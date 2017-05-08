@@ -11,7 +11,7 @@
   <properties>
     <activejdbc.version>1.4.13.j7</activejdbc.version>
     <environments>development.test,development</environments>
-    <project.basedir>./Proyecto/trivia-app</project.basedir>
+    <project.basedir>./trivia-app</project.basedir>
   </properties>
 
   <build>
