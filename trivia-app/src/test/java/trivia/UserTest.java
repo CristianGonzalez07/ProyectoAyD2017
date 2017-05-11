@@ -10,11 +10,22 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class UserTest{
+    
     @Test
     public void validatePrecenseOfUsernames(){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
         User user = new User();
         user.set("username", "");
+
+        assertEquals(user.isValid(), false);
+        Base.close();
+    }
+
+    @Test
+    public void validatePassword(){
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+        User user = new User();
+        user.set("password", "");
 
         assertEquals(user.isValid(), false);
         Base.close();
