@@ -34,9 +34,17 @@ public class App
 				rta = read();
 				if(rta == 1){
 					User.login("NO");
+					Game.play();
 				}else{
 					if(rta == 2){
 						User.login("SI");
+						System.out.println("desea: 1 cargar 2 eliminar");
+						int num = read();
+						if(num == 1){
+							Question.loadQuestion();
+						}else{
+							Question.deleteQuestion();
+						}
 					}
 				}
 			}
