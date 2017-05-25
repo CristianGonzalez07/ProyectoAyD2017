@@ -11,23 +11,45 @@ import static org.junit.Assert.assertEquals;
 
 public class UserTest{
     
-    @Test
-    public void validatePrecenseOfUsernames(){
+    @Before
+    public void before(){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-        User user = new User();
-        user.set("username", "");
+        Base.openTransaction();
+    }
 
-        assertEquals(user.isValid(), false);
+    @After
+    public void after(){
+        Base.rollbackTransaction();
         Base.close();
     }
 
     @Test
+    public void validatePresenceOfUsernames(){
+        User user = new User();
+        user.set("username", "");
+        assertEquals(user.isValid(), false);
+    }
+
+    @Test
     public void validatePassword(){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
         User user = new User();
         user.set("password", "");
-
         assertEquals(user.isValid(), false);
-        Base.close();
+    }
+
+     @Test
+     public void validateUniquenessOfUsernames(){
+         User user = new User();
+         user.set("username", "Cristian");
+         user.set("password","1234");
+         user.saveIt();
+
+         User user2 = new User();
+         user.set("username", "Cristian");
+         user.set("password","12345");
+
+         assertEquals(user2.isValid(), false);
+
+        user.delete();        
     }
 }
