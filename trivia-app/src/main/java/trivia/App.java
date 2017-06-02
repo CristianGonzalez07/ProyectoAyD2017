@@ -38,9 +38,15 @@ public class App
 
       post("/login", (request, response) -> {
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-        User usuario1 = User.createIt("username",request.queryParams("txt_username"),"password",request.queryParams("txt_password"));
+        //User usuario1 = User.createIt("username",request.queryParams("txt_username"),"password",request.queryParams("txt_password"));
+        User usuario1 = User.create("username",request.queryParams("txt_username"),"password",request.queryParams("txt_password"));
+        if(!usuario1.save()){
+        	map.put("message","error");
+        	response.redirect("/login");
+        }else{
+        	response.redirect("/");
+        }
         Base.close();
-        response.redirect("/");
         return null;   
     });
   }       
