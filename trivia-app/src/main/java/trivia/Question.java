@@ -27,28 +27,48 @@ public class Question extends Model{
         return questions;
     }//End getQuestionByCategory
 
-    public static void loadQuestion(String category,String description,String op1,String op2,String op3,String op4){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-        Question q = Question.createIt("category",category,"description",description,"option1",op1,"option2",op2,"option3",op3,"option4",op4);
-        Base.close();
-    } //End loadQuestion
-
-    //permite al usuario respoder una pregunta y retorna si la rta es correcta o no
-    public static Boolean responseQuestion(String category){
-        List<Question> questions = getQuestionsByCategory(category);
-        int n = questions.size();
+    //obtiene una pregunta aleatoria
+    public static Question getQuestion(){
+        int n = random(1,5);
+        List<Question> questions = getQuestionsByCategory(getCat(n));
+        n = questions.size();
         Question q = questions.get(random (0,n));
-        //la opcion 1 es siempre la correcta en la base de datos
-        String correct = q.getString("option1");
-        if(correct.equals(getAnswer(q))){
-            return true;
-        }else{
-            return false;
-        }
-    }//end responseQuestion
+        return q;
+    }
+    //obtiene una pregunta especifica
+    public static Question getQuestionByDesc(String description){
+        List<Question> questions = where("description = '"+description+"'");
+        return questions.get(0);
+    }
 
-    private static String getAnswer(Question q){
+    public static String getAnswer(Question q){
         return q.getString("option1");
     }
 
+    //retorna el string correspondiente al nro de cat tomado como parametroX!
+    private static String getCat(int n){
+        String res = "";
+        switch (n) {
+        case 1:
+            res = "CIENCIAS";
+        break;
+
+        case 2:
+            res = "DEPORTES" ;
+        break;
+
+        case 3:
+            res = "ENTRETENIMIENTO";
+        break;
+
+        case 4:
+            res = "GEOGRAFIA";
+        break;
+
+        case 5:
+            res = "HISTORIA";
+        break;
+        }
+        return res;
+    }
 } //End class Question
