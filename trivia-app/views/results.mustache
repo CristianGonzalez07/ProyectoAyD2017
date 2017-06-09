@@ -1,0 +1,23 @@
+<center>	
+	<header>
+		<h1>PREGUNTA</h1>
+	</header>
+	<article>
+		<div>
+			<form action="/results" method="GET">
+				<h2>{{question}}</h2>
+				<p>{{option1}}</p>
+				<p>{{option2}}</p>
+				<p>{{option3}}</p>
+				<p>{{option4}}</p>
+			</form>
+			<h2 class="Sucess">{{msgResult1}}</h2><h2class="Error">{{msgResult2}}</h2>
+			<form action="/play" method="GET">
+				<input class="btn-default" name="btn_continue" type="submit" value="Continuar"/>
+			</form>
+			<form action="/gameMenu" method="GET">
+				<input class="btn-default" name="btn_out" type="submit" value="Menu Principal"/>
+			</form>
+		</div>
+	</article>	
+</center>

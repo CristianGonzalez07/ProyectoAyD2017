@@ -1,11 +1,19 @@
 <center>
-<h2>Iniciar Sesion</h2>
-
-<br>
-<br>
-<h1>{{message}}</h1>
-<form action="/login" method="POST">
-<input class="form-control" id="txt_username" name="txt_username" placeholder="Username" type="text" value="" /><br>
-<input class="form-control" id="txt_password" name="txt_password" placeholder="Password" type="password" value="" /><br>
-<input id="btn_login" name="btn_login" type="submit" class="btn btn-default" value="Login" />
-</form>
+	<header>
+		<h1>Iniciar Sesion</h1>
+	</header>
+	<article>
+		<div class = "container">
+			<form action="/login" method="POST">
+				<p class="Error">{{msgLogin}}</p>
+				<input class="form-control"  name="txt_username" type="text" placeholder="Nombre de Usuario"  value=""/><br>
+				<input class="form-control"  name="txt_password" type="password" placeholder="Contraseña"  value=""/><br>
+				<label><input class="chkbox" name="permissions" type="checkbox" value="YES">Iniciar sesion como administrador</label><br>
+				<input class="btn-default" name="btn_login" type="submit" value="Iniciar Sesion"/>
+			</form>
+			<form action="/" method="GET">
+				<input class="btn-default" name="mainpage" type="submit" value="Menu Principal">
+			</form>
+		</div>
+	</article>	
+</center>
