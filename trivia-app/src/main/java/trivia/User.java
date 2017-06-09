@@ -9,31 +9,32 @@ public class User extends Model {
 	static{
     	validatePresenceOf("username").message("Please, provide your username");
   		validatePresenceOf("password").message("Please, provide your password");
+  		
 	}
 
-	//crea una cuenta de usuario con un nombre de usuario unico
-	public static void createAccount(String username,String password){			
-  		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-		User p = User.createIt("username",username,"password",password);
-		Base.close();
-	}//End createAccount
-
 	//verifica el inicio de sesion	
-	public static Boolean login(String username,String password,Boolean asAdmin){	
- 		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-		User p = new User();
-		p = User.findFirst("username = "+username);
-		String p1 = p.getString("username");
-		String p2 = p.getString("password");
-		String p3 = p.getString("permissions");
-		Boolean res;
-		if(asAdmin){
-			res = ((p1==username)&&(p2==password)&&(p3=="YES"));
+	public static Boolean validateLogin(String username,String password,String asAdmin){	
+		List<User> users  = User.where("username ='"+username+"' AND password ='"+password+"'");
+		if(users.size() != 0){
+			User p =  users.get(0);
+			String p1 = p.getString("permissions");
+			if(asAdmin != null){
+				return (p1.equals("YES"));
+			}else{
+				return (p1.equals("NO"));
+			}				
 		}else{
-			res = ((p1==username)&&(p2==password));
+			return false;
 		}
-		Base.close();
-		return res;
-  	}//End Login
+  	}//End class validateLogin
+
+  	public static void calcularPuntaje(String username){
+  		//Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+  		User user = User.findFirst("username = ?",username);
+  		int score = (int)user.get("score");
+  		user.set("score",score+1);
+  		user.saveIt();
+  		//Base.close();
+  	}//End class calcularPuntaje
 
 }//End Class User
