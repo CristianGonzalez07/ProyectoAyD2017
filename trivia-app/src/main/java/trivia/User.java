@@ -27,14 +27,11 @@ public class User extends Model {
 			return false;
 		}
   	}//End class validateLogin
-
   	public static void calcularPuntaje(String username){
-  		//Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
   		User user = User.findFirst("username = ?",username);
   		int score = (int)user.get("score");
   		user.set("score",score+1);
   		user.saveIt();
-  		//Base.close();
   	}//End class calcularPuntaje
 
 }//End Class User
