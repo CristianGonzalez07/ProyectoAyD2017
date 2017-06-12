@@ -3,7 +3,6 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import trivia.User;
 import trivia.Question;
-import trivia.Game;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -30,16 +29,6 @@ public class App
     public static void main( String[] args )
     {	
     	Map map = new HashMap();
-
-    	before((request,response) ->{
-    		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-    	}
-    	);
-
-    	after((request,response) ->{
-    		Base.close();
-    	}
-    	);
 
 	      //pagina de Inicio
 	      get("/", (request, response) -> {
@@ -69,6 +58,7 @@ public class App
 
 	       //pagina de juego
 	      get("/play", (request, response) -> {
+	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	Question q = Question.getQuestion();
 	      	map.put("question",q.get("description"));
 	      	List<String> options = new ArrayList<String>();
@@ -87,6 +77,7 @@ public class App
 	      	map.put("option2",options.get(1));
 	      	map.put("option3",options.get(2));
 	      	map.put("option4",options.get(3));
+	      	Base.close();
 	        return new ModelAndView(map, "./views/play.mustache");
 	      }, new MustacheTemplateEngine()
 	      );
@@ -111,6 +102,7 @@ public class App
 
 	      //crear cuenta
 	      post("/register", (request, response) -> {
+	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	User user = User.create("username",request.queryParams("txt_username"),"password",request.queryParams("txt_password"));
 	      	Boolean res = user.save(); 
 	        if(!res)
@@ -123,11 +115,13 @@ public class App
 	        	map.put("msgSucessRegis","Usuario Registrado Exitosamente");
 	        	response.redirect("/register");
 	        }
+	        Base.close();
 	        return null;
 	      });
 	      
 	      //Iniciar sesion
 	      post("/login", (request, response) -> {
+	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	String username = request.queryParams("txt_username");
 	      	String password = request.queryParams("txt_password");
 	      	String permissions = request.queryParams("permissions");
@@ -147,11 +141,13 @@ public class App
 			    	response.redirect("/gameMenu");
 			   	}
 	        }
+	        Base.close();
 	        return null;      
 	      });
 
 	      //Crear Pregunta
 	      post("/createQuestion", (request, response) -> {
+	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	map.clear();
         	Question q = new Question();
         	q.set("category",request.queryParams("Category"));
@@ -170,26 +166,31 @@ public class App
 	      		map.put("msgSucessCreateQuestion","pregunta cargada con exito");
 	      		response.redirect("/createQuestion");
 	      	}
+	      	Base.close();
 	        return null;
 	      });
 
 	      //Jugar
 	      post("/play", (request,response) -> {
-	      	System.out.println((String)request.session().attribute(SESSION_NAME));
+	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	String description =(String)map.get("question");
+	      	User user = User.findFirst("username = ?",(String)request.session().attribute(SESSION_NAME));
 	      	Question q = Question.getQuestionByDesc(description);	
 	      	String currentAnswer = request.queryParams("btn_option");
 	      	if(Question.getAnswer(q).equals(currentAnswer)){
 	      		map.put("msgResult1","Respuesta Correcta");
 	      		map.put("msgResult2","");
-	      		System.out.println((String)request.session().attribute(SESSION_NAME));
-	      		User.calcularPuntaje(request.session().attribute(SESSION_NAME));
+	      		int score = (int)user.get("score");
+  				user.set("score",(score+1));
+  				user.saveIt();
+	      		map.put("score",user.get("score"));
 	      		response.redirect("/results");
 	      	}else{
 	      		map.put("msgResult2","Respuesta Incorrecta");
 	      		map.put("msgResult1","");
 	      		response.redirect("/results");
 	      	}
+	      	Base.close();
 	      	return null;
 	      });
   	}       
