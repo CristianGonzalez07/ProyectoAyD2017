@@ -1,0 +1,47 @@
+body{
+	margin: auto;
+}
+.note{
+	color: blue;
+}
+.titulo{
+	font-size: 50px;
+}
+.Sucess{
+	color: green;
+	font-size: 30px;
+}
+
+.Error{
+	color: red;
+	font-size: 30px;
+}
+form{
+	margin: auto;
+	width: 450px;
+	background: rgba(0,0,0,0.7);
+	padding: 10px 20px;
+	box-sizing: border-box;
+	margin-top: 20px;
+	border-radius: 10px;
+}
+.form-control{
+	height: 45px;
+	width: 250px;
+	font-size: 18px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	padding-left: 10px;
+}
+.btn-default:hover{
+	cursor: pointer;
+}
+.btn-default{
+	height: 45px;
+	width: 250px;
+	font-size: 18px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
