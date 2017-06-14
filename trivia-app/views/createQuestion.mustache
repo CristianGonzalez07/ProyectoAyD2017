@@ -1,34 +1,43 @@
-<center>
-    <header>
-          <h1>Creacion de Pregunta</h1>
-          <h2 class="Error">{{msgFailCreateQuestion}}</h2><h2 class="Sucess">{{msgSucessCreateQuestion}}</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="Style.css"></link>
+</head>
+<body>
+    <center>
+        <header>
+              <h1>Creacion de Pregunta</h1>    
+        </header>
 
-    </header>
-
-    <article>
-        <div>
-            <form action="/createQuestion" method="POST">      
-                <h1>Seleccione la Categoria</h1>
-                <label><input class="chkbox" name="Category" type="checkbox" value="CIENCIAS">CIENCIAS</label><br>
-                <label><input class="chkbox" name="Category" type="checkbox" value="DEPORTES">DEPORTES</label><br>
-                <label><input class="chkbox" name="Category" type="checkbox" value="ENTRETENIMIENTO">ENTRETENIMIENTO</label><br>
-                <label><input class="chkbox" name="Category" type="checkbox" value="GEOGRAFIA">GEOGRAFIA</label><br>
-                <label><input class="chkbox" name="Category" type="checkbox" value="HISTORIA">HISTORIA</label><br>
-                <input class="form-CrearP"  name="Description" type="text" placeholder="Pregunta" value="" /><br>
+        <article>
+            <div class="container">
+            <h2  class="Error">{{msgFailCreateQuestion}}</h2><h2 class="Sucess">{{msgSucessCreateQuestion}}</h2>
+                <form action="/createQuestion" method="POST">      
+                    <h1>Seleccione la Categoria</h1>
+                     <select name="Category">
+                        <option>Seleccionar</option>
+                        <option value="CIENCIAS">Ciencia</option>
+                        <option value="DEPORTES">Deportes</option>
+                        <option value="ENTRETENIMIENTO">Entretenimiento</option>
+                        <option value="GEOGRAFIA">Geografia</option>
+                        <option value="HISTORIA">Historia</option>
+                    </select>
+                    <br>
+                    <h1>Respuestas</h1>
+                    <input class="form-CrearP"  name="txt_op1" type="text"  placeholder="Opcion 1" value="" /><br>
+                    <input class="form-CrearP"  name="txt_op2" type="text"  placeholder="Opcion 2" value="" /><br>
+                    <input class="form-CrearP"  name="txt_op3" type="text"  placeholder="Opcion 3" value="" /><br>
+                    <input class="form-CrearP"  name="txt_op4" type="text"  placeholder="Opcion 4" value="" /><br>
+                    <input class="btn-default" name="btn_createQuestion" type="submit"  value="Cargar Pregunta" />
+                </form> 
+                <form action="/admin" method="GET">
+                    <input class="btn-default" name="adminpage" type="submit" value="Menu Principal">
+                </form>
                 <br>
-                <h1>Respuestas</h1>
-                <input class="form-CrearP"  name="txt_op1" type="text"  placeholder="Opcion 1" value="" /><br>
-                <input class="form-CrearP"  name="txt_op2" type="text"  placeholder="Opcion 2" value="" /><br>
-                <input class="form-CrearP"  name="txt_op3" type="text"  placeholder="Opcion 3" value="" /><br>
-                <input class="form-CrearP"  name="txt_op4" type="text"  placeholder="Opcion 4" value="" /><br>
-                <input class="btn-default" name="btn_createQuestion" type="submit"  value="Cargar Pregunta" />
-            </form> 
-            <form action="/admin" method="GET">
-                <input class="btn-default" name="adminpage" type="submit" value="Menu Principal">
-            </form>
-            <br>
-        </div>
-    
-    </article>
-</center>
+            </div>
+        
+        </article>
+    </center>
+</body>
 

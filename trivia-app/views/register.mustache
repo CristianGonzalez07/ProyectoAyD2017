@@ -1,20 +1,28 @@
-<center>	
-	<header>
-		<h1>Registrarse</h1>
-		<h2 class="note">El nombre de usuario debe contener al menos un caracter</h2>
-		<h2 class="note">La contraseña debe contener al menos un caracter</h2>
-		<p class="Error">{{msgFailRegis}}</p><p class="Sucess">{{msgSucessRegis}}</p>
-	</header>
-	<article>
-		<div class = "container">
-			<form action="/register" method="POST">
-				<input class="form-control"  name="txt_username" placeholder="Nombre de Usuario" type="text" value="" /><br>
-				<input class="form-control"  name="txt_password" placeholder="Contraseña" type="password" value="" /><br>
-				<input class="btn-default" name="btn_register" type="submit" value="Registrarse"/>
-			</form>
-			<form action="/" method="GET">
-				<input class="btn-default" name="mainpage" type="submit" value="Menu Principal">
-			</form>
-		</div>
-	</article>	
-</center>
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="Style.css"></link>
+</head>
+<body>
+	<center>	
+		<header>
+			<h1>Registrarse</h1>
+		</header>
+		<article>
+			<div class = "container">
+					<h2 class="note">El nombre de usuario debe contener al menos un caracter</h2>
+					<h2 class="note">La contraseña debe contener al menos un caracter</h2>
+					<p class="Error">{{msgFailRegis}}</p><p class="Sucess">{{msgSucessRegis}}</p>
+				<form action="/register" method="POST">
+					<input class="form-control"  name="txt_username" placeholder="Nombre de Usuario" type="text" value="" /><br>
+					<input class="form-control"  name="txt_password" placeholder="Contraseña" type="password" value="" /><br>
+					<input class="btn-default" name="btn_register" type="submit" value="Registrarse"/>
+				</form>
+				<form action="/" method="GET">
+					<input class="btn-default" name="mainpage" type="submit" value="Menu Principal">
+				</form>
+			</div>
+		</article>	
+	</center>
+</body>

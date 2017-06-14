@@ -1,16 +1,25 @@
-<center>	
-	<header>
-		<h1>Bienvenido {{currentUser}}</h1>
-		<h3>Puntaje Actual: {{score}}</h3>
-	</header>
-	<article>
-	<div class="container">
-		<form action="/play" method="GET">
-			<input  class="btn-default" name="play" type="submit" value="Iniciar Partida"/>
-		</form>
-		<form action="/" method="GET">
-            <input class="btn-default" name="logout" type="submit" value="Salir">
-        </form>
-	</div>
-	</article>	
-</center>
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="Style.css"></link>
+</head>
+<body>
+	<center>	
+		<header>
+			<h1>Bienvenido {{currentUser}}</h1>
+			<h3>Puntaje Actual: {{score}}</h3>
+		</header>
+		<article>
+		<div class="container">
+			<form action="/play" method="GET">
+				<input  class="btn-default" name="play" type="submit" value="Iniciar Partida"/>
+			</form>
+			<form action="/" method="GET">
+	            <input class="btn-default" name="logout" type="submit" value="Salir">
+	        </form>
+		</div>
+		</article>	
+	</center>
+</body>
+

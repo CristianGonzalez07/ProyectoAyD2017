@@ -28,6 +28,7 @@ public class App
 
     public static void main( String[] args )
     {	
+    	staticFileLocation("/views");
     	Map map = new HashMap();
 
 	      //pagina de Inicio
@@ -39,7 +40,7 @@ public class App
 	      );
 
 	      //pagina de inicio Sesion
-	      get("/login", (reqquest, response) -> {
+	      get("/login", (request, response) -> {
 	        return new ModelAndView(map, "./views/login.mustache");
 	      }, new MustacheTemplateEngine()
 	      );
@@ -52,6 +53,8 @@ public class App
 
 	       //pagina de Usuario 
 	      get("/gameMenu", (request, response) -> {
+			String username = (String)request.session().attribute(SESSION_NAME);
+	      	map.put("currentUser",username);
 	        return new ModelAndView(map, "./views/gameMenu.mustache");
 	      }, new MustacheTemplateEngine()
 	      );
@@ -60,7 +63,17 @@ public class App
 	      get("/play", (request, response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	Question q = Question.getQuestion();
-	      	map.put("question",q.get("description"));
+	      	String username = (String)request.session().attribute(SESSION_NAME);
+	      	String description = q.getString("description"); 
+	      	Game game = new Game();
+	      	List<Game> games  = Game.where("user ='"+username+"'");
+	      	if(games.size()!=0){
+	      		game = Game.findFirst("user = ?",username);
+	      	}else{
+	      		game.set("user",username);
+	      	}
+	      	game.set("description",description);
+	      	game.saveIt();	
 	      	List<String> options = new ArrayList<String>();
 	      	options.add(q.getString("option1"));
 	      	options.add(q.getString("option2"));
@@ -73,6 +86,7 @@ public class App
 	      		auxOp = options.remove(n);
 	      		options.add(auxOp);
 	      	}
+	      	map.put("question",description);
 	      	map.put("option1",options.get(0));
 	      	map.put("option2",options.get(1));
 	      	map.put("option3",options.get(2));
@@ -105,8 +119,7 @@ public class App
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	User user = User.create("username",request.queryParams("txt_username"),"password",request.queryParams("txt_password"));
 	      	Boolean res = user.save(); 
-	        if(!res)
-	        {
+	        if(!res){
 	        	map.put("msgFailRegis","Usuario no valido o en uso/contraseña no valida");
 	        	map.put("msgSucessRegis","");
 	        	response.redirect("/register");	
@@ -133,8 +146,8 @@ public class App
 		    }else{	
 		    	User user = User.findFirst("username = ?",username);
 		    	map.put("score",user.get("score"));
-		    	map.put("currentUser",username);
-                request.session().attribute(SESSION_NAME, username);
+		    	request.session(true);
+		    	request.session().attribute(SESSION_NAME,username);
 			    if(permissions != null){
 			    	response.redirect("/admin");
 			    }else{
@@ -173,8 +186,10 @@ public class App
 	      //Jugar
 	      post("/play", (request,response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-	      	String description =(String)map.get("question");
-	      	User user = User.findFirst("username = ?",(String)request.session().attribute(SESSION_NAME));
+	      	String username = (String)request.session().attribute(SESSION_NAME);
+	      	Game game = Game.findFirst("user = ?",username);
+	      	User user = User.findFirst("username = ?",username);
+	      	String description =game.getString("description");
 	      	Question q = Question.getQuestionByDesc(description);	
 	      	String currentAnswer = request.queryParams("btn_option");
 	      	if(Question.getAnswer(q).equals(currentAnswer)){

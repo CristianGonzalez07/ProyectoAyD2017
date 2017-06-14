@@ -1,19 +1,27 @@
-<center>
-	<header>
-		<h1>Iniciar Sesion</h1>
-	</header>
-	<article>
-		<div class = "container">
-			<form action="/login" method="POST">
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="Style.css"></link>
+</head>
+<body>
+	<center>
+		<header>
+			<h1>Iniciar Sesion</h1>
+		</header>
+		<article>
+			<div class = "container">
 				<p class="Error">{{msgLogin}}</p>
-				<input class="form-control"  name="txt_username" type="text" placeholder="Nombre de Usuario"  value=""/><br>
-				<input class="form-control"  name="txt_password" type="password" placeholder="Contraseña"  value=""/><br>
-				<label><input class="chkbox" name="permissions" type="checkbox" value="YES">Iniciar sesion como administrador</label><br>
-				<input class="btn-default" name="btn_login" type="submit" value="Iniciar Sesion"/>
-			</form>
-			<form action="/" method="GET">
-				<input class="btn-default" name="mainpage" type="submit" value="Menu Principal">
-			</form>
-		</div>
-	</article>	
-</center>
+				<form action="/login" method="POST">
+					<input class="form-control"  name="txt_username" type="text" placeholder="Nombre de Usuario"  value=""/><br>
+					<input class="form-control"  name="txt_password" type="password" placeholder="Contraseña"  value=""/><br>
+					<label><input class="chkbox" name="permissions" type="checkbox" value="YES">Iniciar sesion como administrador</label><br>
+					<input class="btn-default" name="btn_login" type="submit" value="Iniciar Sesion"/>
+				</form>
+				<form action="/" method="GET">
+					<input class="btn-default" name="mainpage" type="submit" value="Menu Principal">
+				</form>
+			</div>
+		</article>	
+	</center>
+</body>

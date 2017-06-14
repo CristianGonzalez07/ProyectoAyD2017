@@ -21,3 +21,10 @@ CREATE TABLE IF NOT EXISTS questions(
   updated_at DATETIME
 )ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS games(
+	id int(11) auto_increment PRIMARY KEY,
+	user VARCHAR(128) NOT NULL,
+	description VARCHAR(128) NOT NULL,
+	created_at DATETIME,
+  updated_at DATETIME
+)ENGINE=InnoDB;
