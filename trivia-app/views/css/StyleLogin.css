@@ -1,6 +1,6 @@
 body{
 	margin:auto;
-	background-color: black;
+	background-color: #F0FFF0;
 }
 
 h1{
@@ -65,7 +65,9 @@ h1{
 	margin-bottom: 15px;
 	background-color: #fff;
 	padding-left: 10px;
+	border-radius: 10px;
 }
 .btn-default:hover{
 	cursor: pointer;
+	background-color: #F5EAEA;
 }

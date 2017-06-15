@@ -1,0 +1,63 @@
+h1{
+	background-color:#A9A9A9;
+	border-bottom: 15px solid;
+	font-size: 50px;
+	text-align: center;
+	margin-top: -1%;
+	height: 70px;
+	margin-left: -1%;
+	margin-bottom: 100px;
+}
+.Sucess{
+	color: green;
+	font-size: 30px;
+}
+.Error{
+	color: red;
+	font-size: 30px;
+}
+.btn-default{
+	height: 45px;
+	width: 250px;
+	font-size: 18px;
+	margin-top: 50px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+
+.btn-default1{
+	height: 45px;
+	width: 150px;
+	font-size: 18px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+	position: absolute;
+	top: 1%;
+	left: 0%;
+}
+.btn-default1:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+
+.btn-default:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+body{
+	background-color: #F0FFF0;
+}
+div{
+	margin: auto;
+	width: 450px;
+	background: rgba(0,0,0,0.4);
+	padding: 10px 20px;
+	box-sizing: border-box;
+	margin-top: 10px;
+	border-radius: 10px;
+}

@@ -1,40 +1,47 @@
-body{
-	background-color: red;
-	margin: auto;
-}
-
 .btn-default:hover{
 	cursor: pointer;
 }
 
 header{
-	background-color: red;
-	height: 100px;
+	background-color:#A9A9A9;
+	border-bottom: 10px solid;
+
+}
+body{
+	background:	#F0FFF0;
+	margin: auto;
 }
 
+
 div{
-	background-color: blue;
+	width: 500px;
+	height: 100%;
+	margin-top: 200px;
+	display: inline-flex;
 }
 
 form{
-	background-color: yellow;
-	width: 300px;
-	/*display: inline-flex; */
+	margin-left: 80px;
 }
 
 .btn-default{
 	background: #31384A;
 	color: #fff;
+	font-size: 35px;
 	padding: 12px;
-	margin: 10px;
+	position: relative;
+	right: 30%;
+	margin-right: 10px;
 	border-radius: 10px;
 }
 
 h1{
+	background-color:#A9A9A9;
+	border-bottom: 15px solid;
+	font-size: 50px;
 	color:black;
 	text-align: center;
-	margin: 0;
-	font-size: 40px;
-	margin-top: 50px;
-	margin-bottom: 20px;
+	margin-top: 0px;
+	height: 70px;
+	margin-bottom: 0px;
 }

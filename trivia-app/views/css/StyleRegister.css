@@ -1,4 +1,5 @@
 body{
+	background-color: #F0FFF0;
 	margin: auto;
 }
 .note{
@@ -11,12 +12,19 @@ body{
 	color: green;
 	font-size: 30px;
 }
+h1{
+	font-size: 60px;
+	margin-top: 0px;
+	background-color: #C0C0C0;
+	border: 15px solid;
+	border-color: silver black  rgba(0,0,0,0.7);
+}
 
 .Error{
 	color: red;
 	font-size: 30px;
 }
-form{
+.container{
 	margin: auto;
 	width: 450px;
 	background: rgba(0,0,0,0.7);
@@ -25,6 +33,16 @@ form{
 	margin-top: 20px;
 	border-radius: 10px;
 }
+/*form{
+	margin: auto;
+	width: 450px;
+	background: rgba(0,0,0,0.7);
+	padding: 10px 20px;
+	box-sizing: border-box;
+	margin-top: 20px;
+	border-radius: 10px;
+}
+*/
 .form-control{
 	height: 45px;
 	width: 250px;
@@ -35,6 +53,7 @@ form{
 }
 .btn-default:hover{
 	cursor: pointer;
+	background-color: #F5EAEA;
 }
 .btn-default{
 	height: 45px;

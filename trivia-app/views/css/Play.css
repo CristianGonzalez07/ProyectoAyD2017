@@ -1,0 +1,33 @@
+h1{
+	background-color:#A9A9A9;
+	border-bottom: 15px solid;
+	font-size: 50px;
+	text-align: center;
+	margin-top: -1%;
+	height: 70px;
+	margin-left: -1%;
+	margin-bottom: 100px;
+}
+div{
+	margin: auto;
+	width: 450px;
+	background: rgba(0,0,0,0.4);
+	padding: 10px 20px;
+	box-sizing: border-box;
+	margin-top: 10px;
+	border-radius: 10px;
+}
+
+.btn-default{
+	height: 45px;
+	width: 250px;
+	font-size: 18px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+.btn-default:hover{
+	cursor: pointer;
+	color: red;
+}

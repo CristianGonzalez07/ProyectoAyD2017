@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="Style.css"></link>
+    <title>Admin</title>
+    <link rel="stylesheet" type="text/css" href="css/Admin.css"></link>
+    <h1>Bienvenido</h1>
+    <h3 class="nombre">{{currentUser}}</h3>
 </head>
 <body>
     <center>
-        <header>
-        	<h1>Bienvenido {{currentUser}}</h1>
-       	</header>
-
         <article>
         	<div class = "container">
     		    <form action="/createQuestion" method="GET">
     		        <input class="btn-default" name="createQuestion_btn" type="submit" value="Crear Pregunta"/>
     		    </form>
                 <form action="/" method="GET">
-                    <input class="btn-default" name="logout" type="submit" value="Salir">
+                    <input class="btn-default1" name="logout" type="submit" value="Salir">
                 </form>
     		</div>
         </article>	    
