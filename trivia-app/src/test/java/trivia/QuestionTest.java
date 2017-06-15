@@ -36,8 +36,23 @@ public class QuestionTest{
         assertEquals(q.isValid(), false);
     }
 
+    public void validateUniquenessOfQuestions(){
+         Question question = new Question();
+         question.set("description", "¿ 2x2 ?");
+         question.set("category","CIENCIAS");
+         question.saveIt();
+
+         Question question2 = new Question();
+         question2.set("description", "¿ 2x2 ?");
+         question2.set("category","CIENCIAS");
+         question2.saveIt();
+         assertEquals(question2.isValid(), false);
+
+        question.delete();        
+    }
+
     @Test
-    public void validatePresenseOfOptions(){
+    public void validatePresenceOfOptions(){
         Question q = new Question();
         q.set("option1", "");
         assertEquals(q.isValid(), false);
@@ -50,7 +65,6 @@ public class QuestionTest{
 
 		q.set("option1", "");
         assertEquals(q.isValid(), false);
-
     }
 
 

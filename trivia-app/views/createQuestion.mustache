@@ -16,7 +16,7 @@
                 <form action="/createQuestion" method="POST">      
                     <h1>Seleccione la Categoria</h1>
                      <select name="Category">
-                        <option>Seleccionar</option>
+                        <option value ="">Seleccionar</option>
                         <option value="CIENCIAS">Ciencia</option>
                         <option value="DEPORTES">Deportes</option>
                         <option value="ENTRETENIMIENTO">Entretenimiento</option>
@@ -24,6 +24,7 @@
                         <option value="HISTORIA">Historia</option>
                     </select>
                     <br>
+                    <input class="form-CrearP"  name="Description" type="text" placeholder="Pregunta" value="" /><br>
                     <h1>Respuestas</h1>
                     <input class="form-CrearP"  name="txt_op1" type="text"  placeholder="Opcion 1" value="" /><br>
                     <input class="form-CrearP"  name="txt_op2" type="text"  placeholder="Opcion 2" value="" /><br>

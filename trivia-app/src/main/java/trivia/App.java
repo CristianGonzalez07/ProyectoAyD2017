@@ -117,16 +117,25 @@ public class App
 	      //crear cuenta
 	      post("/register", (request, response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-	      	User user = User.create("username",request.queryParams("txt_username"),"password",request.queryParams("txt_password"));
-	      	Boolean res = user.save(); 
-	        if(!res){
-	        	map.put("msgFailRegis","Usuario no valido o en uso/contraseña no valida");
-	        	map.put("msgSucessRegis","");
-	        	response.redirect("/register");	
+	      	String username = request.queryParams("txt_username");
+	        List<User> users  = User.where("username ='"+username+"'");
+	        if(users.size()!=0){
+	        	map.put("msgFailRegis","Usuario no disponible");
+		        map.put("msgSucessRegis","");
+		        response.redirect("/register");	
 	        }else{
-	      		map.put("msgFailRegis","");
-	        	map.put("msgSucessRegis","Usuario Registrado Exitosamente");
-	        	response.redirect("/register");
+	        	String password = request.queryParams("txt_password");
+	        	User user = User.create("username",request.queryParams("txt_username"),"password",request.queryParams("txt_password"));
+	      		Boolean res = user.save();
+	        	if(!res){
+		        	map.put("msgFailRegis","Usuario no valido o en uso/contraseña no valida");
+		        	map.put("msgSucessRegis","");
+		        	response.redirect("/register");	
+		        }else{
+		      		map.put("msgFailRegis","");
+		        	map.put("msgSucessRegis","Usuario Registrado Exitosamente");
+		        	response.redirect("/register");
+		        }
 	        }
 	        Base.close();
 	        return null;
@@ -171,7 +180,6 @@ public class App
         	q.set("option3",request.queryParams("txt_op3"));
         	q.set("option4",request.queryParams("txt_op4"));
         	Boolean res = q.save();
-        	System.out.println(res);
 	      	if(!res){
 	      		map.put("msgFailCreateQuestion","alguno de los datos ingresados no es valido.Cargue de nuevo la pregunta");
 	      		response.redirect("/createQuestion");
