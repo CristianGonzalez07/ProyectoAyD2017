@@ -19,10 +19,12 @@ public class App
 {
 
 	//retorna un nro aleatorio en el intervalo tomado como parametro(considerando extremos)
+	//-------------------MODULARIZAR--------------------------------------------- 
 	private static int random(int init,int end) {
 		Random  rnd = new Random();
 		return (int)(rnd.nextDouble() * end + init);
 	}
+	//-------------------MODULARIZAR--------------------------------------------- 
 
 	private static final String SESSION_NAME = "username";
 
@@ -60,6 +62,7 @@ public class App
 	      );
 
 	       //pagina de juego
+ //-------------------MODULARIZAR---------------------------------------------
 	      get("/play", (request, response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	Question q = Question.getQuestion();
@@ -95,6 +98,8 @@ public class App
 	        return new ModelAndView(map, "./views/play.mustache");
 	      }, new MustacheTemplateEngine()
 	      );
+//-------------------MODULARIZAR---------------------------------------------
+
 
 	      //pagina de creacion de pregunta
 	      get("/createQuestion", (request, response) -> {
@@ -115,6 +120,7 @@ public class App
 	      );
 
 	      //crear cuenta
+	//-------------------MODULARIZAR---------------------------------------------
 	      post("/register", (request, response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	String username = request.queryParams("txt_username");
@@ -140,8 +146,11 @@ public class App
 	        Base.close();
 	        return null;
 	      });
-	      
+	//-------------------MODULARIZAR---------------------------------------------
+
+
 	      //Iniciar sesion
+	//-------------------MODULARIZAR---------------------------------------------
 	      post("/login", (request, response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	String username = request.queryParams("txt_username");
@@ -166,8 +175,11 @@ public class App
 	        Base.close();
 	        return null;      
 	      });
+	//-------------------MODULARIZAR---------------------------------------------
+
 
 	      //Crear Pregunta
+	//-------------------MODULARIZAR---------------------------------------------
 	      post("/createQuestion", (request, response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	map.clear();
@@ -190,8 +202,10 @@ public class App
 	      	Base.close();
 	        return null;
 	      });
+	//-------------------MODULARIZAR---------------------------------------------
 
 	      //Jugar
+	//-------------------MODULARIZAR---------------------------------------------
 	      post("/play", (request,response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	String username = (String)request.session().attribute(SESSION_NAME);
@@ -216,5 +230,6 @@ public class App
 	      	Base.close();
 	      	return null;
 	      });
-  	}       
+  	//-------------------MODULARIZAR--------------------------------------------- 
+  	}     
 }

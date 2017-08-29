@@ -40,12 +40,12 @@ public class UserTest{
      @Test
      public void validateUniquenessOfUsernames(){
          User user = new User();
-         user.set("username", "Cristian");
+         user.set("username", "Prueba");
          user.set("password","1234");
          user.saveIt();
 
          User user2 = new User();
-         user.set("username", "Cristian");
+         user.set("username", "Prueba");
          user.set("password","12345");
 
          assertEquals(user2.isValid(), false);

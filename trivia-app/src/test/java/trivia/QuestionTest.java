@@ -60,10 +60,10 @@ public class QuestionTest{
         q.set("option2", "");
         assertEquals(q.isValid(), false);
 
-		q.set("option1", "");
+		q.set("option3", "");
         assertEquals(q.isValid(), false);
 
-		q.set("option1", "");
+		q.set("option4", "");
         assertEquals(q.isValid(), false);
     }
 

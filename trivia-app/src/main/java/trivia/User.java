@@ -10,9 +10,7 @@ public class User extends Model {
 	static{
     	validatePresenceOf("username").message("Please, provide your username");
   		validatePresenceOf("password").message("Please, provide your password");
-  		validateWith(new UniquenessValidator("username")).message("This username is already taken.");
-
-  		
+  		validateWith(new UniquenessValidator("username")).message("This username is already taken."); 		
 	}
 
 	//verifica el inicio de sesion	
