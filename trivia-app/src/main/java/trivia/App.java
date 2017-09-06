@@ -173,17 +173,17 @@ public class App
 	      //Crear Pregunta
 	//-------------------MODULARIZAR---------------------------------------------
 	      post("/createQuestion", (request, response) -> {
-	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	map.clear();
-        	Question q = new Question();
-        	q.set("category",request.queryParams("Category"));
-        	System.out.println(request.queryParams("Category"));
-        	q.set("description",request.queryParams("Description"));
-        	q.set("option1",request.queryParams("txt_op1"));
-        	q.set("option2",request.queryParams("txt_op2"));
-        	q.set("option3",request.queryParams("txt_op3"));
-        	q.set("option4",request.queryParams("txt_op4"));
-        	Boolean res = q.save();
+
+	      	String cat = request.queryParams("Category");
+	      	String desc = request.queryParams("Description");
+	      	String op1 = request.queryParams("txt_op1");
+	      	String op2 = request.queryParams("txt_op2");
+	      	String op3 = request.queryParams("txt_op3");
+	      	String op4 = request.queryParams("txt_op4");
+
+	      	Boolean res = Lib.createQuestion(cat,desc,op1,op2,op3,op4);
+	      	
 	      	if(!res){
 	      		map.put("msgFailCreateQuestion","alguno de los datos ingresados no es valido.Cargue de nuevo la pregunta");
 	      		response.redirect("/createQuestion");
@@ -191,7 +191,6 @@ public class App
 	      		map.put("msgSucessCreateQuestion","pregunta cargada con exito");
 	      		response.redirect("/createQuestion");
 	      	}
-	      	Base.close();
 	        return null;
 	      });
 	//-------------------MODULARIZAR---------------------------------------------
