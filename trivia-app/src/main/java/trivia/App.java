@@ -3,6 +3,7 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import trivia.User;
 import trivia.Question;
+import trivia.Lib;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -17,15 +18,6 @@ import spark.template.mustache.MustacheTemplateEngine;
 
 public class App
 {
-
-	//retorna un nro aleatorio en el intervalo tomado como parametro(considerando extremos)
-	//-------------------MODULARIZAR--------------------------------------------- 
-	private static int random(int init,int end) {
-		Random  rnd = new Random();
-		return (int)(rnd.nextDouble() * end + init);
-	}
-	//-------------------MODULARIZAR--------------------------------------------- 
-
 	private static final String SESSION_NAME = "username";
 
     public static void main( String[] args )
@@ -85,7 +77,7 @@ public class App
 	      	int n = -1;
 	      	String auxOp = "";
 	      	for (int i=0;i<4;i++){
-	      		n = random(0,3);
+	      		n = Lib.random(0,3);
 	      		auxOp = options.remove(n);
 	      		options.add(auxOp);
 	      	}

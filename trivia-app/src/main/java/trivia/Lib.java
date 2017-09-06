@@ -12,6 +12,11 @@ import java.util.Random;
 
 import static spark.Spark.*;
 
-public class lib{
+public class Lib{
+
+	public static int random(int init,int end) {
+		Random  rnd = new Random();
+		return (int)(rnd.nextDouble() * end + init);
+	}
 
 }

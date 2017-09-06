@@ -16,12 +16,6 @@ public class Question extends Model{
         validatePresenceOf("category").message("Please, provide your category");
     }
 
-    //retorna un nro aleatorio en el intervalo tomado como parametro(considerando extremos)
-    private static int random(int init,int end) {
-        Random  rnd = new Random();
-        return (int)(rnd.nextDouble() * end + init);
-    }
-
     private static List<Question> getQuestionsByCategory(String nCat){
         List<Question> questions = where("category = '"+nCat+"'");
         return questions;
@@ -29,10 +23,10 @@ public class Question extends Model{
 
     //obtiene una pregunta aleatoria
     public static Question getQuestion(){
-        int n = random(1,5);
+        int n = Lib.random(1,5);
         List<Question> questions = getQuestionsByCategory(getCat(n));
         n = questions.size();
-        Question q = questions.get(random (0,n));
+        Question q = questions.get(Lib.random (0,n));
         return q;
     }
     //obtiene una pregunta especifica
