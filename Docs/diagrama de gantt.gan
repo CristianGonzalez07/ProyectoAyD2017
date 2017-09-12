@@ -37,36 +37,36 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="1" name="Setup del Proyecto" color="#00cc00" shape="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" meeting="false" start="2017-09-11" duration="4" complete="0" priority="2" expand="true">
+        <task id="1" name="Setup del Proyecto" color="#8cb6ce" shape="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" meeting="false" start="2017-08-21" duration="4" complete="0" priority="2" expand="true">
             <notes><![CDATA[Aprendizaje e instalacion de herramientas]]></notes>
             <depend id="5" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="5" name="Creacion de BD y Modelos" color="#8cb6ce" meeting="false" start="2017-09-15" duration="1" complete="0" priority="2" expand="true">
+        <task id="5" name="Creacion de BD y Modelos" color="#8cb6ce" meeting="false" start="2017-08-25" duration="1" complete="0" priority="2" expand="true">
             <notes><![CDATA[Creacion de la base de datos y de los modelos necesarios para la conexion con la base de datos]]></notes>
             <depend id="12" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="12" name="Crear Cuenta" color="#8cb6ce" meeting="false" start="2017-09-18" duration="2" complete="0" expand="true">
+        <task id="12" name="Crear Cuenta" color="#8cb6ce" meeting="false" start="2017-08-28" duration="2" complete="0" expand="true">
             <notes><![CDATA[desarrollo de la funcionalidad crear cuenta]]></notes>
             <depend id="15" type="2" difference="0" hardness="Strong"/>
             <depend id="16" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="15" name="Iniciar Sesion" color="#8cb6ce" meeting="false" start="2017-09-20" duration="3" complete="0" expand="true">
+        <task id="15" name="Iniciar Sesion" color="#8cb6ce" meeting="false" start="2017-08-30" duration="3" complete="0" expand="true">
             <notes><![CDATA[Desarrollo de la funcionalidad Iniciar Sesion]]></notes>
             <depend id="32" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="16" name="Crear Pregunta" color="#8cb6ce" meeting="false" start="2017-09-20" duration="3" complete="0" expand="true">
+        <task id="16" name="Crear Pregunta" color="#8cb6ce" meeting="false" start="2017-08-30" duration="3" complete="0" expand="true">
             <notes><![CDATA[Desarrollo de la funcionalidad Crear pregunta]]></notes>
             <depend id="32" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="32" name="Sistema de Respuestas" color="#8cb6ce" meeting="false" start="2017-09-25" duration="2" complete="0" expand="true">
+        <task id="32" name="Sistema de Respuestas" color="#8cb6ce" meeting="false" start="2017-09-04" duration="2" complete="0" expand="true">
             <notes><![CDATA[Desarrollo de la funcionalidad del sistema de respuestas]]></notes>
             <depend id="33" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="33" name="Interfaz web" color="#8cb6ce" meeting="false" start="2017-09-27" duration="3" complete="0" expand="true">
+        <task id="33" name="Interfaz web" color="#8cb6ce" meeting="false" start="2017-09-06" duration="3" complete="0" expand="true">
             <notes><![CDATA[Desarrollo de la interfaz web de la app]]></notes>
             <depend id="50" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="50" name="Correccion de errores" color="#8cb6ce" meeting="false" start="2017-10-02" duration="5" complete="0" expand="true"/>
+        <task id="50" name="Correccion de errores" color="#8cb6ce" meeting="false" start="2017-09-11" duration="5" complete="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="0" name="Cristian Gonzalez" function="SoftwareDevelopment:2" contacts="" phone=""/>
