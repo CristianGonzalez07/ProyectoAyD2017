@@ -3,6 +3,7 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import trivia.User;
 import trivia.Question;
+import trivia.Game;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -68,44 +69,18 @@ public class App
 	      );
 
 	       //pagina de juego
- //-------------------MODULARIZAR---------------------------------------------
-	      get("/play", (request, response) -> {
-	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-	      	Question q = Question.getQuestion();
+ 	      get("/play", (request, response) -> {
 	      	String username = (String)request.session().attribute(SESSION_NAME);
-	      	String description = q.getString("description"); 
-	      	Game game = new Game();
-	      	List<Game> games  = Game.where("user ='"+username+"'");
-	      	if(games.size()!=0){
-	      		game = Game.findFirst("user = ?",username);
-	      	}else{
-	      		game.set("user",username);
-	      	}
-	      	game.set("description",description);
-	      	game.saveIt();	
-	      	List<String> options = new ArrayList<String>();
-	      	options.add(q.getString("option1"));
-	      	options.add(q.getString("option2"));
-	      	options.add(q.getString("option3"));
-	      	options.add(q.getString("option4"));
-	      	int n = -1;
-	      	String auxOp = "";
-	      	for (int i=0;i<4;i++){
-	      		n = random(0,3);
-	      		auxOp = options.remove(n);
-	      		options.add(auxOp);
-	      	}
+	      	String description = Game.initGame(username);
+	      	List<String> options = Question.mergeOptions(description);
 	      	map.put("question",description);
 	      	map.put("option1",options.get(0));
 	      	map.put("option2",options.get(1));
 	      	map.put("option3",options.get(2));
 	      	map.put("option4",options.get(3));
-	      	Base.close();
 	        return new ModelAndView(map, "./views/play.mustache");
 	      }, new MustacheTemplateEngine()
 	      );
-//-------------------MODULARIZAR---------------------------------------------
-
 
 	      //pagina de creacion de pregunta
 	      get("/createQuestion", (request, response) -> {
