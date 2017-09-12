@@ -16,6 +16,55 @@ public class Question extends Model{
         validatePresenceOf("category").message("Please, provide your category");
     }
 
+    /** 
+     * function that returns a random number between the range given by the
+     * parameters.
+     * @param init is the smallest number in the range.
+     * @param end is the largest number in the range.
+     * @return a random number between the range given by the parameters.
+     * @pre. 0 <= init <= end.
+     * @post. a random number between the range given by the parameters is
+     * returned.
+     */
+    public static int random(int init,int end) {
+        Random  rnd = new Random();
+        return (int)(rnd.nextDouble() * end + init);
+    }
+
+    /** 
+     * function that return true if the question was created correctly
+     * otherwise false.
+     * @param cat is the category corresponding to the question to be 
+     * created.
+     * @param desc is the description corresponding to the question to be 
+     * created.
+     * @param op1 is the first corresponding to the question to be created.
+     * @param op2 is the second corresponding to the question to be created.
+     * @param op3 is the third corresponding to the question to be created.
+     * @param op4 is the fourth corresponding to the question to be created.
+     * @return true if the question was created correctly otherwise false
+     * @pre. cat != null. desc != null. op1 != null. op2 != null. 0p3 != null.
+     *  op4 != null.
+     * @post. true is returned if the question was created correctly otherwise
+     * false.
+     */
+    public static Boolean createQuestion(String cat,String desc,String op1,
+                                         String op2,String op3,String op4){
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia",
+                 "root", "root");
+        Question q = new Question();
+        q.set("category",cat );
+        System.out.println(cat);
+        q.set("description",desc);
+        q.set("option1",op1);
+        q.set("option2",op2);
+        q.set("option3",op3);
+        q.set("option4",op4);
+        Boolean res = q.save();
+        Base.close();
+        return res;
+    }
+
     private static List<Question> getQuestionsByCategory(String nCat){
         List<Question> questions = where("category = '"+nCat+"'");
         return questions;
@@ -23,10 +72,10 @@ public class Question extends Model{
 
     //obtiene una pregunta aleatoria
     public static Question getQuestion(){
-        int n = Lib.random(1,5);
+        int n = random(1,5);
         List<Question> questions = getQuestionsByCategory(getCat(n));
         n = questions.size();
-        Question q = questions.get(Lib.random (0,n));
+        Question q = questions.get(random (0,n));
         return q;
     }
     //obtiene una pregunta especifica
