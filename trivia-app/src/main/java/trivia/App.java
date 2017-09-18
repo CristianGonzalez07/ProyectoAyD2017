@@ -99,6 +99,40 @@ public class App
 	    Base.close();
 	    return user;
 	}
+
+
+
+
+
+	/** 
+     * Comentar 
+     */
+	public static String answer(String username)(){
+		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+  		User user = User.findFirst("username = ?",username);
+ 		String description =Game.initGame(username);
+  		Question q = Question.getQuestionByDesc(description);
+    	Base.close();
+    	return Question.getAnswer(q);
+	}
+
+
+	/** 
+     * Comentar 
+     */
+	public static void currentScore(String username){
+		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+		User user = User.findFirst("username = ?",username);
+		int score = (int)user.get("score");
+	  	user.set("score",(score+1));
+	  	user.saveIt();
+	  	Base.close();
+	}
+
+
+
+
+
 	
     public static void main( String[] args )
     {	
@@ -299,7 +333,7 @@ public class App
 
 	      //Jugar
 	//-------------------MODULARIZAR---------------------------------------------
-	      post("/play", (request,response) -> {
+	      /*post("/play", (request,response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	String username = (String)request.session().attribute(SESSION_NAME);
 	      	Game game = Game.findFirst("user = ?",username);
@@ -323,6 +357,28 @@ public class App
 	      	Base.close();
 	      	return null;
 	      });
+	      */
+
+
+				post("/play", (request,response) -> {
+					String username = (String)request.session().attribute(SESSION_NAME);
+					String currentAnswer = request.queryParams("btn_option");
+					      	
+					if(answer(username).equals(currentAnswer)){
+					   	map.put("msgResult1","Respuesta Correcta");
+					   	map.put("msgResult2","");
+					   	currentScore(username);
+					   	map.put("score",user.get("score"));
+					 	response.redirect("/results");
+					}else{
+					    map.put("msgResult2","Respuesta Incorrecta");
+					    map.put("msgResult1","");
+					    response.redirect("/results");
+					}
+				    return null;
+				});	      
+
+
   	//-------------------MODULARIZAR--------------------------------------------- 
   	}     
 }
