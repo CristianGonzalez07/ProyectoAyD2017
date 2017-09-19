@@ -34,76 +34,6 @@ public class App
 		return (int)(rnd.nextDouble() * end + init);
 	}
 
-
-	/** 
-     * Function that creates a user returns a number 
-     * depending on whether or not the user is reserved.
-     * @param username is the name of the user to consult.
-     * @param password is the password of the user to control
-     * @return A number from 1 to 3, 1 if reserved, 2 if already 
-     * available and 3 if not.
-     * @pre. username <> [] and password <> []
-     * @post. a number from 1 to 3 that must return
-     */
-	public static int registro(String username, String password){
-			int cont = 0;
-			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-			List<User> users  = User.where("username ='"+username+"'");
-			if (users.size() != 0){
-				cont = 1;
-			}else{
-				User usuario = new User();
-				usuario.set("username",username);
-				usuario.set("password",password);
-				Boolean res = usuario.save();
-				if (res == true){
-					cont = 3;
-				}else{
-					cont = 2;
-				}
-			}
-			Base.close();
-			return cont;
-	}
-
-	/** 
-     * -- Falta comentar -- falta afirmar si es correcto
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     */
-	public static boolean logeado(String username, String password, String permissions){
-	   Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-	   boolean resp = User.validateLogin(username,password,permissions); 
-	   Base.close();
-	   return resp;
-	}
-
-	/** 
-     * -- Falta comentar -- falta afirmar si es correcto
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     */
-	public static User usuario1(String username){
-		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-	    User user = User.findFirst("username = ?",username);
-	    Base.close();
-	    return user;
-	}
-
-
-
-
-
 	
     public static void main( String[] args )
     {	
@@ -197,11 +127,11 @@ public class App
 	      );
 
 	      //crear cuenta
-	//-------------------MODULARIZAR---------------------------------------------
+
 	    	post("/register", (request, response) -> {
 	      	String username = request.queryParams("txt_username");
 	      	String password = request.queryParams("txt_password");
-	      	int res = registro(username,password);
+	      	int res = User.register(username,password);
 
 	        if(res == 1){
 	        	map.put("msgFailRegis","Usuario no disponible");
@@ -222,12 +152,10 @@ public class App
 	    });
 	    
 
-	//-------------------MODULARIZAR---------------------------------------------
-
 
 	      //Iniciar sesion
-	//-------------------MODULARIZAR---------------------------------------------
-	      /*post("/login", (request, response) -> {
+
+	      post("/login", (request, response) -> {
 	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	      	String username = request.queryParams("txt_username");
 	      	String password = request.queryParams("txt_password");
@@ -251,30 +179,7 @@ public class App
 	        Base.close();
 	        return null;      
 	      });
-	      */
-	      post("/login", (request, response) -> {
-	      	String username = request.queryParams("txt_username");
-	      	String password = request.queryParams("txt_password");
-	      	String permissions = request.queryParams("permissions");
-		    if(!logeado(username,password,permissions)){
-		        map.put("msgLogin","Usuario no valido /contraseña no valida");
-		        response.redirect("/login");	
-		    }else{	
-		    	map.put("score",usuario1(username).get("score"));
-		    	request.session(true);
-		    	request.session().attribute(SESSION_NAME,username);
-			    if(permissions != null){
-			    	response.redirect("/admin");
-			    }else{
-			    	response.redirect("/gameMenu");
-			   	}
-	        }
-	        return null;      
-	      });
 
-
-
-	//-------------------MODULARIZAR---------------------------------------------
 
 
 	      //Crear Pregunta
