@@ -303,34 +303,6 @@ public class App
 	//-------------------MODULARIZAR---------------------------------------------
 
 	      //Jugar
-	//-------------------MODULARIZAR---------------------------------------------
-	      /*post("/play", (request,response) -> {
-	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-	      	String username = (String)request.session().attribute(SESSION_NAME);
-	      	Game game = Game.findFirst("user = ?",username);
-	      	User user = User.findFirst("username = ?",username);
-	      	String description =game.getString("description");
-	      	Question q = Question.getQuestionByDesc(description);	
-	      	String currentAnswer = request.queryParams("btn_option");
-	      	if(Question.getAnswer(q).equals(currentAnswer)){
-	      		map.put("msgResult1","Respuesta Correcta");
-	      		map.put("msgResult2","");
-	      		int score = (int)user.get("score");
-  				user.set("score",(score+1));
-  				user.saveIt();
-	      		map.put("score",user.get("score"));
-	      		response.redirect("/results");
-	      	}else{
-	      		map.put("msgResult2","Respuesta Incorrecta");
-	      		map.put("msgResult1","");
-	      		response.redirect("/results");
-	      	}
-	      	Base.close();
-	      	return null;
-	      });
-	      */
-
-
 				post("/play", (request,response) -> {
 					String username = (String)request.session().attribute(SESSION_NAME);
 					String currentAnswer = request.queryParams("btn_option");
@@ -350,6 +322,5 @@ public class App
 				});	      
 
 
-  	//-------------------MODULARIZAR--------------------------------------------- 
   	}     
 }
