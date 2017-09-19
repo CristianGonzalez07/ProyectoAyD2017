@@ -3,7 +3,11 @@ package trivia;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
+import trivia.User;
+import trivia.Question;
+import trivia.Game;
 
 public class Question extends Model{
 
@@ -50,10 +54,9 @@ public class Question extends Model{
      */
     public static Boolean createQuestion(String cat,String desc,String op1,
                                          String op2,String op3,String op4){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia",
-                 "root", "root");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia","root", "root");
         Question q = new Question();
-        q.set("category",cat );
+        q.set("category",cat);
         System.out.println(cat);
         q.set("description",desc);
         q.set("option1",op1);
@@ -65,12 +68,50 @@ public class Question extends Model{
         return res;
     }
 
+    /** 
+     * function that returns a List of the options associated with a question in a random order.
+     * @param description is the description of an existing question in db.
+     * @return a List of the options associated with a question in a random order.
+     * @pre. the description is associated with a question in db.
+     * @post. returns a List of the options associated with a question in a random order.
+     */
+    public static List<String> mergeOptions(String description){
+    	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia","root", "root");
+	    List<String> options = new ArrayList<String>();
+	    Question q = Question.getQuestionByDesc(description);
+	    options.add(q.getString("option1"));
+	    options.add(q.getString("option2"));
+	    options.add(q.getString("option3"));
+	    options.add(q.getString("option4"));
+	    int n = -1;
+	    String auxOp = "";
+	    for (int i=0;i<4;i++){
+	      	n = random(0,3);
+	      	auxOp = options.remove(n);
+	      	options.add(auxOp);
+	    }
+	    Base.close();
+	    return options;
+    }
+
+     /** 
+     * function that returns a list with all the questions belonging to a given category.
+     * @param nCat is a number corresponding to a category.
+     * @return a list with all the questions belonging to a given category.
+     * @pre. 1<= nCat <= 5 
+     * @post. returns a list with all the questions belonging to a given category.
+     */
     private static List<Question> getQuestionsByCategory(String nCat){
         List<Question> questions = where("category = '"+nCat+"'");
         return questions;
-    }//End getQuestionByCategory
+    }
 
-    //obtiene una pregunta aleatoria
+    /** 
+     * function that returns a model associated with a question in the db.
+     * @return a model associated with a question in db.
+     * @pre. there should be at least one question from each categoty in the db.
+     * @post. create a returns a model associated with a question in the db.
+     */
     public static Question getQuestion(){
         int n = random(1,5);
         List<Question> questions = getQuestionsByCategory(getCat(n));
@@ -78,17 +119,39 @@ public class Question extends Model{
         Question q = questions.get(random (0,n));
         return q;
     }
-    //obtiene una pregunta especifica
+
+    /** 
+     * function that returns a model associated with a question in the db.
+     * @param description is the description of an existing question in db.
+     * @return a model associated with a question in the db.
+     * @pre. the description is associated with a question in db.
+     * @post. create a returns a model associated with a question in the db.
+     */
     public static Question getQuestionByDesc(String description){
         List<Question> questions = where("description = '"+description+"'");
         return questions.get(0);
     }
 
+    /** 
+     * function that returns the answer associated with a question in db.
+     * @param 
+     * @return
+     * @pre.
+     * @post. 
+     */
+
+    //el parametro de esta funcion pasa de question a descripcion modificar.
     public static String getAnswer(Question q){
         return q.getString("option1");
     }
 
-    //retorna el string correspondiente al nro de cat tomado como parametroX!
+    /** 
+     * function that returns the name of one category associated with the given parameter.
+     * @param n is a number corresponding to a category.
+     * @return the name of one category associated with the given parameter.
+     * @pre. 1<= n <= 5.
+     * @post. returns the name of one category associated with the given parameter.
+     */
     private static String getCat(int n){
         String res = "";
         switch (n) {
@@ -114,4 +177,4 @@ public class Question extends Model{
         }
         return res;
     }
-} //End class Question
+}
