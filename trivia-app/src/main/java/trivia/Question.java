@@ -129,19 +129,6 @@ public class Question extends Model{
     }
 
     /** 
-     * function that returns the answer associated with a question in db.
-     * @param 
-     * @return
-     * @pre.
-     * @post. 
-     */
-
-    //el parametro de esta funcion pasa de question a descripcion modificar.
-    public static String getAnswer(Question q){
-        return q.getString("option1");
-    }
-
-    /** 
      * function that returns the name of one category associated with the given parameter.
      * @param n is a number corresponding to a category.
      * @return the name of one category associated with the given parameter.

@@ -50,37 +50,32 @@ public class App
       		Base.close();
     	});
 
-	      //pagina de Inicio
-	      get("/", (request, response) -> {
-	      	request.session().removeAttribute(SESSION_NAME);
-	      	map.clear();
-	        return new ModelAndView(map, "./views/mainpage.mustache");
-	      }, new MustacheTemplateEngine()
-	      );
+	    get("/", (request, response) -> {
+	       request.session().removeAttribute(SESSION_NAME);
+	       map.clear();
+	       return new ModelAndView(map, "./views/mainpage.mustache");
+	    }, new MustacheTemplateEngine()
+	    );
 
-	      //pagina de inicio Sesion
-	      get("/login", (request, response) -> {
-	        return new ModelAndView(map, "./views/login.mustache");
-	      }, new MustacheTemplateEngine()
-	      );
+	    get("/login", (request, response) -> {
+	       return new ModelAndView(map, "./views/login.mustache");
+	    }, new MustacheTemplateEngine()
+	    );
 
-	      //pagina de crear cuenta
-	      get("/register", (request, response) -> {
-	        return new ModelAndView(map, "./views/register.mustache");
-	      }, new MustacheTemplateEngine()
-	      );
+	    get("/register", (request, response) -> {
+	       return new ModelAndView(map, "./views/register.mustache");
+	    }, new MustacheTemplateEngine()
+	    );
 
-	       //pagina de Usuario 
-	      get("/gameMenu", (request, response) -> {
-			String username = (String)request.session().attribute(SESSION_NAME);
-	      	map.put("currentUser",username);
+	    get("/gameMenu", (request, response) -> {
+            String username = (String)request.session().attribute(SESSION_NAME);
+            map.put("currentUser",username);
 	        return new ModelAndView(map, "./views/gameMenu.mustache");
-	      }, new MustacheTemplateEngine()
-	      );
+	    },   new MustacheTemplateEngine()
+	    ); 
 
-	       //pagina de juego
- 	      get("/play", (request, response) -> {
-	      	String username = (String)request.session().attribute(SESSION_NAME);
+ 	    get("/play", (request, response) -> {
+            String username = (String)request.session().attribute(SESSION_NAME);
 	      	String description = Game.newQuestion(username);
 	      	List<String> options = Question.mergeOptions(description);
 	      	map.put("question",description);
@@ -89,28 +84,23 @@ public class App
 	      	map.put("option3",options.get(2));
 	      	map.put("option4",options.get(3));
 	        return new ModelAndView(map, "./views/play.mustache");
-	      }, new MustacheTemplateEngine()
-	      );
+        },  new MustacheTemplateEngine()
+	    );
 
-	      //pagina de creacion de pregunta
-	      get("/createQuestion", (request, response) -> {
+        get("/createQuestion", (request, response) -> {
 	        return new ModelAndView(map, "./views/createQuestion.mustache");
-	      }, new MustacheTemplateEngine()
-	      );
+        },  new MustacheTemplateEngine()
+        );
 
-	      //pagina de administrador
-	      get("/admin", (request, response) -> {
+        get("/admin", (request, response) -> {
 	        return new ModelAndView(map, "./views/admin.mustache");
-	      }, new MustacheTemplateEngine()
-	      );
+        },  new MustacheTemplateEngine()
+        );
 
-	      //pagina de Resultados 
-	      get("/results", (request, response) -> {
-	        return new ModelAndView(map, "./views/results.mustache");
-	      }, new MustacheTemplateEngine()
-	      );
-
-	      //crear cuenta
+        get("/results", (request, response) -> {
+            return new ModelAndView(map, "./views/results.mustache");
+        }, new MustacheTemplateEngine()
+        );
 
 	    post("/register", (request, response) -> {
 	      	String username = request.queryParams("txt_username");
@@ -134,10 +124,6 @@ public class App
 	        }
 	        return null;
 	    });
-	    
-
-
-	      //Iniciar sesion
 
 	    post("/login", (request, response) -> {
 	      	String username = request.queryParams("txt_username");
@@ -162,14 +148,10 @@ public class App
 	        return null;      
 	      });
 
-
-
-	      //Crear Pregunta
-	//-------------------MODULARIZAR---------------------------------------------
 	    post("/createQuestion", (request, response) -> {
 	      	map.clear();
 
-	      	String cat = request.queryParams("Category");
+            String cat = request.queryParams("Category");
 	      	String desc = request.queryParams("Description");
 	      	String op1 = request.queryParams("txt_op1");
 	      	String op2 = request.queryParams("txt_op2");
@@ -187,9 +169,7 @@ public class App
 	      	}
 	        return null;
 	      });
-	//-------------------MODULARIZAR---------------------------------------------
 
-	      //Jugar
 		post("/play", (request,response) -> {
 			String username = (String)request.session().attribute(SESSION_NAME);
 			String currentAnswer = request.queryParams("btn_option");

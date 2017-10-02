@@ -17,7 +17,7 @@ public class Game extends Model {
      * function that returns a description of the last question associated with the game.
      * @param username is a name of player associated with the game.
      * @return a description of the last question associated to the game.
-     * @pre. the description is associated with a question in db.
+     * @pre. username <> []
      * @post. returns a description of the last question associated with the game.
      */
 	public static String getQuestion(String username){
@@ -34,7 +34,7 @@ public class Game extends Model {
      * function that created and returns a description of the last question associated with the game.
      * @param username is a name of player associated with the game.
      * @return a description of the last question associated to the game.
-     * @pre. the description is associated with a question in db.
+     * @pre. username <> []
      * @post. returns a description of the last question associated with the game.
      */
 	public static String newQuestion(String username){
@@ -53,21 +53,28 @@ public class Game extends Model {
 	   	game.saveIt();
 	   	return description;	
 	}
-
-	/** 
-    	 * Comentar 
-     	*/
+    /** 
+     * function that returns the answer associated with a question in db.
+     * @param username is a name of player associated with the game.
+     * @return the response associated with the question answered by the user.
+     * @pre. username <> []
+     * @post. returns the response associated with the question answered by the user.
+     */
 	public static String answer(String username){
   		User user = User.findFirst("username = ?",username);
  		String description = getQuestion(username);
   		Question q = Question.getQuestionByDesc(description);
-    	return Question.getAnswer(q);
+    	return question.get("option1");
 	}
 
 
 	/** 
-     	 * Comentar 
-     	*/
+     * function that modifies a user's current score and then returns it
+     * @param username is a name of player associated with the game.
+     * @return user's current score
+     * @pre. username <> []
+     * @post. modifies and returns user's current score
+     */
 	public static int currentScore(String username){
 		User user = User.findFirst("username = ?",username);
 		int score = (int)user.get("score");

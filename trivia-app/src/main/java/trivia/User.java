@@ -42,7 +42,19 @@ public class User extends Model {
 			return cont;
 	}
 
-	//verifica el inicio de sesion	
+    /** 
+     * Function function that returns true if the user's password and
+     * permissions are correct for system access.
+     * @param username is the name of the user to consult.
+     * @param password is the password of the user to control
+     * @param asAdmin indicates the corresponding access permissions.
+     * @return  true if the user's password and permissions are correct
+     * for system access otherwise false.
+     * @pre. username <> [] and password <> [] and 
+     * (asAdmin="YES" or asAdmin = "NO")
+     * @post. returns true if the user's password and
+     * permissions are correct for system access.
+     */
 	public static Boolean validateLogin(String username,String password,String asAdmin){	
 		List<User> users  = User.where("username ='"+username+"' AND password ='"+password+"'");
 		if(users.size() != 0){
