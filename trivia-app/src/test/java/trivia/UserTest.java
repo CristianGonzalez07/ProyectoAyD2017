@@ -39,17 +39,59 @@ public class UserTest{
 
      @Test
      public void validateUniquenessOfUsernames(){
-         User user = new User();
-         user.set("username", "Prueba");
-         user.set("password","1234");
-         user.saveIt();
+        User user = new User();
+        user.set("username", "Prueba");
+        user.set("password","1234");
+        user.saveIt();
 
-         User user2 = new User();
-         user.set("username", "Prueba");
-         user.set("password","12345");
+        User user2 = new User();
+        user.set("username", "Prueba");
+        user.set("password","12345");
 
-         assertEquals(user2.isValid(), false);
+        assertEquals(user2.isValid(), false);
 
         user.delete();        
+    }
+
+    @Test
+    public void validateRegister(){
+        String username = "";
+        String pass = "";
+        assertEquals(User.register(username,pass),2);
+
+        username = "Prueba";
+        pass = "1234";
+        User user = new User();
+        user.set("username", username);
+        user.set("password",pass);
+        user.saveIt();
+        assertEquals(User.register(username,pass),1);
+
+        user.delete(); 
+        username = "Prueba";
+        pass = "1234";
+        assertEquals(User.register(username,pass),3);
+    }
+
+    @Test
+    public void validateFunctionValidateLogin(){
+        String username = "";
+        String pass = "";
+        String perms = "NO";  
+        assertEquals(User.validateLogin(username,pass,perms),false);
+       
+        perms = "YES";
+        assertEquals(User.validateLogin(username,pass,perms),false);
+        
+        username = "Prueba";
+        pass = "1234";
+        User user = new User();
+        user.set("username", username);
+        user.set("password",pass);
+        user.saveIt();
+        assertEquals(User.validateLogin(username,pass,perms),false);
+       
+        user.delete();
+        assertEquals(User.validateLogin("CGonzalez","pregunta2","YES"),true);
     }
 }

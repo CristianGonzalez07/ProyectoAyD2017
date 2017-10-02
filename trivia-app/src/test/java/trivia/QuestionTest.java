@@ -37,16 +37,16 @@ public class QuestionTest{
     }
 
     public void validateUniquenessOfQuestions(){
-         Question question = new Question();
-         question.set("description", "¿ 2x2 ?");
-         question.set("category","CIENCIAS");
-         question.saveIt();
+        Question question = new Question();
+        question.set("description", "¿ 2x2 ?");
+        question.set("category","CIENCIAS");
+        question.saveIt();
 
-         Question question2 = new Question();
-         question2.set("description", "¿ 2x2 ?");
-         question2.set("category","CIENCIAS");
-         question2.saveIt();
-         assertEquals(question2.isValid(), false);
+        Question question2 = new Question();
+        question2.set("description", "¿ 2x2 ?");
+        question2.set("category","CIENCIAS");
+        question2.saveIt();
+        assertEquals(question2.isValid(), false);
 
         question.delete();        
     }
@@ -67,5 +67,21 @@ public class QuestionTest{
         assertEquals(q.isValid(), false);
     }
 
-
+    @Test
+    public void validatecreateQuestion(){
+        assertEquals(Question.createQuestion("DEPORTES","¿Cual es el mejor Equipo?",
+            "Boca","River","Racing","Central"), true);
+        assertEquals(Question.createQuestion("","¿Cual es el mejor Equipo?",
+            "Boca","River","Racing","Central"), false);
+        assertEquals(Question.createQuestion("DEPORTES","",
+            "Boca","River","Racing","Central"), false);
+        assertEquals(Question.createQuestion("DEPORTES","¿Cual es el mejor Equipo?",
+            "","River","Racing","Central"), false);
+        assertEquals(Question.createQuestion("DEPORTES","¿Cual es el mejor Equipo?",
+            "Boca","","Racing","Central"), false);
+        assertEquals(Question.createQuestion("DEPORTES","¿Cual es el mejor Equipo?",
+            "Boca","River","","Central"), false);
+        assertEquals(Question.createQuestion("DEPORTES","¿Cual es el mejor Equipo?",
+            "Boca","River","Racing",""), false);
+    }
 }
