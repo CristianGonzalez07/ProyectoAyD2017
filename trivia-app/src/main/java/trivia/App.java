@@ -34,11 +34,21 @@ public class App
 		Random  rnd = new Random();
 		return (int)(rnd.nextDouble() * end + init);
 	}
+
 	
     public static void main( String[] args )
     {	
     	staticFileLocation("/views");
     	Map map = new HashMap();
+
+
+    	before((req, res)->{
+        	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+   		});
+
+    	after((req, res) -> {
+      		Base.close();
+    	});
 
 	      //pagina de Inicio
 	      get("/", (request, response) -> {
@@ -71,7 +81,7 @@ public class App
 	       //pagina de juego
  	      get("/play", (request, response) -> {
 	      	String username = (String)request.session().attribute(SESSION_NAME);
-	      	String description = Game.initGame(username);
+	      	String description = Game.newQuestion(username);
 	      	List<String> options = Question.mergeOptions(description);
 	      	map.put("question",description);
 	      	map.put("option1",options.get(0));
@@ -102,7 +112,7 @@ public class App
 
 	      //crear cuenta
 
-	    	post("/register", (request, response) -> {
+	    post("/register", (request, response) -> {
 	      	String username = request.queryParams("txt_username");
 	      	String password = request.queryParams("txt_password");
 	      	int res = User.register(username,password);
@@ -129,8 +139,7 @@ public class App
 
 	      //Iniciar sesion
 
-	      post("/login", (request, response) -> {
-	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+	    post("/login", (request, response) -> {
 	      	String username = request.queryParams("txt_username");
 	      	String password = request.queryParams("txt_password");
 	      	String permissions = request.queryParams("permissions");
@@ -150,7 +159,6 @@ public class App
 			    	response.redirect("/gameMenu");
 			   	}
 	        }
-	        Base.close();
 	        return null;      
 	      });
 
@@ -158,7 +166,7 @@ public class App
 
 	      //Crear Pregunta
 	//-------------------MODULARIZAR---------------------------------------------
-	      post("/createQuestion", (request, response) -> {
+	    post("/createQuestion", (request, response) -> {
 	      	map.clear();
 
 	      	String cat = request.queryParams("Category");
@@ -182,31 +190,22 @@ public class App
 	//-------------------MODULARIZAR---------------------------------------------
 
 	      //Jugar
-	//-------------------MODULARIZAR---------------------------------------------
-	      post("/play", (request,response) -> {
-	      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-	      	String username = (String)request.session().attribute(SESSION_NAME);
-	      	Game game = Game.findFirst("user = ?",username);
-	      	User user = User.findFirst("username = ?",username);
-	      	String description =game.getString("description");
-	      	Question q = Question.getQuestionByDesc(description);	
-	      	String currentAnswer = request.queryParams("btn_option");
-	      	if(Question.getAnswer(q).equals(currentAnswer)){
-	      		map.put("msgResult1","Respuesta Correcta");
-	      		map.put("msgResult2","");
-	      		int score = (int)user.get("score");
-  				user.set("score",(score+1));
-  				user.saveIt();
-	      		map.put("score",user.get("score"));
-	      		response.redirect("/results");
-	      	}else{
-	      		map.put("msgResult2","Respuesta Incorrecta");
-	      		map.put("msgResult1","");
-	      		response.redirect("/results");
-	      	}
-	      	Base.close();
-	      	return null;
-	      });
-  	//-------------------MODULARIZAR--------------------------------------------- 
+		post("/play", (request,response) -> {
+			String username = (String)request.session().attribute(SESSION_NAME);
+			String currentAnswer = request.queryParams("btn_option");
+				      	
+			if(Game.answer(username).equals(currentAnswer)){
+			   	map.put("msgResult1","Respuesta Correcta");
+			   	map.put("msgResult2","");
+			   	int score = Game.currentScore(username);
+			   	map.put("score",score);
+			 	response.redirect("/results");
+			}else{
+	   		    map.put("msgResult2","Respuesta Incorrecta");
+			    map.put("msgResult1","");
+			    response.redirect("/results");
+			}
+		    return null;
+		});	      
   	}     
 }

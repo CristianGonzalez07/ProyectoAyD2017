@@ -54,7 +54,6 @@ public class Question extends Model{
      */
     public static Boolean createQuestion(String cat,String desc,String op1,
                                          String op2,String op3,String op4){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia","root", "root");
         Question q = new Question();
         q.set("category",cat);
         System.out.println(cat);
@@ -64,7 +63,6 @@ public class Question extends Model{
         q.set("option3",op3);
         q.set("option4",op4);
         Boolean res = q.save();
-        Base.close();
         return res;
     }
 
@@ -76,7 +74,6 @@ public class Question extends Model{
      * @post. returns a List of the options associated with a question in a random order.
      */
     public static List<String> mergeOptions(String description){
-    	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia","root", "root");
 	    List<String> options = new ArrayList<String>();
 	    Question q = Question.getQuestionByDesc(description);
 	    options.add(q.getString("option1"));
@@ -90,7 +87,6 @@ public class Question extends Model{
 	      	auxOp = options.remove(n);
 	      	options.add(auxOp);
 	    }
-	    Base.close();
 	    return options;
     }
 

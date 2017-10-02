@@ -6,6 +6,12 @@ import java.util.List;
 import org.javalite.activejdbc.validation.UniquenessValidator;
 
 public class User extends Model {
+	
+	static{
+    	validatePresenceOf("username").message("Please, provide your username");
+  		validatePresenceOf("password").message("Please, provide your password");
+  		validateWith(new UniquenessValidator("username")).message("This username is already taken."); 		
+	}
 
 	/** 
      * Function that creates a user returns a number 
@@ -19,7 +25,6 @@ public class User extends Model {
      */
 	public static int register(String username, String password){
 			int cont = 0;
-			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 			List<User> users  = User.where("username ='"+username+"'");
 			if (users.size() != 0){
 				cont = 1;
@@ -34,14 +39,7 @@ public class User extends Model {
 					cont = 2;
 				}
 			}
-			Base.close();
 			return cont;
-	}
-	
-	static{
-    	validatePresenceOf("username").message("Please, provide your username");
-  		validatePresenceOf("password").message("Please, provide your password");
-  		validateWith(new UniquenessValidator("username")).message("This username is already taken."); 		
 	}
 
 	//verifica el inicio de sesion	
@@ -58,6 +56,5 @@ public class User extends Model {
 		}else{
 			return false;
 		}
-  	}//End class validateLogin
-
-}//End Class User
+  	}
+}
