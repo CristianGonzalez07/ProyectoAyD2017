@@ -19,7 +19,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 public class App
 {
 	private static final String SESSION_NAME = "username";
-	private static Boolean conect = false;
+	
 
 	/** 
      * function that returns a random number between the range given by the
@@ -44,13 +44,11 @@ public class App
 
 
     	before((req, res)->{
-    		conect = !(conect);
         	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
    		});
 
     	after((req, res) -> {
       		Base.close();
-      		conect = !(conect);
     	});
 
 	    get("/", (request, response) -> {
