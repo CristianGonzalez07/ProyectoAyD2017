@@ -64,7 +64,7 @@ public class Game extends Model {
   		User user = User.findFirst("username = ?",username);
  		String description = getQuestion(username);
   		Question q = Question.getQuestionByDesc(description);
-    	return question.get("option1");
+    	return q.getString("option1");
 	}
 
 
