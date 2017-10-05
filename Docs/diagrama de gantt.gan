@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-09-09" view-index="0" gantt-divider-location="300" resource-divider-location="300" version="2.8.5" locale="es">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-09-25" view-index="0" gantt-divider-location="323" resource-divider-location="300" version="2.8.5" locale="es">
     <description/>
-    <view zooming-state="default:3" id="gantt-chart">
-        <field id="tpd3" name="Nombre" width="167" order="0"/>
-        <field id="tpd4" name="Fecha de inicio" width="65" order="1"/>
-        <field id="tpd5" name="Fecha de fin" width="64" order="2"/>
+    <view zooming-state="default:4" id="gantt-chart">
+        <field id="tpd3" name="Nombre" width="166" order="0"/>
+        <field id="tpd4" name="Fecha de inicio" width="69" order="1"/>
+        <field id="tpd5" name="Fecha de fin" width="69" order="2"/>
         <option id="taskLabelUp" value="resources"/>
         <option id="taskLabelDown" value="length"/>
         <option id="taskLabelLeft" value=""/>
@@ -66,7 +66,23 @@
             <notes><![CDATA[Desarrollo de la interfaz web de la app]]></notes>
             <depend id="50" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="50" name="Correccion de errores" color="#8cb6ce" meeting="false" start="2017-10-02" duration="5" complete="0" expand="true"/>
+        <task id="50" name="Correccion de errores" color="#8cb6ce" meeting="false" start="2017-10-02" duration="5" complete="0" expand="true">
+            <depend id="51" type="2" difference="0" hardness="Strong"/>
+            <depend id="54" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="51" name="Aprendizaje Web Socket" color="#8cb6ce" meeting="false" start="2017-10-09" duration="3" complete="0" expand="true"/>
+        <task id="54" name="Modificacion Base de Datos" color="#8cb6ce" meeting="false" start="2017-10-09" duration="1" complete="0" expand="true">
+            <depend id="59" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="59" name="Actualizacion Post Cambio" color="#8cb6ce" meeting="false" start="2017-10-10" duration="1" complete="0" expand="true">
+            <depend id="67" type="2" difference="0" hardness="Strong"/>
+            <depend id="70" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="67" name="Elegir Rival" color="#8cb6ce" meeting="false" start="2017-10-11" duration="1" complete="0" expand="true"/>
+        <task id="70" name="Notificaciones" color="#8cb6ce" meeting="false" start="2017-10-11" duration="3" complete="0" expand="true">
+            <depend id="74" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="74" name="Sistema de juego 1v1" color="#8cb6ce" meeting="false" start="2017-10-16" duration="4" complete="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="0" name="Cristian Gonzalez" function="SoftwareDevelopment:2" contacts="" phone=""/>
