@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-09-25" view-index="0" gantt-divider-location="323" resource-divider-location="300" version="2.8.5" locale="es">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-10-16" view-index="0" gantt-divider-location="323" resource-divider-location="300" version="2.8.5" locale="es">
     <description/>
-    <view zooming-state="default:4" id="gantt-chart">
+    <view zooming-state="default:0" id="gantt-chart">
         <field id="tpd3" name="Nombre" width="166" order="0"/>
         <field id="tpd4" name="Fecha de inicio" width="69" order="1"/>
         <field id="tpd5" name="Fecha de fin" width="69" order="2"/>
@@ -72,17 +72,42 @@
         </task>
         <task id="51" name="Aprendizaje Web Socket" color="#8cb6ce" meeting="false" start="2017-10-09" duration="3" complete="0" expand="true"/>
         <task id="54" name="Modificacion Base de Datos" color="#8cb6ce" meeting="false" start="2017-10-09" duration="1" complete="0" expand="true">
+            <notes><![CDATA[Modificar la base de datos del sistema adaptandola para la introduccion del nuevo modo de juego
+]]></notes>
             <depend id="59" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="59" name="Actualizacion Post Cambio" color="#8cb6ce" meeting="false" start="2017-10-10" duration="1" complete="0" expand="true">
+            <notes><![CDATA[Actualizacion del codigo y test que utilizan los modelos que estan involucrados en los cambios de la DB]]></notes>
             <depend id="67" type="2" difference="0" hardness="Strong"/>
             <depend id="70" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="67" name="Elegir Rival" color="#8cb6ce" meeting="false" start="2017-10-11" duration="1" complete="0" expand="true"/>
+        <task id="67" name="Elegir Rival" color="#8cb6ce" meeting="false" start="2017-10-11" duration="1" complete="0" expand="true">
+            <notes><![CDATA[Implementacion de:
+Emparejamiento Random
+Emparejamiento por Seleccion manual
+Emparejamiento por Busqueda]]></notes>
+        </task>
         <task id="70" name="Notificaciones" color="#8cb6ce" meeting="false" start="2017-10-11" duration="3" complete="0" expand="true">
+            <notes><![CDATA[Implementacion de:
+-Envio de notificaciones posteriores al emparejamiento para 	confirmaruna partida
+-Recepcion y aceptacion o rechazo de la partida.]]></notes>
             <depend id="74" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="74" name="Sistema de juego 1v1" color="#8cb6ce" meeting="false" start="2017-10-16" duration="4" complete="0" expand="true"/>
+        <task id="74" name="Sistema de juego 1v1" color="#8cb6ce" meeting="false" start="2017-10-16" duration="4" complete="0" expand="true">
+            <notes><![CDATA[Implementacion de :
+-Interfaz de juego
+-Actualizacion de datos de partida
+-Actualizacion de temporizador
+-Limitacion de tiempo de espera
+-Limitacion de duracion de partidas
+-Limitacion de tiempo de espera
+-Limitacion de cantidad de partidas
+-Agregar opcion de reanudar partida
+-modificar obtencion de puntajes
+-informar resultados
+-Actualizacion de datos de partida(turnos,puntos)
+]]></notes>
+        </task>
     </tasks>
     <resources>
         <resource id="0" name="Cristian Gonzalez" function="SoftwareDevelopment:2" contacts="" phone=""/>
