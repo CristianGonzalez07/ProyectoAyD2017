@@ -34,3 +34,14 @@ CREATE TABLE IF NOT EXISTS games(
 	created_at DATETIME,
 	updated_at DATETIME
 )ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS notifications(
+	id int(11) auto_increment PRIMARY KEY,
+	origin VARCHAR(128) NOT NULL,
+	destination VARCHAR(128) NOT NULL,
+	content VARCHAR(128) NOT NULL,
+	read BOOLEAN NOT NULL,
+	accepted BOOLEAN NOT NULL,
+	created_at DATETIME,
+  	updated_at DATETIME
+)ENGINE=InnoDB;
