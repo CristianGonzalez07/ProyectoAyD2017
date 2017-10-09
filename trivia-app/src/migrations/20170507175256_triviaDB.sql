@@ -23,8 +23,14 @@ CREATE TABLE IF NOT EXISTS questions(
 
 CREATE TABLE IF NOT EXISTS games(
 	id int(11) auto_increment PRIMARY KEY,
-	user VARCHAR(128) NOT NULL,
-	description VARCHAR(128) NOT NULL,
+	typeOfGame ENUM('1player','2player'),
+	player1 VARCHAR(128) NOT NULL,
+	player2 VARCHAR(128) NOT NULL,
+	scorePlayer1 int(11) NOT NULL DEFAULT 0,
+	scorePlayer2 int(11) NOT NULL DEFAULT 0,
+	move int(11)  NOT NULL DEFAULT 0,
+	status ENUM('WAITING','INPROGRESS','TERMINATED'),
+	initiated DATETIME,
 	created_at DATETIME,
-  updated_at DATETIME
+	updated_at DATETIME
 )ENGINE=InnoDB;
