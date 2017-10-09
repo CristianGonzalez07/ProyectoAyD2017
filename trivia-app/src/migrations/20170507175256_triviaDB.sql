@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS games(
 	player2 VARCHAR(128) NOT NULL,
 	scorePlayer1 int(11) NOT NULL DEFAULT 0,
 	scorePlayer2 int(11) NOT NULL DEFAULT 0,
-	move int(11)  NOT NULL DEFAULT 0,
+	moves int(11)  NOT NULL DEFAULT 0,
 	status ENUM('WAITING','INPROGRESS','TERMINATED'),
 	initiated DATETIME,
 	created_at DATETIME,
