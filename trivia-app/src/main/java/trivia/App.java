@@ -75,19 +75,6 @@ public class App
 	    },   new MustacheTemplateEngine()
 	    ); 
 
- 	    get("/play", (request, response) -> {
-            String username = (String)request.session().attribute(SESSION_NAME);
-	      	String description = Game.newQuestion(username);
-	      	List<String> options = Question.mergeOptions(description);
-	      	map.put("question",description);
-	      	map.put("option1",options.get(0));
-	      	map.put("option2",options.get(1));
-	      	map.put("option3",options.get(2));
-	      	map.put("option4",options.get(3));
-	        return new ModelAndView(map, "./views/play.mustache");
-        },  new MustacheTemplateEngine()
-	    );
-
         get("/createQuestion", (request, response) -> {
 	        return new ModelAndView(map, "./views/createQuestion.mustache");
         },  new MustacheTemplateEngine()
@@ -170,23 +157,5 @@ public class App
 	      	}
 	        return null;
 	      });
-
-		post("/play", (request,response) -> {
-			String username = (String)request.session().attribute(SESSION_NAME);
-			String currentAnswer = request.queryParams("btn_option");
-				      	
-			if(Game.answer(username).equals(currentAnswer)){
-			   	map.put("msgResult1","Respuesta Correcta");
-			   	map.put("msgResult2","");
-			   	int score = Game.currentScore(username);
-			   	map.put("score",score);
-			 	response.redirect("/results");
-			}else{
-	   		    map.put("msgResult2","Respuesta Incorrecta");
-			    map.put("msgResult1","");
-			    response.redirect("/results");
-			}
-		    return null;
-		});	      
   	}     
 }
