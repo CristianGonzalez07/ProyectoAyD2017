@@ -48,7 +48,6 @@ public class Game extends Model {
 	/** 
      * function that modifies a user's current score
      * @param username is a name of player associated with the game.
-     * @return user's current score
      * @pre. username <> []
      * @post. modifies user's current score
      */
@@ -66,4 +65,44 @@ public class Game extends Model {
 		}
 		game.set("moves",round+1);
 	}
+
+
+	/**
+	* function that modifies the total score of users
+	* @param username of users associated with the game
+	* @pre idGame <> []
+	* @pos modifies user's total score
+	*/
+	public static void totalScoreForPlayer(int idGame){
+		Game game = Game.findFirst("id = ?", idGame);
+		String status = game.get("status");
+		String typeOfGame = game.get("typeOfGame");
+		if(status=='TERMINATED'){
+			
+			if(typeOfGame=='2PLAYER'){
+				int scorePlayer1 = game.get("scorePlayer1");
+				int scorePlayer2 = game.get("scorePlayer2");
+				user user1 = game.get("player1");
+				user user2 = game.get("player2");
+				if(scorePlayer1>scorePlayer2)
+					user1.set("score",scorePlayer1+15);
+				if(scorePlayer1<scorePlayer2)
+					user2.set("score",scorePlayer2+15);
+				else{					
+					user1.set("score",scorePlayer1);
+					user2.set("score",scorePlayer2);
+				}
+			}else{
+				int scorePlayer1 = game.get("scorePlayer1");
+				user user1 = game.get("player1");
+				user1.set("score",scorePlayer1);
+			}
+
+		}
+
+
+	}
+
+
+
 }
