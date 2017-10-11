@@ -124,10 +124,7 @@ public class Game extends Model {
 				int scorePlayer1 = (int)game.get("scorePlayer1");
 				p1.set("score",scorePlayer1);
 			}
-
 		}
-
-
 	}
 
 
@@ -149,11 +146,4 @@ public class Game extends Model {
 		}
 		return res;
 	}
-}
-
-
-	
-
-
-
 }
