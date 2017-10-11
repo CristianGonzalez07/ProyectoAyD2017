@@ -79,7 +79,7 @@ public class Game extends Model {
 	public static void currentScore(String p1,String p2){
 		List<Game> games = Game.where("player1 = " + p1 + "AND player2 = " + p2);
 		Game game = games.get(0);
-		int (int)round = game.get("moves");
+		int round = (int)game.get("moves");
 		int score = 0;
 		if (round%2==0){
 			score = (int)game.get("scorePlayer1");
