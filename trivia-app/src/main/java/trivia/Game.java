@@ -30,29 +30,6 @@ public class Game extends Model {
 	   	return description;
 	}
 
-	/** 
-     * function that created and returns a description of the last question associated with the game.
-     * @param username is a name of player associated with the game.
-     * @return a description of the last question associated to the game.
-     * @pre. username <> []
-     * @post. returns a description of the last question associated with the game.
-     */
-	public static String newQuestion(String username){
-		Game game = new Game();
-	    List<Game> games  = Game.where("user ='"+username+"'");
-	    Question q = new Question();
-	    String description = "";
-	   	if(games.size() != 0){
-	   		game = Game.findFirst("user = ?",username);
-	    }else{
-	    	game.set("user",username);	
-	    }
-	    q = Question.getQuestion();
-	    description = q.getString("description"); 
-	   	game.set("description",description);
-	   	game.saveIt();
-	   	return description;	
-	}
     /** 
      * function that returns the answer associated with a question in db.
      * @param username is a name of player associated with the game.

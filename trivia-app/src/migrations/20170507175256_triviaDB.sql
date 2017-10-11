@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS games(
 	id int(11) auto_increment PRIMARY KEY,
 	typeOfGame ENUM('1PLAYER','2PLAYER'),
 	player1 VARCHAR(128) NOT NULL,
-	player2 VARCHAR(128) NOT NULL,
+	player2 VARCHAR(128),
 	scorePlayer1 int(11) NOT NULL DEFAULT 0,
 	scorePlayer2 int(11) NOT NULL DEFAULT 0,
 	moves int(11)  NOT NULL DEFAULT 0,
