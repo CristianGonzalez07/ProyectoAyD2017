@@ -131,5 +131,29 @@ public class Game extends Model {
 	}
 
 
+	/** 
+     * function that's returns true if the limit of games
+     * per player is not exceeded.
+     * @param username is a name of player
+     * @pre. username <> []
+     * @post. return true if the limit of games
+     * per player is not exceeded.
+     * @return true if if the limit of games per
+     * player is not exceeded. 
+     */
+	public static boolean limitGames(String username){
+		List<Game> games = Game.where(("player1 = " + username + "OR player2 = " + username));
+		boolean res = false;
+		if (games.size()<= 4){
+			res=true;
+		}
+		return res;
+	}
+}
+
+
+	
+
+
 
 }
