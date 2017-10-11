@@ -42,6 +42,6 @@ public class GameTest{
         game.set("PLAYER1", "Player");
         game.set("PLAYER2", "");
         assertEquals(game.isValid(), false);
-        game.delete;
+        game.delete();
     }
 }
