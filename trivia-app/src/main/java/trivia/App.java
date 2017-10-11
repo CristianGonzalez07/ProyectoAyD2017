@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
+
 import static spark.Spark.*;
 
 import spark.ModelAndView;
@@ -51,6 +55,16 @@ public class App
       		Base.close();
     	});
 
+    	Timer timer = new Timer (960000, new ActionListener () 
+				{ 
+	    			public void actionPerformed(ActionEvent e) 
+	    			{ 
+	        			Game.checkWaitTime();
+	     			} 
+				}); 
+
+		timer.start();
+	    
 	    get("/", (request, response) -> {
 	       request.session().removeAttribute(SESSION_NAME);
 	       map.clear();
