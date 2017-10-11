@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS users(
   permissions ENUM('YES','NO') DEFAULT 'NO',
   score int(11) NOT NULL DEFAULT 0,
   UNIQUE (username),	
-  created_at DATETIME,
-  updated_at DATETIME
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS questions(
@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS questions(
   option2  VARCHAR(50) NOT NULL,
   option3  VARCHAR(50) NOT NULL,
   option4  VARCHAR(50) NOT NULL,
-  created_at DATETIME,
-  updated_at DATETIME
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS games(
@@ -29,10 +29,10 @@ CREATE TABLE IF NOT EXISTS games(
 	scorePlayer1 int(11) NOT NULL DEFAULT 0,
 	scorePlayer2 int(11) NOT NULL DEFAULT 0,
 	moves int(11)  NOT NULL DEFAULT 0,
-	status ENUM('WAITING','INPROGRESS','TERMINATED'),
-	initiated DATETIME,
-	created_at DATETIME,
-	updated_at DATETIME
+	status ENUM('WAITING','INPROGRESS','TERMINATED','UNINITIATED'),
+	initiated TIMESTAMP,
+	created_at TIMESTAMP,
+	updated_at TIMESTAMP
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS notifications(
@@ -42,6 +42,6 @@ CREATE TABLE IF NOT EXISTS notifications(
 	content VARCHAR(128) NOT NULL,
 	viewed BOOLEAN,
 	accepted BOOLEAN ,
-	created_at DATETIME,
-  	updated_at DATETIME
+	created_at TIMESTAMP,
+  	updated_at TIMESTAMP
 )ENGINE=InnoDB;
