@@ -34,13 +34,13 @@ public class GameTest{
     @Test
     public void validateGame(){
         Game game = new Game();
-        game.set("typeOfGame", "1player");
-        game.set("PLAYER1", "Player");
-        game.set("PLAYER2", "");
+        game.set("typeOfGame", "1PLAYER");
+        game.set("Player1", "Player");
+        game.set("Player2", "");
         assertEquals(game.isValid(), true);
-        game.set("typeOfGame", "2player");
-        game.set("PLAYER1", "Player");
-        game.set("PLAYER2", "");
+        game.set("typeOfGame", "2PLAYER");
+        game.set("1Player", "Player");
+        game.set("2Player", "");
         assertEquals(game.isValid(), false);
         game.delete();
     }

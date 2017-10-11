@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS notifications(
 	origin VARCHAR(128) NOT NULL,
 	destination VARCHAR(128) NOT NULL,
 	content VARCHAR(128) NOT NULL,
-	read BOOLEAN NOT NULL,
-	accepted BOOLEAN NOT NULL,
+	viewed BOOLEAN,
+	accepted BOOLEAN ,
 	created_at DATETIME,
   	updated_at DATETIME
 )ENGINE=InnoDB;
