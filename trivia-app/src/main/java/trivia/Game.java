@@ -103,13 +103,13 @@ public class Game extends Model {
 		String status = game.getString("status");
 		String typeOfGame = game.getString("typeOfGame");
 		if(status.equals("TERMINATED")){
-			User p1 = User.findFirst("username = ?",p1);	
+			String user1 = game.getString("player1");
+			User p1 = User.findFirst("username = ?",user1);	
 			if(typeOfGame.equals("2PLAYER")){
 				int scorePlayer1 = (int)game.get("scorePlayer1");
 				int scorePlayer2 = (int)game.get("scorePlayer2");
-				String user1 = game.getString("player1");
 				String user2 = game.getString("player2");
-				User p2 = User.findFirst("username = ?",p2);
+				User p2 = User.findFirst("username = ?",user2);
 				if(scorePlayer1>scorePlayer2)
 					p1.set("score",scorePlayer1+15);
 				else{
