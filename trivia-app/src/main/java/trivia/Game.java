@@ -79,13 +79,13 @@ public class Game extends Model {
 	public static void currentScore(String p1,String p2){
 		List<Game> games = Game.where("player1 = " + p1 + "AND player2 = " + p2);
 		Game game = games.get(0);
-		int round = game.get("moves");
+		int (int)round = game.get("moves");
 		int score = 0;
 		if (round%2==0){
-			score = game.get("scorePlayer1");
+			score = (int)game.get("scorePlayer1");
 			game.set("scorePlayer1", score+1);
 		} else {
-			score = game.get("scorePlayer2");
+			score = (int)game.get("scorePlayer2");
 			game.set("scorePlayer2", score+1);
 		}
 		game.set("moves",round+1);
@@ -100,29 +100,29 @@ public class Game extends Model {
 	*/
 	public static void totalScoreForPlayer(int idGame){
 		Game game = Game.findFirst("id = ?", idGame);
-		String status = game.get("status");
-		String typeOfGame = game.get("typeOfGame");
+		String status = game.getString("status");
+		String typeOfGame = game.getString("typeOfGame");
 		if(status.equals("TERMINATED")){
-			
+			User p1 = User.findFirst("username = ?",p1);	
 			if(typeOfGame.equals("2PLAYER")){
-				int scorePlayer1 = game.get("scorePlayer1");
-				int scorePlayer2 = game.get("scorePlayer2");
-				user user1 = game.get("player1");
-				user user2 = game.get("player2");
+				int scorePlayer1 = (int)game.get("scorePlayer1");
+				int scorePlayer2 = (int)game.get("scorePlayer2");
+				String user1 = game.getString("player1");
+				String user2 = game.getString("player2");
+				User p2 = User.findFirst("username = ?",p2);
 				if(scorePlayer1>scorePlayer2)
-					user1.set("score",scorePlayer1+15);
+					p1.set("score",scorePlayer1+15);
 				else{
 					if(scorePlayer1<scorePlayer2)
-						user2.set("score",scorePlayer2+15);
+						p2.set("score",scorePlayer2+15);
 					else{					
-						user1.set("score",scorePlayer1);
-						user2.set("score",scorePlayer2);
+						p1.set("score",scorePlayer1);
+						p2.set("score",scorePlayer2);
 					}
 				}
 			}else{
-				int scorePlayer1 = game.get("scorePlayer1");
-				user user1 = game.get("player1");
-				user1.set("score",scorePlayer1);
+				int scorePlayer1 = (int)game.get("scorePlayer1");
+				p1.set("score",scorePlayer1);
 			}
 
 		}
