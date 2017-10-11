@@ -46,17 +46,24 @@ public class Game extends Model {
 
 
 	/** 
-     * function that modifies a user's current score and then returns it
+     * function that modifies a user's current score
      * @param username is a name of player associated with the game.
      * @return user's current score
      * @pre. username <> []
-     * @post. modifies and returns user's current score
+     * @post. modifies user's current score
      */
-	public static int currentScore(String username){
-		User user = User.findFirst("username = ?",username);
-		int score = (int)user.get("score");
-	  	user.set("score",(score+1));
-	  	user.saveIt();
-	  	return score+1;
+	public static void currentScore(String p1,String p2){
+		List<Game> games = Game.where("player1 = " + p1 + "AND player2 = " + p2)
+		Game game = games.get(0);
+		int round = game.get("moves");
+		int score = 0;
+		if (round%2==0){
+			score = game.get("scorePlayer1");
+			game.set("scorePlayer1", score+1);
+		} else {
+			score = game.get("scorePlayer2");
+			game.set("scorePlayer2", score+1);
+		}
+		game.set("moves",round+1);
 	}
 }
