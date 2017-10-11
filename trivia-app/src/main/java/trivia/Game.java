@@ -4,6 +4,8 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import java.util.List;
 import trivia.Question;
+import java.util.Date;
+import java.sql.Timestamp;
 
 public class Game extends Model {
 	//-----------------------------------------	
@@ -44,6 +46,29 @@ public class Game extends Model {
     	return q.getString("option1");
 	}
 
+    /** 
+     * function that limits the start time of a game.
+     * @pre. true; 
+     * @post. if a game exceeded its waiting time, it changes its
+     * status to uninitiated.
+    **/
+    public static void checkWaitTime(){
+        List<Game> games = Game.where("status = WAITING");
+        Date date = new Date();
+        Timestamp current = new Timestamp(date.getTime());
+        Timestamp startDate = new Timestamp(0,0,0,0,0,0,0);
+        int currentHour = current.getHours();
+        int initialHour = 0;
+        Game currentGame = new Game(); 
+        for(int i=0;i<games.size();i++){
+            currentGame = games.get(i);
+            startDate = currentGame.getTimestamp("created_at");
+            initialHour = startDate.getHours();
+            if(initialHour+5<currentHour){
+                currentGame.set("status","UNINITIATED");
+            } 
+        }
+    }
 
 	/** 
      * function that modifies a user's current score and then returns it
