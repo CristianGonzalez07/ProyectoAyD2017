@@ -4,6 +4,7 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import java.util.List;
 import org.javalite.activejdbc.validation.UniquenessValidator;
+import java.util.Random;
 
 public class User extends Model {
 	
@@ -12,6 +13,21 @@ public class User extends Model {
   		validatePresenceOf("password").message("Please, provide your password");
   		validateWith(new UniquenessValidator("username")).message("This username is already taken."); 		
 	}
+
+	/** 
+     * function that returns a random number between the range given by the
+     * parameters.
+     * @param init is the smallest number in the range.
+     * @param end is the largest number in the range.
+     * @return a random number between the range given by the parameters.
+     * @pre. 0 <= init <= end.
+     * @post. a random number between the range given by the parameters is
+     * returned.
+     */
+    public static int random(int init,int end) {
+        Random  rnd = new Random();
+        return (int)(rnd.nextDouble() * end + init);
+    }
 
 	/** 
      * Function that creates a user returns a number 
@@ -69,4 +85,23 @@ public class User extends Model {
 			return false;
 		}
   	}
+
+  	/**
+	 *function that returns the id of a randomly selected user.
+	 *@param username is the name of the user who is looking for a rival
+	 *@return the id of a randomly selected user.
+	 *@pre. true
+	 *@post. returns the id of a randomly selected user.
+  	 */
+  	public static int randomMatch(String username){
+  		List<User> users  = User.findAll();
+  		int count = users.size();
+  		User user = users.get(random(1,count));
+  		String name = user.getString("username");
+  		if(name.equals(username)){
+  			randomMatch(username);
+  		}
+  		return (int)user.get("id");
+  	}
+
 }
