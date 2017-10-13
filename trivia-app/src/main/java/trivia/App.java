@@ -60,6 +60,7 @@ public class App
 	    			public void actionPerformed(ActionEvent e) 
 	    			{ 
 	        			Game.checkWaitTime();
+	        			Game.checkProgresGame();
 	     			} 
 				}); 
 

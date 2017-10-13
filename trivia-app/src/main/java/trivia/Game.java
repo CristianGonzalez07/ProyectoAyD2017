@@ -70,6 +70,29 @@ public class Game extends Model {
         }
     }
 
+    /** 
+     * function that limits the duration of the game
+     * @pre. true; 
+     * @post. if the game exceeds the maximum time of a match, it is given as finished
+    **/
+    public static void checkProgresGame(){
+    	List<Game> games = Game.where("status = INPROGRESS");
+    	Date date = new Date();
+    	Timestamp current = new Timestamp(date.getTime());
+    	Timestamp startDate = new Timestamp(0,0,0,0,0,0,0);
+    	Game currentGame = new Game();
+    	for(int i=0; i<games.size(); i++){
+    		currentGame = games.get(i);
+    		startDate = currentGame.getTimestamp("initiated");
+    		int days1 = current.getDate();
+    		current.setDate(days1-2);
+    		int valor = current.compareTo(startDate);
+    		if (valor > 0){
+    			currentGame.set("status","TERMINATED");
+    		}
+    	}
+    }
+
 	/** 
      * function that modifies a user's current score
      * @param username is a name of player associated with the game.
