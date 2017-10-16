@@ -23,43 +23,43 @@ public class NotificationTest{
     @Test
     public void validatePresenceOfOrigin(){
         Notification n = new Notification();
-        q.set("origin", "");
+        n.set("origin", "");
         assertEquals(n.isValid(), false);
     }
 
     @Test
     public void validatePresenceOfDestination(){
         Notification n = new Notification();
-        q.set("destination", "");
+        n.set("destination", "");
         assertEquals(n.isValid(), false);
     }
 
     @Test
-    public void validatePresenceOfOrigin(){
+    public void validatePresenceOfContent(){
         Notification n = new Notification();
-        q.set("content", "");
+        n.set("content", "");
         assertEquals(n.isValid(), false);
     }
 
     @Test
-    public void validatePresenceOfOrigin(){
+    public void validatePresenceOfViewed(){
         Notification n = new Notification();
-        q.set("viewed", "");
+        n.set("viewed", "");
         assertEquals(n.isValid(), false);
     }
 
     @Test
-    public void validatePresenceOfOrigin(){
+    public void validatePresenceOfAccepted(){
         Notification n = new Notification();
-        q.set("accepted", "");
+        n.set("accepted", "");
         assertEquals(n.isValid(), false);
     }
 
     @Test
     public void validate_createNotification(){
         String origin = "Cristian"; 
-        String destination = "Seba"
-        String content = "Prueba"
+        String destination = "Seba";
+        String content = "Prueba";
    
         assertEquals(Notification.createNotification(origin,destination,content),true);
         origin = "";

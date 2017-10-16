@@ -39,9 +39,13 @@ public class GameTest{
         game.set("Player2", "");
         assertEquals(game.isValid(), true);
         game.set("typeOfGame", "2PLAYER");
-        game.set("1Player", "Player");
-        game.set("2Player", "");
+        game.set("player1", "");
+        game.set("player2", "");
         assertEquals(game.isValid(), false);
+        game.set("typeOfGame", "1PLAYER");
+        game.set("Player1", "Player");
+        game.set("Player2", "player2");
+        assertEquals(game.isValid(), true);
         game.delete();
     }
 }

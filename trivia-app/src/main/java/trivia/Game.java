@@ -10,8 +10,8 @@ import java.sql.Timestamp;
 public class Game extends Model {
 		
 	static{
-    	validatePresenceOf("user").message("Please, provide your username");
-  		validatePresenceOf("description").message("Please, provide your password");
+    	validatePresenceOf("typeOfGame").message("Please, provide your typeOfGame");
+    	validatePresenceOf("player1").message("Please, provide your player 1");
 	}
 
 	/** 
@@ -22,7 +22,7 @@ public class Game extends Model {
      * @post. true is returned if the game was created correctly, otherwise false.
      */
 	public static boolean createGame1Player(String player){
-		Game game = New Game();
+		Game game = new Game();
 		game.set("typeOfGame","1PLAYER");
 		game.set("player1",player);
 		game.set("status","INPROGRESS");
@@ -39,7 +39,7 @@ public class Game extends Model {
      * @post. true is returned if the game was created correctly,otherwise false
      */
 	public static boolean createGame2Player(String player1,String player2){
-		Game game = New Game();
+		Game game = new Game();
 		game.set("typeOfGame","2PLAYER");
 		game.set("player1",player1);
 		game.set("player2",player2);
