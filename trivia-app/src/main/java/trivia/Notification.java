@@ -12,7 +12,17 @@ public class Notification extends Model{
 		validatePresenceOf("accepted").message("Please, provide your status of accepted");
 	}
 
-	public static boolean createNotification(string origin , string destination, string content){
+	 /** 
+     * function that creates a user notification
+     * @param origin user origin of the notification 
+     * @param destination user notification destination 
+     * @param content content of notification
+     * @return true if the notification was created correctly, but false
+     * @pre. origin != null, destination != null, content != null.
+     * @post. true is returned if the notification was created correctly otherwise
+     * false.
+     */
+	public static boolean createNotification(String origin , String destination, String content){
 
 		Notification n = new Notification();
 		n.set("origin",origin);
@@ -20,7 +30,7 @@ public class Notification extends Model{
 		n.set("content",content);
 		n.set("viewed",false);
 		n.set("accepted",false);
-		Boolean respuesta = n.save();
-		return respuesta;
+		Boolean result = n.save();
+		return result;
 	}
 }
