@@ -11,4 +11,16 @@ public class Notification extends Model{
 		validatePresenceOf("viewed").message("Please, provide your status of viewed");
 		validatePresenceOf("accepted").message("Please, provide your status of accepted");
 	}
+
+	public static boolean createNotification(string origin , string destination, string content){
+
+		Notification n = new Notification();
+		n.set("origin",origin);
+		n.set("destination",destination);
+		n.set("content",content);
+		n.set("viewed",false);
+		n.set("accepted",false);
+		Boolean respuesta = n.save();
+		return respuesta;
+	}
 }
