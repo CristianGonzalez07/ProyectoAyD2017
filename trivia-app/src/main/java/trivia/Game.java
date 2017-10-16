@@ -8,42 +8,39 @@ import java.util.Date;
 import java.sql.Timestamp;
 
 public class Game extends Model {
-	//-----------------------------------------	
+		
 	static{
     	validatePresenceOf("user").message("Please, provide your username");
   		validatePresenceOf("description").message("Please, provide your password");
 	}
 
-
-	/** 
-     * function that returns a description of the last question associated with the game.
-     * @param username is a name of player associated with the game.
-     * @return a description of the last question associated to the game.
-     * @pre. username <> []
-     * @post. returns a description of the last question associated with the game.
-     */
-	public static String getQuestion(String username){
-	    Game game = new Game();
-	    List<Game> games  = Game.where("user ='"+username+"'");
-	    Question q = new Question();
-	    String description = "";
-	    game = Game.findFirst("user = ?",username);
-	    description = game.getString("description");
-	   	return description;
+	public static boolean createGame1Player(String player){
+		Game game = New Game();
+		game.set("typeOfGame","1PLAYER");
+		game.set("player1",player);
+		game.set("status","INPROGRESS");
+		boolean res = game.save();
+		return res;
 	}
 
-    /** 
-     * function that returns the answer associated with a question in db.
-     * @param username is a name of player associated with the game.
-     * @return the response associated with the question answered by the user.
-     * @pre. username <> []
-     * @post. returns the response associated with the question answered by the user.
-     */
-	public static String answer(String username){
-  		User user = User.findFirst("username = ?",username);
- 		String description = getQuestion(username);
-  		Question q = Question.getQuestionByDesc(description);
-    	return q.getString("option1");
+	public static boolean createGame2Player(String player1,String player2){
+		Game game = New Game();
+		game.set("typeOfGame","2PLAYER");
+		game.set("player1",player1);
+		game.set("player2",player2);
+		game.set("status","WAITING");
+		boolean res = game.save();
+		return res;
+	}
+
+	public static boolean startGame2Player(int idGame){
+		Game game = findFirst("id = ?", idGame);
+		game.set("status","INPROGRESS");
+		Date date = new Date();
+		Timestamp current = new Timestamp(date.getTime());
+		game.set("initiated",current);
+		boolean res = game.save();
+		return res;
 	}
 
     /** 
