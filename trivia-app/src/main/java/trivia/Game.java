@@ -14,6 +14,13 @@ public class Game extends Model {
   		validatePresenceOf("description").message("Please, provide your password");
 	}
 
+	/** 
+     * function that creates a game for 1 player 
+     * @param player is player 1 of the game
+     * @return true if the game was created correctly, otherwise false
+     * @pre. player != null.
+     * @post. true is returned if the game was created correctly, otherwise false.
+     */
 	public static boolean createGame1Player(String player){
 		Game game = New Game();
 		game.set("typeOfGame","1PLAYER");
@@ -23,6 +30,14 @@ public class Game extends Model {
 		return res;
 	}
 
+	/** 
+     * function that creates a game for 2 players 
+     * @param  player is player 1 of the game 
+     * @param  player is player 2 of the game
+     * @return true if the game was created correctly,otherwise false
+     * @pre. player1 != null, player2 != null.
+     * @post. true is returned if the game was created correctly,otherwise false
+     */
 	public static boolean createGame2Player(String player1,String player2){
 		Game game = New Game();
 		game.set("typeOfGame","2PLAYER");
@@ -33,6 +48,13 @@ public class Game extends Model {
 		return res;
 	}
 
+	/** 
+     * function that starts a game for 2 players
+     * @param idGame is the id associated with the corresponding game to start. 
+     * @return true if the game can start correctly,otherwise false.
+     * @pre. idGame >=1;
+     * @post. true is returned if the game can start correctly,otherwise false.
+     */
 	public static boolean startGame2Player(int idGame){
 		Game game = findFirst("id = ?", idGame);
 		game.set("status","INPROGRESS");
