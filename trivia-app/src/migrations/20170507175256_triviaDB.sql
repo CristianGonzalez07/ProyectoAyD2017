@@ -35,12 +35,10 @@ CREATE TABLE IF NOT EXISTS games(
 	updated_at TIMESTAMP NULL
 )ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS notifications(
+CREATE TABLE IF NOT EXISTS invitations(
 	id int(11) auto_increment PRIMARY KEY,
 	origin VARCHAR(128) NOT NULL,
 	destination VARCHAR(128) NOT NULL,
-	content VARCHAR(128) NOT NULL,
-	viewed BOOLEAN,
 	accepted BOOLEAN ,
 	created_at TIMESTAMP NULL,
   	updated_at TIMESTAMP NULL
