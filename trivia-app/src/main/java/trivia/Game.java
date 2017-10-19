@@ -8,42 +8,61 @@ import java.util.Date;
 import java.sql.Timestamp;
 
 public class Game extends Model {
-	//-----------------------------------------	
+		
 	static{
-    	validatePresenceOf("user").message("Please, provide your username");
-  		validatePresenceOf("description").message("Please, provide your password");
+    	validatePresenceOf("typeOfGame").message("Please, provide your typeOfGame");
+    	validatePresenceOf("player1").message("Please, provide your player 1");
 	}
-
 
 	/** 
-     * function that returns a description of the last question associated with the game.
-     * @param username is a name of player associated with the game.
-     * @return a description of the last question associated to the game.
-     * @pre. username <> []
-     * @post. returns a description of the last question associated with the game.
+     * function that creates a game for 1 player 
+     * @param player is player 1 of the game
+     * @return true if the game was created correctly, otherwise false
+     * @pre. player != null.
+     * @post. true is returned if the game was created correctly, otherwise false.
      */
-	public static String getQuestion(String username){
-	    Game game = new Game();
-	    List<Game> games  = Game.where("user ='"+username+"'");
-	    Question q = new Question();
-	    String description = "";
-	    game = Game.findFirst("user = ?",username);
-	    description = game.getString("description");
-	   	return description;
+	public static boolean createGame1Player(String player){
+		Game game = new Game();
+		game.set("typeOfGame","1PLAYER");
+		game.set("player1",player);
+		game.set("status","INPROGRESS");
+		boolean res = game.save();
+		return res;
 	}
 
-    /** 
-     * function that returns the answer associated with a question in db.
-     * @param username is a name of player associated with the game.
-     * @return the response associated with the question answered by the user.
-     * @pre. username <> []
-     * @post. returns the response associated with the question answered by the user.
+	/** 
+     * function that creates a game for 2 players 
+     * @param  player is player 1 of the game 
+     * @param  player is player 2 of the game
+     * @return true if the game was created correctly,otherwise false
+     * @pre. player1 != null, player2 != null.
+     * @post. true is returned if the game was created correctly,otherwise false
      */
-	public static String answer(String username){
-  		User user = User.findFirst("username = ?",username);
- 		String description = getQuestion(username);
-  		Question q = Question.getQuestionByDesc(description);
-    	return q.getString("option1");
+	public static boolean createGame2Player(String player1,String player2){
+		Game game = new Game();
+		game.set("typeOfGame","2PLAYER");
+		game.set("player1",player1);
+		game.set("player2",player2);
+		game.set("status","WAITING");
+		boolean res = game.save();
+		return res;
+	}
+
+	/** 
+     * function that starts a game for 2 players
+     * @param idGame is the id associated with the corresponding game to start. 
+     * @return true if the game can start correctly,otherwise false.
+     * @pre. idGame >=1;
+     * @post. true is returned if the game can start correctly,otherwise false.
+     */
+	public static boolean startGame2Player(int idGame){
+		Game game = findFirst("id = ?", idGame);
+		game.set("status","INPROGRESS");
+		Date date = new Date();
+		Timestamp current = new Timestamp(date.getTime());
+		game.set("initiated",current);
+		boolean res = game.save();
+		return res;
 	}
 
     /** 

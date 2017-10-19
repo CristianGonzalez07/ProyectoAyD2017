@@ -1,19 +1,20 @@
 package trivia;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
-import trivia.User;
-import trivia.Question;
-import trivia.Game;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
+
+import java.util.concurrent.ConcurrentHashMap;
+import org.eclipse.jetty.websocket.api.Session;
+import org.json.JSONObject;
+import static j2html.TagCreator.*;
 
 import static spark.Spark.*;
 
@@ -23,7 +24,8 @@ import spark.template.mustache.MustacheTemplateEngine;
 public class App
 {
 	private static final String SESSION_NAME = "username";
-	
+	static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
+    static int nextUserNumber = 1;
 
 	/** 
      * function that returns a random number between the range given by the
@@ -45,7 +47,9 @@ public class App
     {	
     	staticFileLocation("/views");
     	Map map = new HashMap();
-
+    	staticFiles.expireTime(600);
+        webSocket("/menu",EchoWebSocket.class);
+        init();
 
     	before((req, res)->{
         	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
@@ -65,7 +69,7 @@ public class App
 				}); 
 
 		timer.start();
-	    
+
 	    get("/", (request, response) -> {
 	       request.session().removeAttribute(SESSION_NAME);
 	       map.clear();
