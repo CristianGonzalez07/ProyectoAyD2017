@@ -12,6 +12,7 @@ public class Game extends Model {
 	static{
     	validatePresenceOf("typeOfGame").message("Please, provide your typeOfGame");
     	validatePresenceOf("player1").message("Please, provide your player 1");
+    	validatePresenceOf("status").message("Please, provide your status");
 	}
 
 	/** 
