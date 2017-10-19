@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users(
   permissions ENUM('YES','NO') DEFAULT 'NO',
   score int(11) NOT NULL DEFAULT 0,
   UNIQUE (username),	
-  created_at TIMESTAMP,
+  created_at TIMESTAMP NULL,
   updated_at TIMESTAMP NULL
 )ENGINE=InnoDB;
 
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS questions(
   option2  VARCHAR(50) NOT NULL,
   option3  VARCHAR(50) NOT NULL,
   option4  VARCHAR(50) NOT NULL,
-  created_at TIMESTAMP,
+  created_at TIMESTAMP NULL,
   updated_at TIMESTAMP NULL
 )ENGINE=InnoDB;
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS games(
 	moves int(11)  NOT NULL DEFAULT 0,
 	status ENUM('WAITING','INPROGRESS','TERMINATED','UNINITIATED'),
 	initiated TIMESTAMP,
-	created_at TIMESTAMP,
+	created_at TIMESTAMP NULL,
 	updated_at TIMESTAMP NULL
 )ENGINE=InnoDB;
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS invitations(
 	id int(11) auto_increment PRIMARY KEY,
 	origin VARCHAR(128) NOT NULL,
 	destination VARCHAR(128) NOT NULL,
-	accepted BOOLEAN ,
+	accepted BOOLEAN,
 	created_at TIMESTAMP NULL,
   	updated_at TIMESTAMP NULL
 )ENGINE=InnoDB;
