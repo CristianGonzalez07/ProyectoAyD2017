@@ -2,6 +2,8 @@ package trivia;
 
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Invitation extends Model{
 	static{
@@ -14,19 +16,20 @@ public class Invitation extends Model{
      * function that creates a user invitation
      * @param origin user origin of the invitation 
      * @param destination user invitation destination 
-     * @return true if the invitation was created correctly, otherwise false
      * @pre. origin != null, destination != null
-     * @post. true is returned if the invitation was created correctly otherwise
-     * false.
+     * @post. creates a user invitation
      */
 	public static boolean createInvitation(String origin , String destination){
-
-		Invitation n = new Invitation();
-		n.set("origin",origin);
-		n.set("destination",destination);
-		n.set("accepted",false);
-		Boolean result = n.save();
-		return result;
+          boolean res = false;
+          long count = Invitation.count("origin = '"+origin+"' AND destination = '"+destination+"'");
+          if (count == 0){
+               Invitation n = new Invitation();
+               n.set("origin",origin);
+               n.set("destination",destination);
+               n.set("accepted",false);
+               res = n.save();
+          }
+		return res;
 	}
 
 	/** 
@@ -55,7 +58,7 @@ public class Invitation extends Model{
      * that invited the given user as a parameter to a game.
      */
      public static List<String> getInvitations(String username){
-          List<String> listOfUsers = new List<String>();
+          List<String> listOfUsers = new ArrayList<String>();
           Invitation invitation = new Invitation();
           String origin = "";
           for(int i = 0;i<3;i++){
