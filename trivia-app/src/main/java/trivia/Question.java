@@ -74,6 +74,7 @@ public class Question extends Model{
      * @post. returns a List of the options associated with a question in a random order.
      */
     public static List<String> mergeOptions(String description){
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
 	    List<String> options = new ArrayList<String>();
 	    Question q = Question.getQuestionByDesc(description);
 	    options.add(q.getString("option1"));
@@ -87,6 +88,7 @@ public class Question extends Model{
 	      	auxOp = options.remove(n);
 	      	options.add(auxOp);
 	    }
+        Base.close();
 	    return options;
     }
 
@@ -108,12 +110,15 @@ public class Question extends Model{
      * @pre. there should be at least one question from each categoty in the db.
      * @post. create a returns a model associated with a question in the db.
      */
-    public static Question getQuestion(){
+    public static String getQuestion(){
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
         int n = random(1,5);
         List<Question> questions = getQuestionsByCategory(getCat(n));
         n = questions.size();
         Question q = questions.get(random (0,n));
-        return q;
+        String res = q.getString("description");
+        Base.close();
+        return res;
     }
 
     /** 

@@ -26,8 +26,7 @@ public class App
 	private static final String SESSION_NAME = "username";
 	private static boolean connect = false;
 	static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
-    static int nextUserNumber = 1;
-
+	static int nextUserNumber = 1;
 	/** 
      * function that returns a random number between the range given by the
      * parameters.
@@ -43,13 +42,34 @@ public class App
 		return (int)(rnd.nextDouble() * end + init);
 	}
 
-	
+
+
+  	//Sends a message from one user to all users, along with a list of current usernames
+    public static void broadcastMessage(String sender, String message) {
+    	String question = Question.getQuestion();
+    	List<String> options = Question.mergeOptions(question);
+        userUsernameMap.keySet().stream().filter(Session::isOpen).forEach(session -> {
+            try {
+                session.getRemote().sendString(String.valueOf(new JSONObject()
+                    .put("question",question)
+                    .put("option1",options.get(0))
+                    .put("option2",options.get(1))
+                    .put("option3",options.get(2))
+                    .put("option4",options.get(3))
+                ));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+
     public static void main( String[] args )
     {	
     	staticFileLocation("/views");
     	Map map = new HashMap();
     	staticFiles.expireTime(600);
-        webSocket("/menu",EchoWebSocket.class);
+        webSocket("/chat", EchoWebSocket.class);
         init();
 
     	before((request, response)->{
@@ -227,5 +247,5 @@ public class App
 	      	}
 	      	return null;
 	    });
-  	}     
+  	}   
 }
