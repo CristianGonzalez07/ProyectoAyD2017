@@ -87,21 +87,26 @@ public class User extends Model {
   	}
 
   	/**
-	 *function that returns the id of a randomly selected user.
+	 *function that returns the username of a randomly selected user.
 	 *@param username is the name of the user who is looking for a rival
-	 *@return the id of a randomly selected user.
+	 *@return the username of a randomly selected user.
 	 *@pre. true
-	 *@post. returns the id of a randomly selected user.
+	 *@post. returns the username of a randomly selected user.
   	 */
-  	public static int randomMatch(String username){
-  		List<User> users  = User.findAll();
+  	public static String randomMatch(String username){
+  		List<User> users  =  User.findAll();
+      String result = "";
   		int count = users.size();
-  		User user = users.get(random(1,count));
+  		User user = users.get(random(0,count));
   		String name = user.getString("username");
-  		if(name.equals(username)){
-  			randomMatch(username);
-  		}
-  		return (int)user.get("id");
+      String permissions = user.getString("permissions");
+      System.out.println(name+"==="+permissions);
+  		if(name.equals(username) || (permissions.equals("YES"))){
+        result = randomMatch(username);
+      }else{
+        result = user.getString("username");
+      }
+  		return result;
   	}
 
 }

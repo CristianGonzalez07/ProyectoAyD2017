@@ -24,6 +24,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 public class App
 {
 	private static final String SESSION_NAME = "username";
+	private static boolean connect = false;
 	static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
     static int nextUserNumber = 1;
 
@@ -51,12 +52,18 @@ public class App
         webSocket("/menu",EchoWebSocket.class);
         init();
 
-    	before((req, res)->{
-        	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-   		});
+    	before((request, response)->{
+    		if(!connect){
+				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+    			connect = !connect;
+    		}
+        });
 
-    	after((req, res) -> {
-      		Base.close();
+    	after((request, response) -> {
+    		if(connect){
+    			Base.close();
+				connect = !connect;
+    		}
     	});
 
     	Timer timer = new Timer (960000, new ActionListener () 
@@ -70,7 +77,7 @@ public class App
 
 		timer.start();
 
-	    get("/", (request, response) -> {
+	    get("/mainpage", (request, response) -> {
 	       request.session().removeAttribute(SESSION_NAME);
 	       map.clear();
 	       return new ModelAndView(map, "./views/mainpage.mustache");
@@ -90,7 +97,14 @@ public class App
 	    get("/gameMenu", (request, response) -> {
             String username = (String)request.session().attribute(SESSION_NAME);
             map.put("currentUser",username);
-	        return new ModelAndView(map, "./views/gameMenu.mustache");
+	        if(Invitation.newInvitations(username)){
+	        	map.put("textoInvitaciones","Los siguientes usuarios te han invitado a una partida.Para aceptar o rechazar has click sobre el nombre del usuario");
+	        	List<String> invitations = Invitation.getInvitations(username);
+	        	for(int i=0;i<3;i++){
+	        		map.put("Invitation"+i,invitations.get(i));
+	        	}
+	        }
+	         return new ModelAndView(map, "./views/gameMenu.mustache");
 	    },   new MustacheTemplateEngine()
 	    ); 
 
@@ -176,5 +190,42 @@ public class App
 	      	}
 	        return null;
 	      });
+
+	    post("/gameMenu", (request, response)->{
+
+	    	String typeOfGame = request.queryParams("typeOfGame");
+	    	System.out.println("================================================");
+	      	System.out.println(typeOfGame);
+	      	String logOut = request.queryParams("Logout");
+	      	String invitation = request.queryParams("Invitation");
+	      	String game = request.queryParams("game");
+	      	String username = (String)request.session().attribute(SESSION_NAME);
+	      	
+	      	if(typeOfGame!=null){
+	      		if(typeOfGame.equals("1 Jugador")){
+	      			Game.createGame1Player(username);
+		      	}else if(typeOfGame.equals("2 Jugadores")){
+		      		String player2 = User.randomMatch(username);
+		      		Invitation.createInvitation(username,player2);
+		      		Game.createGame2Player(username,player2);
+
+		      	}
+	      	}
+	      	
+
+	      	if(logOut!=null){
+	      		//response.redirect("/mainpage");
+	      	}
+
+	      	if(invitation!= null){
+	      		int id = Game.findIdGame(invitation,username);
+	      		Game.startGame2Player(id);
+	      	}
+
+	      	if(game != null){
+	      		//reanudar el game ya creado.
+	      	}
+	      	return null;
+	    });
   	}     
 }

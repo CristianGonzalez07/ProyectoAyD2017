@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-public class NotificationTest{
+public class InvitationTest{
 	@Before
     public void before(){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
@@ -22,47 +22,32 @@ public class NotificationTest{
 
     @Test
     public void validatePresenceOfOrigin(){
-        Notification n = new Notification();
+        Invitation n = new Invitation();
         n.set("origin", "");
         assertEquals(n.isValid(), false);
     }
 
     @Test
     public void validatePresenceOfDestination(){
-        Notification n = new Notification();
+        Invitation n = new Invitation();
         n.set("destination", "");
         assertEquals(n.isValid(), false);
     }
 
     @Test
-    public void validatePresenceOfContent(){
-        Notification n = new Notification();
-        n.set("content", "");
-        assertEquals(n.isValid(), false);
-    }
-
-    @Test
-    public void validatePresenceOfViewed(){
-        Notification n = new Notification();
-        n.set("viewed", "");
-        assertEquals(n.isValid(), false);
-    }
-
-    @Test
     public void validatePresenceOfAccepted(){
-        Notification n = new Notification();
+        Invitation n = new Invitation();
         n.set("accepted", "");
         assertEquals(n.isValid(), false);
     }
 
     @Test
-    public void validate_createNotification(){
+    public void validate_createinvitation(){
         String origin = "Cristian"; 
         String destination = "Seba";
-        String content = "Prueba";
    
-        assertEquals(Notification.createNotification(origin,destination,content),true);
+        assertEquals(Invitation.createInvitation(origin,destination),true);
         origin = "";
-        assertEquals(Notification.createNotification(origin,destination,content),false);
+        assertEquals(Invitation.createInvitation(origin,destination),false);
     }
 }

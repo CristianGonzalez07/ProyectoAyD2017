@@ -12,57 +12,52 @@ public class Game extends Model {
 	static{
     	validatePresenceOf("typeOfGame").message("Please, provide your typeOfGame");
     	validatePresenceOf("player1").message("Please, provide your player 1");
+    	validatePresenceOf("status").message("Please, provide your status");
 	}
 
 	/** 
      * function that creates a game for 1 player 
      * @param player is player 1 of the game
-     * @return true if the game was created correctly, otherwise false
      * @pre. player != null.
-     * @post. true is returned if the game was created correctly, otherwise false.
+     * @post.  creates a game for 1 player
      */
-	public static boolean createGame1Player(String player){
+	public static void createGame1Player(String player){
 		Game game = new Game();
 		game.set("typeOfGame","1PLAYER");
 		game.set("player1",player);
 		game.set("status","INPROGRESS");
-		boolean res = game.save();
-		return res;
+		game.saveIt();
 	}
 
 	/** 
      * function that creates a game for 2 players 
      * @param  player is player 1 of the game 
      * @param  player is player 2 of the game
-     * @return true if the game was created correctly,otherwise false
      * @pre. player1 != null, player2 != null.
-     * @post. true is returned if the game was created correctly,otherwise false
+     * @post. creates a game for 2 players 
      */
-	public static boolean createGame2Player(String player1,String player2){
+	public static void createGame2Player(String player1,String player2){
 		Game game = new Game();
 		game.set("typeOfGame","2PLAYER");
 		game.set("player1",player1);
 		game.set("player2",player2);
 		game.set("status","WAITING");
-		boolean res = game.save();
-		return res;
+		game.saveIt();
 	}
 
 	/** 
      * function that starts a game for 2 players
      * @param idGame is the id associated with the corresponding game to start. 
-     * @return true if the game can start correctly,otherwise false.
      * @pre. idGame >=1;
-     * @post. true is returned if the game can start correctly,otherwise false.
+     * @post. starts a game for 2 players
      */
-	public static boolean startGame2Player(int idGame){
+	public static void startGame2Player(int idGame){
 		Game game = findFirst("id = ?", idGame);
 		game.set("status","INPROGRESS");
 		Date date = new Date();
 		Timestamp current = new Timestamp(date.getTime());
 		game.set("initiated",current);
-		boolean res = game.save();
-		return res;
+		game.saveIt();
 	}
 
     /** 
@@ -187,5 +182,18 @@ public class Game extends Model {
 			res=true;
 		}
 		return res;
+	}
+
+	/** 
+     * function that's returns the id that refers to the game in which the 2 given users participate
+     * @param user1 is a name of player 1
+     * @param user2 is a name of player 2
+     * @pre. user1 <> [] and user2 <> []
+     * @post. return the id that refers to the game in which the 2 given users participate
+     * @return the id that refers to the game in which the 2 given users participate
+     */
+	public static int findIdGame(String user1,String user2){
+		Game game = findFirst("player1 = '"+user1+"'' and player2 = '"+user2+"'");
+		return (int)game.get("id");
 	}
 }
