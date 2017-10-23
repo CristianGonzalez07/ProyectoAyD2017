@@ -14,7 +14,7 @@ public class Game extends Model {
     	validatePresenceOf("player1").message("Please, provide your player 1");
     	validatePresenceOf("status").message("Please, provide your status");
 	}
-
+	
 	/** 
      * function that creates a game for 1 player 
      * @param player is player 1 of the game

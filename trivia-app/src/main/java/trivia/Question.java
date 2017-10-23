@@ -108,12 +108,13 @@ public class Question extends Model{
      * @pre. there should be at least one question from each categoty in the db.
      * @post. create a returns a model associated with a question in the db.
      */
-    public static Question getQuestion(){
+    public static String getQuestion(){
         int n = random(1,5);
         List<Question> questions = getQuestionsByCategory(getCat(n));
         n = questions.size();
         Question q = questions.get(random (0,n));
-        return q;
+        String res = q.getString("description");
+        return res;
     }
 
     /** 

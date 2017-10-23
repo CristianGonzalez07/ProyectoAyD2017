@@ -11,7 +11,7 @@ public class Invitation extends Model{
 		validatePresenceOf("destination").message("Please, provide your destination user");
 		validatePresenceOf("accepted").message("Please, provide your status of accepted");
 	}
-
+     
 	 /** 
      * function that creates a user invitation
      * @param origin user origin of the invitation 
