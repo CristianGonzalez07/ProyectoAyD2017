@@ -46,6 +46,10 @@ public class App
 
   	//Sends a message from one user to all users, along with a list of current usernames
     public static void broadcastMessage(String sender, String message) {
+    	if(!connect){
+			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+    		connect = true;
+    	}
     	String question = Question.getQuestion();
     	List<String> options = Question.mergeOptions(question);
         userUsernameMap.keySet().stream().filter(Session::isOpen).forEach(session -> {
@@ -60,6 +64,10 @@ public class App
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        if(connect){
+    		Base.close();
+			connect = false;
+    	}
         });
     }
 
@@ -75,14 +83,14 @@ public class App
     	before((request, response)->{
     		if(!connect){
 				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-    			connect = !connect;
+    			connect = true;
     		}
         });
 
     	after((request, response) -> {
     		if(connect){
     			Base.close();
-				connect = !connect;
+				connect = false;
     		}
     	});
 

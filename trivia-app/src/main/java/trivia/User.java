@@ -13,7 +13,7 @@ public class User extends Model {
   		validatePresenceOf("password").message("Please, provide your password");
   		validateWith(new UniquenessValidator("username")).message("This username is already taken."); 		
 	}
-
+  
 	/** 
      * function that returns a random number between the range given by the
      * parameters.
