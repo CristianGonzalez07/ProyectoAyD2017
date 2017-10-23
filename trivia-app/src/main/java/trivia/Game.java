@@ -60,6 +60,31 @@ public class Game extends Model {
 		game.saveIt();
 	}
 
+	
+	/** 
+     * the game controls the completion of a game
+     * @param idGame is the id associated with the corresponding game to start. 
+     * @pre. idGame >=1;
+     * @post. returns true if the game has completed all its rounds
+    */
+	public static boolean endGame (int idGame){
+		Game game = findFirst("id = ?",idGame);
+		boolean resp = false;
+		String player = (String)game.get("typeOfGame");
+		int round = (int)game.get("moves");
+		if(player.equals("1PLAYER")){
+			if (round == 10){
+				resp = true;
+			}
+		}
+		if(player.equals("2PLAYER")){
+			if (round == 20){
+				resp = true;
+			}
+		}
+		return resp; 
+	}
+
     /** 
      * function that limits the start time of a game.
      * @pre. true; 
