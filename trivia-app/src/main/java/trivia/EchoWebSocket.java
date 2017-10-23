@@ -1,16 +1,19 @@
 package trivia;
 import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @WebSocket
 public class EchoWebSocket {
     private String sender, msg;
+    static Map<Session, String> usernameMap = new ConcurrentHashMap<>();
 
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
-        String username = "User" + App.nextUserNumber++;
+        String username = usernameMap.get(user);
         App.userUsernameMap.put(user, username);
-        App.broadcastMessage(sender = "server", msg = "build");
+        App.broadcastMessage(sender = "server", msg = "build",user);
     }
 
     @OnWebSocketClose
@@ -21,6 +24,6 @@ public class EchoWebSocket {
 
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
-        App.broadcastMessage(sender = App.userUsernameMap.get(user), msg = message);
+        App.broadcastMessage(sender = App.userUsernameMap.get(user), msg = message,user);
     }
 }
