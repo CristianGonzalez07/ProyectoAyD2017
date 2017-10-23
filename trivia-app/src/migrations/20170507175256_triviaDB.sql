@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users(
   password VARCHAR(128) NOT NULL,
   permissions ENUM('YES','NO') DEFAULT 'NO',
   score int(11) NOT NULL DEFAULT 0,
+  currentGame int(11),
   UNIQUE (username),	
   created_at TIMESTAMP NULL,
   updated_at TIMESTAMP NULL
