@@ -10,23 +10,25 @@
 		<h3 class="texto">Puntaje Actual:<h3 class="puntaje">{{score}}</h3></h3>
 		<article>
 		<div class="container">
-
-		<button type="submit" id="1Player" class="btn-default">1 Jugador</button>
-		<button type="submit" id="2Player" class="btn-default">2 Jugadores</button>
-		<button type="submit" id="Logout" class="btn-default1">Salir</button>
-		
-		<h3>{{textoInvitaciones}}</h3>
-		
-		<button type="submit" id="Invitacion1" class="btn-default">{{Notificacion1}}</button>
-		<button type="submit" id="Invitacion2" class="btn-default">{{Notificacion2}}</button>
-		<button type="submit" id="Invitacion3" class="btn-default">{{Notificacion3}}</button>
-
-		<h3>{{textoPartidas}}</h3>
-		<button type="submit" id="Partida1" class="btn-default">{{Partida1}}</button>
-		<button type="submit" id="Partida2" class="btn-default">{{Partida2}}</button>
-		<button type="submit" id="Partida3" class="btn-default">{{Partida3}}</button>
-
-
+			<form action="/gameMenu" method="POST">
+				<input type="submit" name="typeOfGame" class="btn-default" value="1 Jugador"/>
+				<input type="submit" name="typeOfGame" class="btn-default" value="2 Jugadores"/>
+			</form>
+			<form action="/mainpage" method="GET">
+					<input type="submit" name="Logout" class="btn-default1" value="Salir"/>
+			</form>		
+			<h3>{{textoInvitaciones}}</h3>
+			<form action="/gameMenu" method="POST">	
+				<input type="submit" name="Invitacion" class="btn-default" value= {{Notificacion1}}/>
+				<input type="submit" name="Invitacion" class="btn-default" value= {{Notificacion2}}/>
+				<input type="submit" name="Invitacion" class="btn-default" value= {{Notificacion3}}/>
+			</form>
+			<h3>{{textoPartidas}}</h3>
+			<form action="/gameMenu" method="POST">
+				<input type="submit" name="Partida" class="btn-default" value= {{Partida1}}/>
+				<input type="submit" name="Partida" class="btn-default" value= {{Partida2}}/>
+				<input type="submit" name="Partida" class="btn-default" value= {{Partida3}}/>
+			</form>
 		</div>
 		</article>	
 	</center>
