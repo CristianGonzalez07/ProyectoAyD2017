@@ -47,9 +47,12 @@ public class App
 
   	//Sends a message from one user to all users, along with a list of current usernames
     public static void broadcastMessage(String sender, String message,Session user) {
-    	if(!connect){
+    	/*if(!connect){
 			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     		connect = true;
+    	}*/
+    	if(!Base.hasConnection()) {
+    		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     	}
     	String username = userUsernameMap.get(user);
     	int id = (int)User.getCurrentGameId(username);
@@ -97,10 +100,10 @@ public class App
 	                e.printStackTrace();
 	            }
     	}
-
-        if(connect){
+	
+        if(Base.hasConnection()){
     		Base.close();
-			connect = false;
+			// connect = false;
     	}
     }
 
@@ -114,16 +117,17 @@ public class App
         init();
 
     	before((request, response)->{
-    		if(!connect){
-				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-    			connect = true;
+    		System.out.println(Base.hasConnection()+"Hola before");
+
+    		if(!Base.hasConnection()) {
+    			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     		}
         });
 
     	after((request, response) -> {
-    		if(connect){
+    		System.out.println(Base.hasConnection()+"Hola after");
+    		if(Base.hasConnection()) {
     			Base.close();
-				connect = false;
     		}
     	});
 
@@ -221,7 +225,6 @@ public class App
 		    	map.put("score",user.get("score"));
 		    	request.session(true);
 		    	request.session().attribute(SESSION_NAME,username);
-		    	EchoWebSocket.usernameMap.put((Session)request.session(),username);
 			    if(permissions != null){
 			    	response.redirect("/admin");
 			    }else{
@@ -263,9 +266,14 @@ public class App
 	      	String username = (String)request.session().attribute(SESSION_NAME);
 	      	
 	      	if(typeOfGame!=null){
+	      		System.out.println("=?===????===");
+	      		System.out.println(Base.hasConnection());
+	      		System.out.println(Game.limitGames(username)+"lllllll");
 	      		if(Game.limitGames(username)){
+	      			System.out.println("=?======");
 	      			if(typeOfGame.equals("1 Jugador")){
 		      			Game.createGame1Player(username);
+		      			System.out.println("=?====?==");
 		      			response.redirect("/");
 			      	}else if(typeOfGame.equals("2 Jugadores")){
 			      		String player2 = User.randomMatch(username);

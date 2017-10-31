@@ -7,11 +7,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @WebSocket
 public class EchoWebSocket {
     private String sender, msg;
-    static Map<Session, String> usernameMap = new ConcurrentHashMap<>();
+
+
 
     @OnWebSocketConnect
     public void onConnect(Session user) throws Exception {
-        String username = usernameMap.get(user);
+        String username = "User"+App.nextUserNumber++;
         App.userUsernameMap.put(user, username);
         App.broadcastMessage(sender = "server", msg = "build",user);
     }

@@ -232,8 +232,9 @@ public class Game extends Model {
      */
 	public static boolean limitGames(String username){
 		List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"'"));
+		System.out.println("GamesSize()"+games.size());
 		boolean res = false;
-		if (games.size()<= 4){
+		if (games.size()<= 8){
 			res=true;
 		}
 		return res;
