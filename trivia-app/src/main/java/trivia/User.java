@@ -5,6 +5,7 @@ import org.javalite.activejdbc.Model;
 import java.util.List;
 import org.javalite.activejdbc.validation.UniquenessValidator;
 import java.util.Random;
+import trivia.Game;
 
 public class User extends Model {
 	
@@ -131,7 +132,7 @@ public class User extends Model {
   */
     public static String getCurrentGameType(String username){
       int currentGame = getCurrentGameId(username);
-      Game game = findFirst("id = ?", currentGame);
+      Game game = Game.findFirst("id = ?", currentGame);
       return game.getString("typeOfGame");
     }
 

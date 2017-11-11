@@ -25,8 +25,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 public class App
 {
 	private static final String SESSION_NAME = "username";
-	private static boolean connect = false;
-	static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
+	
 	static int nextUserNumber = 1;
 	/** 
      * function that returns a random number between the range given by the
@@ -47,17 +46,16 @@ public class App
 
   	//Sends a message from one user to all users, along with a list of current usernames
     public static void broadcastMessage(String sender, String message,Session user) {
-    	/*if(!connect){
-			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-    		connect = true;
-    	}*/
     	if(!Base.hasConnection()) {
     		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     	}
-    	String username = userUsernameMap.get(user);
-    	int id = (int)User.getCurrentGameId(username);
-    	String typeOfGame = User.getCurrentGameType(username);
 
+    	String username_aux = EchoWebSocket.usernameMap.get(user);
+    	String username = EchoWebSocket.userUsernameMap.get(username_aux);
+    	int id = (int)User.getCurrentGameId(username);
+    	
+    	String typeOfGame = User.getCurrentGameType(username);
+    	
     	if(message.equals("build")){
     		String question = Question.getQuestion();
     		Game.setQuestion(question,id);
@@ -83,27 +81,26 @@ public class App
 
     	}else if(message.equals("quit")){
     		
-    	}else{ //el msj es una respuesta a una pregunta
-    		String msg = "";
-    		if(Game.answer(id,message)){
-    			Game.currentScore(id);
-    			msg = "Respuesta Correcta";
-    		}else{
-    			msg = "Respuesta Incorrecta";
-    			Game.updateMoves(id);
-    		}
-    		try {
-	    		user.getRemote().sendString(String.valueOf(new JSONObject()
-	                    .put("results",msg)
-	            ));
-            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
-    	}
+    		}else{ //el msj es una respuesta a una pregunta
+	    		String msg = "";
+	    		if(Game.answer(id,message)){
+	    			Game.currentScore(id);
+	    			msg = "Respuesta Correcta";
+	    		}else{
+	    			msg = "Respuesta Incorrecta";
+	    			Game.updateMoves(id);
+	    		}
+	    		try {
+		    		user.getRemote().sendString(String.valueOf(new JSONObject()
+		                    .put("results",msg)
+		            ));
+	            } catch (Exception e) {
+		                e.printStackTrace();
+		            }
+	    	}
 	
         if(Base.hasConnection()){
     		Base.close();
-			// connect = false;
     	}
     }
 
@@ -117,15 +114,12 @@ public class App
         init();
 
     	before((request, response)->{
-    		System.out.println(Base.hasConnection()+"Hola before");
-
     		if(!Base.hasConnection()) {
     			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     		}
         });
 
     	after((request, response) -> {
-    		System.out.println(Base.hasConnection()+"Hola after");
     		if(Base.hasConnection()) {
     			Base.close();
     		}
@@ -258,22 +252,17 @@ public class App
 
 	    post("/gameMenu", (request, response)->{
 	    	String typeOfGame = request.queryParams("typeOfGame");
-	    	System.out.println("================================================");
-	      	System.out.println(typeOfGame);
 	      	String logOut = request.queryParams("Logout");
 	      	String invitation = request.queryParams("Invitation");
 	      	String game = request.queryParams("game");
 	      	String username = (String)request.session().attribute(SESSION_NAME);
 	      	
 	      	if(typeOfGame!=null){
-	      		System.out.println("=?===????===");
-	      		System.out.println(Base.hasConnection());
-	      		System.out.println(Game.limitGames(username)+"lllllll");
 	      		if(Game.limitGames(username)){
-	      			System.out.println("=?======");
+	      			System.out.println("???????"+username+"??"+nextUserNumber);
+	      			EchoWebSocket.userUsernameMap.put("user"+nextUserNumber,username);
 	      			if(typeOfGame.equals("1 Jugador")){
 		      			Game.createGame1Player(username);
-		      			System.out.println("=?====?==");
 		      			response.redirect("/");
 			      	}else if(typeOfGame.equals("2 Jugadores")){
 			      		String player2 = User.randomMatch(username);
