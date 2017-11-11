@@ -17,19 +17,23 @@ function update(msg) {
     var data = JSON.parse(msg.data);
 
     if(data.results != ""){
-        text = "<button onclick="
         insert("results","<h2>" + data.results + "</h2>")
-        insert("results", text+"sendBuild()>Continuar</button>");
+        insert("results", "<input value = Continuar type='button' class='btn-default' onclick= sendBuild()/>");
     }else{
         id("question").innerHTML = "";
         id("options").innerHTML = "";
         id("results").innerHTML = "";
-        text = "<button id='option' onclick="
+        var text = "<input type='button' id = 'option'  class='btn-default' ";
+        var option1 = new String(data.option1);
+        var option2 = new String(data.option2);
+        var option3 = new String(data.option3);
+        var option4 = new String(data.option4);
+
         insert("question", "<h2>" + data.question + "</h2>");
-        insert("options", text+"sendOption()>" + data.option1 + "</button>");
-        insert("options", text+"sendOption()>" + data.option2 + "</button>");
-        insert("options", text+"sendOption()>" + data.option3 + "</button>");
-        insert("options", text+"sendOption()>" + data.option4 + "</button>");
+        insert("options", text+"value= " + option1 + " onclick= sendOption()/>");
+        insert("options", text+"value= " + option2 + " onclick= sendOption()/>");
+        insert("options", text+"value= " + option3 + " onclick= sendOption()/>");
+        insert("options", text+"value= " + option4 + " onclick= sendOption()/>");
     }
 }
 
