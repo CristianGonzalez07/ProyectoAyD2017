@@ -2,6 +2,7 @@ package trivia;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 
+import trivia.EchoWebSocket;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,8 +25,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 public class App
 {
 	private static final String SESSION_NAME = "username";
-	private static boolean connect = false;
-	static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
+	
 	static int nextUserNumber = 1;
 	/** 
      * function that returns a random number between the range given by the
@@ -45,30 +45,63 @@ public class App
 
 
   	//Sends a message from one user to all users, along with a list of current usernames
-    public static void broadcastMessage(String sender, String message) {
-    	if(!connect){
-			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-    		connect = true;
+    public static void broadcastMessage(String sender, String message,Session user) {
+    	if(!Base.hasConnection()) {
+    		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     	}
-    	String question = Question.getQuestion();
-    	List<String> options = Question.mergeOptions(question);
-        userUsernameMap.keySet().stream().filter(Session::isOpen).forEach(session -> {
-            try {
-                session.getRemote().sendString(String.valueOf(new JSONObject()
+
+    	String username_aux = EchoWebSocket.usernameMap.get(user);
+    	String username = EchoWebSocket.userUsernameMap.get(username_aux);
+    	int id = (int)User.getCurrentGameId(username);
+    	
+    	String typeOfGame = User.getCurrentGameType(username);
+    	
+    	if(message.equals("build")){
+    		String question = Question.getQuestion();
+    		Game.setQuestion(question,id);
+    		List<String> options = Question.mergeOptions(question);	
+    		
+    		if(typeOfGame.equals("1PLAYER")){
+    			try {
+                user.getRemote().sendString(String.valueOf(new JSONObject()
                     .put("question",question)
                     .put("option1",options.get(0))
                     .put("option2",options.get(1))
                     .put("option3",options.get(2))
                     .put("option4",options.get(3))
+                    .put("results","")
                 ));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        if(connect){
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+    		}
+    		else if(typeOfGame.equals("2PLAYER")){
+    			//completar
+    		}
+
+    	}else if(message.equals("quit")){
+    		
+    		}else{ //el msj es una respuesta a una pregunta
+	    		String msg = "";
+	    		if(Game.answer(id,message)){
+	    			Game.currentScore(id);
+	    			msg = "Respuesta Correcta";
+	    		}else{
+	    			msg = "Respuesta Incorrecta";
+	    			Game.updateMoves(id);
+	    		}
+	    		try {
+		    		user.getRemote().sendString(String.valueOf(new JSONObject()
+		                    .put("results",msg)
+		            ));
+	            } catch (Exception e) {
+		                e.printStackTrace();
+		            }
+	    	}
+	
+        if(Base.hasConnection()){
     		Base.close();
-			connect = false;
     	}
-        });
     }
 
 
@@ -81,16 +114,14 @@ public class App
         init();
 
     	before((request, response)->{
-    		if(!connect){
-				Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-    			connect = true;
+    		if(!Base.hasConnection()) {
+    			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     		}
         });
 
     	after((request, response) -> {
-    		if(connect){
+    		if(Base.hasConnection()) {
     			Base.close();
-				connect = false;
     		}
     	});
 
@@ -220,38 +251,42 @@ public class App
 	      });
 
 	    post("/gameMenu", (request, response)->{
-
 	    	String typeOfGame = request.queryParams("typeOfGame");
-	    	System.out.println("================================================");
-	      	System.out.println(typeOfGame);
 	      	String logOut = request.queryParams("Logout");
 	      	String invitation = request.queryParams("Invitation");
 	      	String game = request.queryParams("game");
 	      	String username = (String)request.session().attribute(SESSION_NAME);
 	      	
 	      	if(typeOfGame!=null){
-	      		if(typeOfGame.equals("1 Jugador")){
-	      			Game.createGame1Player(username);
-		      	}else if(typeOfGame.equals("2 Jugadores")){
-		      		String player2 = User.randomMatch(username);
-		      		Invitation.createInvitation(username,player2);
-		      		Game.createGame2Player(username,player2);
-
-		      	}
+	      		if(Game.limitGames(username)){
+	      			System.out.println("???????"+username+"??"+nextUserNumber);
+	      			EchoWebSocket.userUsernameMap.put("user"+nextUserNumber,username);
+	      			if(typeOfGame.equals("1 Jugador")){
+		      			Game.createGame1Player(username);
+		      			response.redirect("/");
+			      	}else if(typeOfGame.equals("2 Jugadores")){
+			      		String player2 = User.randomMatch(username);
+			      		Invitation.createInvitation(username,player2);
+			      		Game.createGame2Player(username,player2);
+			      	}
+	      		}else{
+	      			//msj denegando creacion de game	
+	      		} 		
 	      	}
-	      	
-
+	      
 	      	if(logOut!=null){
-	      		//response.redirect("/mainpage");
+	      		response.redirect("/mainpage");
 	      	}
 
 	      	if(invitation!= null){
 	      		int id = Game.findIdGame(invitation,username);
 	      		Game.startGame2Player(id);
+	      		User.setCurrentGame(username,id);
+	      		response.redirect("/");
 	      	}
 
 	      	if(game != null){
-	      		//reanudar el game ya creado.
+	      		//
 	      	}
 	      	return null;
 	    });

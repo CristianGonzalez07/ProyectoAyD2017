@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users(
   password VARCHAR(128) NOT NULL,
   permissions ENUM('YES','NO') DEFAULT 'NO',
   score int(11) NOT NULL DEFAULT 0,
+  currentGame int(11),
   UNIQUE (username),	
   created_at TIMESTAMP NULL,
   updated_at TIMESTAMP NULL
@@ -29,6 +30,7 @@ CREATE TABLE IF NOT EXISTS games(
 	scorePlayer1 int(11) NOT NULL DEFAULT 0,
 	scorePlayer2 int(11) NOT NULL DEFAULT 0,
 	moves int(11)  NOT NULL DEFAULT 0,
+	question VARCHAR(128) DEFAULT NULL,
 	status ENUM('WAITING','INPROGRESS','TERMINATED','UNINITIATED'),
 	initiated TIMESTAMP,
 	created_at TIMESTAMP NULL,

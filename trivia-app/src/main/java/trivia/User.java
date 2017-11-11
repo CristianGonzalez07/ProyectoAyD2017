@@ -5,6 +5,7 @@ import org.javalite.activejdbc.Model;
 import java.util.List;
 import org.javalite.activejdbc.validation.UniquenessValidator;
 import java.util.Random;
+import trivia.Game;
 
 public class User extends Model {
 	
@@ -13,6 +14,19 @@ public class User extends Model {
   		validatePresenceOf("password").message("Please, provide your password");
   		validateWith(new UniquenessValidator("username")).message("This username is already taken."); 		
 	}
+  
+  /** 
+     * function that associates a current game id to the given user.
+     * @param username is the name of the user associated with the id of the current game.
+     * @param idGame it's the id to set
+     * @pre. username != "",id >0;
+     * @post. saves the id of current game associated with the username.
+    */
+  public static void setCurrentGame(String username,int id){
+    User user = findFirst("username = ?", username);
+    user.set("currentGame",id);
+    user.saveIt();    
+  } 
   
 	/** 
      * function that returns a random number between the range given by the
@@ -86,13 +100,13 @@ public class User extends Model {
 		}
   	}
 
-  	/**
+  /**
 	 *function that returns the username of a randomly selected user.
 	 *@param username is the name of the user who is looking for a rival
 	 *@return the username of a randomly selected user.
 	 *@pre. true
 	 *@post. returns the username of a randomly selected user.
-  	 */
+  */
   	public static String randomMatch(String username){
   		List<User> users  =  User.findAll();
       String result = "";
@@ -109,4 +123,29 @@ public class User extends Model {
   		return result;
   	}
 
+  /**
+   *function that returns the current game type for the given user.
+   *@param user name is the user name of who wants to know the current game type.
+   *@return the current game type.
+   *@pre. username != null.
+   *@post. returns the current game type if exists,otherwise returns null.
+  */
+    public static String getCurrentGameType(String username){
+      int currentGame = getCurrentGameId(username);
+      Game game = Game.findFirst("id = ?", currentGame);
+      return game.getString("typeOfGame");
+    }
+
+  /**
+   *function that returns the current game id for the given user.
+   *@param user name is the user name of who wants to know the current game id.
+   *@return the current game id.
+   *@pre. username != null.
+   *@post. returns the current game id if exists,otherwise returns null.
+  */
+    public static int getCurrentGameId(String username){
+      User user =  findFirst("username = ?", username);
+      int currentGame = (int)user.get("currentGame");
+      return currentGame;
+    }
 }

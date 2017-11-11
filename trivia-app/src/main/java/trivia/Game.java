@@ -4,6 +4,7 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import java.util.List;
 import trivia.Question;
+import trivia.User;
 import java.util.Date;
 import java.sql.Timestamp;
 
@@ -14,6 +15,19 @@ public class Game extends Model {
     	validatePresenceOf("player1").message("Please, provide your player 1");
     	validatePresenceOf("status").message("Please, provide your status");
 	}
+	
+	/** 
+     * function that saves a question associated with the game.
+     * @param is the question to keep.
+     * @param is the game where we will save the question
+     * @pre. question != "",id >0;
+     * @post. saves a question associated with the game.
+    */
+	public static void setQuestion(String question,int idGame){
+		Game game = findFirst("id = ?", idGame);
+		game.set("question",question);
+		game.saveIt();		
+	} 
 	
 	/** 
      * function that creates a game for 1 player 
@@ -27,6 +41,10 @@ public class Game extends Model {
 		game.set("player1",player);
 		game.set("status","INPROGRESS");
 		game.saveIt();
+		Long id = (Long)game.get("id");
+		User user = User.findFirst("username = ?",player);
+		user.set("currentGame",id);
+		user.saveIt();
 	}
 
 	/** 
@@ -132,17 +150,29 @@ public class Game extends Model {
     	}
     }
 
-	/** 
-     * function that modifies a user's current score
-     * @param username is a name of player associated with the game.
-     * @pre. username <> []
-     * @post. modifies user's current score
-     */
-	public static void currentScore(String p1,String p2){
-		List<Game> games = Game.where("player1 = " + p1 + "AND player2 = " + p2);
-		Game game = games.get(0);
+    /** 
+     *function that modifies the current game round.
+     * @param idGame is a ID associated with the game.
+     * @pre. id > 0.
+     * @post. modifies the current game round.
+    */
+    public static void updateMoves(int idGame){
+    	Game game = findFirst("id = ?",idGame); 
 		int round = (int)game.get("moves");
+		game.set("moves",round+1);
+		game.saveIt();
+    }
+
+	/** 
+     * function that modifies a user's current score.
+     * @param idGame is a ID associated with the game.
+     * @pre. id > 0.
+     * @post. modifies user's current score.
+     */
+	public static void currentScore(int idGame){
+		Game game = findFirst("id = ?",idGame); 
 		int score = 0;
+		int round = (int)game.get("moves");
 		if (round%2==0){
 			score = (int)game.get("scorePlayer1");
 			game.set("scorePlayer1", score+1);
@@ -150,7 +180,8 @@ public class Game extends Model {
 			score = (int)game.get("scorePlayer2");
 			game.set("scorePlayer2", score+1);
 		}
-		game.set("moves",round+1);
+		updateMoves(idGame);
+		game.saveIt();
 	}
 
 
@@ -189,7 +220,6 @@ public class Game extends Model {
 		}
 	}
 
-
 	/** 
      * function that's returns true if the limit of games
      * per player is not exceeded.
@@ -201,7 +231,7 @@ public class Game extends Model {
      * player is not exceeded. 
      */
 	public static boolean limitGames(String username){
-		List<Game> games = Game.where(("player1 = " + username + "OR player2 = " + username));
+		List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"'"));
 		boolean res = false;
 		if (games.size()<= 4){
 			res=true;
@@ -209,6 +239,20 @@ public class Game extends Model {
 		return res;
 	}
 
+	/** 
+     * function that verifies the correctness of a response given by a player.
+     * @param username is a name of player associated with the game.
+     * @return true if the player answer is correct.
+     * @pre. id > 0, playerAnswer != "";
+     * @post. returns true if the player answer is correct.
+     */
+	public static boolean answer(int idGame,String playerAnswer){  
+  		Game game = findFirst("id = ?",idGame); 
+  		String description = game.getString("question");
+  		Question q = Question.getQuestionByDesc(description);
+    	String correctAnswer = q.getString("option1");
+    	return playerAnswer.equals(correctAnswer);
+	}
 	/** 
      * function that's returns the id that refers to the game in which the 2 given users participate
      * @param user1 is a name of player 1
