@@ -80,15 +80,12 @@ public class App
     		}
 
     	}else if(message.equals("quit")){
-    			//
+    		
     		}else{ //el msj es una respuesta a una pregunta
 	    		String msg = "";
-	    		System.out.println("el game nro: "+id);
-	    		System.out.println("tiene la rta : "+message);
-	    		System.out.println("y es: "+Game.answer(id,message));
 	    		if(Game.answer(id,message)){
 	    			Game.currentScore(id);
-	    				    			msg = "Respuesta Correcta";
+	    			msg = "Respuesta Correcta";
 	    		}else{
 	    			msg = "Respuesta Incorrecta";
 	    			Game.updateMoves(id);

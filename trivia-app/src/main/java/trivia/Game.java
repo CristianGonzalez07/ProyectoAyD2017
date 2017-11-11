@@ -251,7 +251,6 @@ public class Game extends Model {
   		String description = game.getString("question");
   		Question q = Question.getQuestionByDesc(description);
     	String correctAnswer = q.getString("option1");
-    	System.out.println("La rta correcta es: "+correctAnswer);
     	return playerAnswer.equals(correctAnswer);
 	}
 	/** 
