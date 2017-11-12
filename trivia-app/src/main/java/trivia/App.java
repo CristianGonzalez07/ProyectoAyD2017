@@ -50,6 +50,7 @@ public class App
     		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     	}
 
+    	System.out.println("================="+message+"=======");
     	String username_aux = EchoWebSocket.usernameMap.get(user);
     	String username = EchoWebSocket.userUsernameMap.get(username_aux);
     	int id = (int)User.getCurrentGameId(username);
@@ -79,25 +80,23 @@ public class App
     			//completar
     		}
 
-    	}else if(message.equals("quit")){
-    		
-    		}else{ //el msj es una respuesta a una pregunta
-	    		String msg = "";
-	    		if(Game.answer(id,message)){
-	    			Game.currentScore(id);
-	    			msg = "Respuesta Correcta";
-	    		}else{
-	    			msg = "Respuesta Incorrecta";
-	    			Game.updateMoves(id);
-	    		}
-	    		try {
-		    		user.getRemote().sendString(String.valueOf(new JSONObject()
-		                    .put("results",msg)
-		            ));
-	            } catch (Exception e) {
-		                e.printStackTrace();
-		            }
-	    	}
+    	}else{ //el msj es una respuesta a una pregunta
+	    	String msg = "";
+	    	if(Game.answer(id,message)){
+	    		Game.currentScore(id);
+	    		msg = "Respuesta Correcta";
+	    	}else{
+	    		msg = "Respuesta Incorrecta";
+	    		Game.updateMoves(id);
+	   		}
+	   		try {
+	    		user.getRemote().sendString(String.valueOf(new JSONObject()
+	                    .put("results",msg)
+		        ));
+	        } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+	   	}
 	
         if(Base.hasConnection()){
     		Base.close();

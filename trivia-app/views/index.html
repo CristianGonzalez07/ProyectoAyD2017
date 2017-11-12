@@ -8,8 +8,16 @@
 <body>
 	<center>
 		<div id="question"><!-- Built by JS --></div>
-		<div id="options"><!-- Built by JS --></div>
+		<div>
+				<input id="option1"  type='button' class='btn-default' onclick="sendOption1()"/>
+				<input id="option2"  type='button' class='btn-default' onclick="sendOption2()"/>
+				<input id="option3"  type='button' class='btn-default' onclick="sendOption3()"/>
+				<input id="option4"  type='button' class='btn-default' onclick="sendOption4()"/>
+		</div>
         <div id="results"><!-- Built by JS --></div>
+        <form action="/gameMenu" method="GET">
+			<input type="submit" class="btn-default1" value="Salir"/>
+		</form>	
     	<script src="websocketDemo.js"></script>
 	</center>
 </body>
