@@ -31,3 +31,20 @@ div{
 	cursor: pointer;
 	color: red;
 }
+.btn-default1{
+	height: 40px;
+	width: 150px;
+	font-size: 18px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+	position: absolute;
+	top: 1%;
+	left: 1%; 
+}
+.btn-default1:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
