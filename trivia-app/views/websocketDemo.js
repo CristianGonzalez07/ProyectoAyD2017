@@ -23,20 +23,26 @@ function sendBuild() {
 //Update the chat-panel, and the list of connected users
 function update(msg) {
     var data = JSON.parse(msg.data);
-
-    if(data.results != ""){
+    if(data.play=="yes"){
+        if(data.results != ""){
         text = "<button class='btn-default' onclick="
         insert("results","<h2>" + data.results + "</h2>")
         insert("results", text+"sendBuild()>Continuar</button>");
+        }else{
+            id("question").innerHTML = "";
+            id("results").innerHTML = "";
+            insert("question","<h2>" + data.question + "</h2>");
+            document.getElementById("option1").value=data.option1;
+            document.getElementById("option2").value=data.option2;
+            document.getElementById("option3").value=data.option3;
+            document.getElementById("option4").value=data.option4;
+        }
     }else{
         id("question").innerHTML = "";
         id("results").innerHTML = "";
-        insert("question","<h2>" + data.question + "</h2>")
-        document.getElementById("option1").value=data.option1;
-        document.getElementById("option2").value=data.option2;
-        document.getElementById("option3").value=data.option3;
-        document.getElementById("option4").value=data.option4;
+        insert("question","<h2>" + data.msgEspera + "</h2>")
     }
+    
 }
 
 //Helper function for inserting HTML as the first child of an element
