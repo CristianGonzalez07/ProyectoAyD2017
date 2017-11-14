@@ -53,7 +53,6 @@ public class App
     	String username = EchoWebSocket.biMapUsername.get(username_aux);
 
     	int id = (int)User.getCurrentGameId(username);
-    	
     	String typeOfGame = User.getCurrentGameType(username);
     	
     	if(message.equals("build")){
@@ -79,7 +78,7 @@ public class App
     		else if(typeOfGame.equals("2PLAYER")){
     			int numberOfPlayer = Game.numberOfPlayer(id,username);
 
-    			if(numberOfPlayer==1){
+    			if((numberOfPlayer == 1)&&(Game.actualMoves(id)%2 == 1)){
     				try {
                 	user.getRemote().sendString(String.valueOf(new JSONObject()
                 		.put("play","yes")
@@ -93,14 +92,15 @@ public class App
 
 	                String p2 = Game.player_2(id);
 		            username_aux = EchoWebSocket.biMapUsername.inverse().get(p2);
-		            System.out.println("=========voy a buscar la session de: "+username_aux);
-		            org.eclipse.jetty.websocket.api.Session user2 = EchoWebSocket.biMapSession.get(username_aux);
+		           	if(username_aux != null){
+		           		org.eclipse.jetty.websocket.api.Session user2 = EchoWebSocket.biMapSession.get(username_aux);
 		    		
-		    		user2.getRemote().sendString(String.valueOf(new JSONObject()
-		    			.put("play","no")
-		    			.put("msgEspera","Espere...El turno de responder es de: "+username)
-		    		));	
-
+		    			user2.getRemote().sendString(String.valueOf(new JSONObject()
+		    				.put("play","no")
+		    				.put("msgEspera","Espere...El turno de responder es de: "+username)
+		    			));	
+		           	}
+		           
 		            } catch (Exception e) {
 		                e.printStackTrace();
 		            }
@@ -114,19 +114,20 @@ public class App
 
 	                String p1 = Game.player_1(id);
 		            username_aux = EchoWebSocket.biMapUsername.inverse().get(p1);
-		            System.out.println("=========voy a buscar la session de: "+username_aux);
-		            org.eclipse.jetty.websocket.api.Session user1 = EchoWebSocket.biMapSession.get(username_aux);
+		            if(username_aux != null){
+		            	org.eclipse.jetty.websocket.api.Session user1 = EchoWebSocket.biMapSession.get(username_aux);
 		    		
-		    		user1.getRemote().sendString(String.valueOf(new JSONObject()
-		    			.put("play","yes")
-	                    .put("question",question)
-	                    .put("option1",options.get(0))
-	                    .put("option2",options.get(1))
-	                    .put("option3",options.get(2))
-	                    .put("option4",options.get(3))
-	                    .put("results","")
-		    		));	
-		    		
+		    			user1.getRemote().sendString(String.valueOf(new JSONObject()
+		    				.put("play","yes")
+	                    	.put("question",question)
+	                    	.put("option1",options.get(0))
+	                    	.put("option2",options.get(1))
+	                    	.put("option3",options.get(2))
+	                    	.put("option4",options.get(3))
+	                    	.put("results","")
+		    			));	
+		           	}
+		            	
 		            } catch (Exception e) {
 		                e.printStackTrace();
 		            }
@@ -162,7 +163,7 @@ public class App
     {	
     	staticFileLocation("/views");
     	Map map = new HashMap();
-    	staticFiles.expireTime(600);
+    	staticFiles.expireTime(6000);
         webSocket("/chat", EchoWebSocket.class);
         init();
 
@@ -213,10 +214,10 @@ public class App
 	        	map.put("textoInvitaciones","Los siguientes usuarios te han invitado a una partida.Para aceptar o rechazar has click sobre el nombre del usuario");
 	        	List<String> invitations = Invitation.getInvitations(username);
 	        	for(int i=0;i<3 && i<invitations.size();i++){
-	        		map.put("Invitation"+(i+1),invitations.get(i));
+	        		map.put("Invitacion"+(i+1),invitations.get(i));
 	        	}
 	        }
-	        
+	       /* 
 	        if(User.games(username)){
 	        	map.put("textoPartidas","Las siguientes Partidas estan Activas·Has click sobre ellas para reanudar");
 	        	List<String> games = Game.games(username);
@@ -224,7 +225,7 @@ public class App
 	        		map.put("Partida"+(i+1),games.get(i));
 	        	}
 	        }
-			
+			*/
 	         return new ModelAndView(map, "./views/gameMenu.mustache");
 	    },   new MustacheTemplateEngine()
 	    ); 
@@ -315,15 +316,15 @@ public class App
 	    post("/gameMenu", (request, response)->{
 	    	String typeOfGame = request.queryParams("typeOfGame");
 	      	String logOut = request.queryParams("Logout");
-	      	String invitation = request.queryParams("Invitation");
+	      	String invitation = request.queryParams("invitacion");
 	      	String game = request.queryParams("game");
 	      	String username = (String)request.session().attribute(SESSION_NAME);
 	      	
-	      	if(typeOfGame!=null){
+	      	if(typeOfGame != null){
 	      		if(Game.limitGames(username)){
-	      			EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
 	      			if(typeOfGame.equals("1 Jugador")){
 		      			Game.createGame1Player(username);
+		      			EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
 		      			response.redirect("/");
 			      	}else if(typeOfGame.equals("2 Jugadores")){
 			      		String player2 = User.randomMatch(username);
@@ -332,7 +333,8 @@ public class App
 			      		response.redirect("/gameMenu");
 			      	}
 	      		}else{
-	      			//msj denegando creacion de game	
+	      			map.put("msgError","Usted no puede iniciar mas partidas.primero debe finalizar las partidas ya iniciadas");
+	      			response.redirect("/gameMenu");	
 	      		} 		
 	      	}
 	      
@@ -340,16 +342,15 @@ public class App
 	      		response.redirect("/mainpage");
 	      	}
 
-	      	if(invitation!= null){
+	      	if(invitation != null){
 	      		int id = Game.findIdGame(invitation,username);
 	      		Game.startGame2Player(id);
 	      		User.setCurrentGame(username,id);
+	      		EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
 	      		response.redirect("/");
 	      	}
 
-	      	if(game != null){
-	      		//
-	      	}
+	      	map.clear();
 	      	return null;
 	    });
   	}   
