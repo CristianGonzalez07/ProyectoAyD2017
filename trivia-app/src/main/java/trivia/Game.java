@@ -3,6 +3,7 @@ package trivia;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import java.util.List;
+import java.util.ArrayList;
 import trivia.Question;
 import trivia.User;
 import java.util.Date;
@@ -186,10 +187,10 @@ public class Game extends Model {
 
 
 	/**
-	* function that modifies the total score of users
-	* @param username of users associated with the game
-	* @pre idGame <> []
-	* @pos modifies user's total score
+	 * function that modifies the total score of users
+	 * @param username of users associated with the game
+	 * @pre idGame <> []
+	 * @pos modifies user's total score
 	*/
 	public static void totalScoreForPlayer(int idGame){
 		Game game = Game.findFirst("id = ?", idGame);
@@ -229,7 +230,7 @@ public class Game extends Model {
      * per player is not exceeded.
      * @return true if if the limit of games per
      * player is not exceeded. 
-     */
+    */
 	public static boolean limitGames(String username){
 		List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"'"));
 		boolean res = false;
@@ -245,7 +246,7 @@ public class Game extends Model {
      * @return true if the player answer is correct.
      * @pre. id > 0, playerAnswer != "";
      * @post. returns true if the player answer is correct.
-     */
+    */
 	public static boolean answer(int idGame,String playerAnswer){  
   		Game game = findFirst("id = ?",idGame); 
   		String description = game.getString("question");
@@ -260,9 +261,67 @@ public class Game extends Model {
      * @pre. user1 <> [] and user2 <> []
      * @post. return the id that refers to the game in which the 2 given users participate
      * @return the id that refers to the game in which the 2 given users participate
-     */
+    */
 	public static int findIdGame(String user1,String user2){
 		Game game = findFirst("player1 = '"+user1+"'' and player2 = '"+user2+"'");
 		return (int)game.get("id");
+	}
+
+	/** 
+     * function that returns the player number corresponding to the given user as a parameter associated
+     * with the given game as a parameter.
+     * @param id is the id of one game.
+     * @param username is a player who participates in the game.
+     * @pre. id>0 username <> []
+     * @post. returns the player number corresponding to the given user as a parameter associated
+     * with the given game as a parameter.
+     * @return the player number corresponding to the given user as a parameter associated
+     * with the given game as a parameter.
+    */
+	public static int numberOfPlayer(int id,String username){
+		Game game  =  findFirst("id = ?",id);
+		String user = game.getString("player1");
+		int res = 0;
+		if(username.equals(user)){
+			res = 1;
+		}else{
+			res =  2;
+		}
+		return res;
+	}
+
+	/**
+	 * function that returns the name of the player 1.
+	 *@param id is the id of a game
+	 *@pre. id>0
+	 *@post. returns the name of the player 1.
+	 *@return  the name of the player 1.
+	*/
+	public static String player_1(int id){
+		Game game  =  findFirst("id = ?",id);
+		return game.getString("player1");
+	}
+
+	/**
+	 * function that returns the name of the player 2.
+	 *@param id is the id of a game
+	 *@pre. id>0
+	 *@post. returns the name of the player 2.
+	 *@return  the name of the player 2.
+	*/
+	public static String player_2(int id){
+		Game game  =  findFirst("id = ?",id);
+		return game.getString("player2");
+	}
+
+	public static List<String> games(String username){
+		List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"' AND status = 'INPROGRESS'"));
+		List<String> list = new ArrayList<String>();
+		int id = 0;
+		for (int i = 0;i<games.size();i++) {
+			id = (int)games.get(i).get("id");
+			list.add(Integer.toString(id));
+		}
+		return list;
 	}
 }
