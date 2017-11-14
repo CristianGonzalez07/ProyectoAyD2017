@@ -49,11 +49,11 @@ public class App
     		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     	}
 
-    	String username_aux = EchoWebSocket.biMapSession.inverse().get(user);
-    	String username = EchoWebSocket.biMapUsername.get(username_aux);
+    	String aux = EchoWebSocket.biMapSession.inverse().get(user);
+    	String currentUser = EchoWebSocket.biMapUsername.get(aux);
 
-    	int id = (int)User.getCurrentGameId(username);
-    	String typeOfGame = User.getCurrentGameType(username);
+    	int id = (int)User.getCurrentGameId(currentUser);
+    	String typeOfGame = User.getCurrentGameType(currentUser);
     	
     	if(message.equals("build")){
     		String question = Question.getQuestion();
@@ -76,58 +76,70 @@ public class App
 	            }
     		}
     		else if(typeOfGame.equals("2PLAYER")){
-    			int numberOfPlayer = Game.numberOfPlayer(id,username);
+    			int numberOfPlayer = Game.numberOfPlayer(id,currentUser);
+    			String p1 = Game.player_1(id);
+    			String p2 = Game.player_2(id);
+    			org.eclipse.jetty.websocket.api.Session user1 = null;
+    			org.eclipse.jetty.websocket.api.Session user2 = null;
 
-    			if((numberOfPlayer == 1)&&(Game.actualMoves(id)%2 == 1)){
-    				try {
-                	user.getRemote().sendString(String.valueOf(new JSONObject()
-                		.put("play","yes")
-	                    .put("question",question)
-	                    .put("option1",options.get(0))
-	                    .put("option2",options.get(1))
-	                    .put("option3",options.get(2))
-	                    .put("option4",options.get(3))
-	                    .put("results","")
-	                ));
 
-	                String p2 = Game.player_2(id);
-		            username_aux = EchoWebSocket.biMapUsername.inverse().get(p2);
-		           	if(username_aux != null){
-		           		org.eclipse.jetty.websocket.api.Session user2 = EchoWebSocket.biMapSession.get(username_aux);
-		    		
-		    			user2.getRemote().sendString(String.valueOf(new JSONObject()
-		    				.put("play","no")
-		    				.put("msgEspera","Espere...El turno de responder es de: "+username)
-		    			));	
+    			if(p1.equals(currentUser)){
+    				user1 = user;
+    				aux = EchoWebSocket.biMapUsername.inverse().get(p2);
+		           	if(aux != null){
+		           		user2 = EchoWebSocket.biMapSession.get(aux);
 		           	}
-		           
+    			}else{
+    				user2 = user;
+    				aux = EchoWebSocket.biMapUsername.inverse().get(p1);
+		           	if(aux != null){
+		           		user1 = EchoWebSocket.biMapSession.get(aux);
+		           	}
+    			}
+
+    			if(Game.actualMoves(id)%2 != 0){
+
+    				try {
+    					if(user1 != null){
+		                	user1.getRemote().sendString(String.valueOf(new JSONObject()
+		                		.put("play","yes")
+			                    .put("question",question)
+			                    .put("option1",options.get(0))
+			                    .put("option2",options.get(1))
+			                    .put("option3",options.get(2))
+			                    .put("option4",options.get(3))
+			                    .put("results","")
+			                ));
+		                }
+		                if(user2 != null){
+				    		user2.getRemote().sendString(String.valueOf(new JSONObject()
+				    			.put("play","no")
+				    			.put("msgEspera","Espere...El turno de responder es de: "+p1)
+				    		));	
+		           		}
 		            } catch (Exception e) {
 		                e.printStackTrace();
 		            }
 
     			}else{
     				try {
-                	user.getRemote().sendString(String.valueOf(new JSONObject()
-	                    .put("play","no")
-		    			.put("msgEspera","Espere...El turno de responder es de: "+username)
-	                ));
-
-	                String p1 = Game.player_1(id);
-		            username_aux = EchoWebSocket.biMapUsername.inverse().get(p1);
-		            if(username_aux != null){
-		            	org.eclipse.jetty.websocket.api.Session user1 = EchoWebSocket.biMapSession.get(username_aux);
-		    		
-		    			user1.getRemote().sendString(String.valueOf(new JSONObject()
-		    				.put("play","yes")
-	                    	.put("question",question)
-	                    	.put("option1",options.get(0))
-	                    	.put("option2",options.get(1))
-	                    	.put("option3",options.get(2))
-	                    	.put("option4",options.get(3))
-	                    	.put("results","")
-		    			));	
-		           	}
-		            	
+    					if(user1 != null){
+		                	user1.getRemote().sendString(String.valueOf(new JSONObject()
+			                    .put("play","no")
+				    			.put("msgEspera","Espere...El turno de responder es de: "+p2)
+			                ));
+	                	}
+	                	if(user2 != null){
+			    			user2.getRemote().sendString(String.valueOf(new JSONObject()
+			    				.put("play","yes")
+		                    	.put("question",question)
+		                    	.put("option1",options.get(0))
+		                    	.put("option2",options.get(1))
+		                    	.put("option3",options.get(2))
+		                    	.put("option4",options.get(3))
+		                    	.put("results","")
+			    			));	
+			    		}	
 		            } catch (Exception e) {
 		                e.printStackTrace();
 		            }
@@ -217,15 +229,6 @@ public class App
 	        		map.put("Invitacion"+(i+1),invitations.get(i));
 	        	}
 	        }
-	       /* 
-	        if(User.games(username)){
-	        	map.put("textoPartidas","Las siguientes Partidas estan Activas·Has click sobre ellas para reanudar");
-	        	List<String> games = Game.games(username);
-	        	for(int i=0;i<3 && i<games.size();i++){
-	        		map.put("Partida"+(i+1),games.get(i));
-	        	}
-	        }
-			*/
 	         return new ModelAndView(map, "./views/gameMenu.mustache");
 	    },   new MustacheTemplateEngine()
 	    ); 
@@ -243,6 +246,21 @@ public class App
         get("/results", (request, response) -> {
             return new ModelAndView(map, "./views/results.mustache");
         }, new MustacheTemplateEngine()
+        );
+
+        get("/continue", (request, response) -> {
+        	String username = (String)request.session().attribute(SESSION_NAME);
+	        if(User.games(username)){
+	        	List<String> games = Game.games(username);
+	        		map.put("textoPartidas","Las siguientes Partidas estan Activas·Has click sobre ellas para reanudar");
+	        		for(int i=0;i<3 && i<games.size();i++){
+	        			map.put("Partida"+(i+1),games.get(i));
+	        		}
+	        }else{
+        		map.put("textoPartidas","Usted no posee Partidas Activas en este momento");
+        	}
+	        return new ModelAndView(map, "./views/continue.mustache");
+        },  new MustacheTemplateEngine()
         );
 
 	    post("/register", (request, response) -> {
@@ -316,8 +334,8 @@ public class App
 	    post("/gameMenu", (request, response)->{
 	    	String typeOfGame = request.queryParams("typeOfGame");
 	      	String logOut = request.queryParams("Logout");
-	      	String invitation = request.queryParams("invitacion");
 	      	String game = request.queryParams("game");
+	      	String invitation = request.queryParams("invitacion");
 	      	String username = (String)request.session().attribute(SESSION_NAME);
 	      	
 	      	if(typeOfGame != null){
@@ -337,21 +355,33 @@ public class App
 	      			response.redirect("/gameMenu");	
 	      		} 		
 	      	}
-	      
-	      	if(logOut!=null){
-	      		response.redirect("/mainpage");
-	      	}
 
 	      	if(invitation != null){
 	      		int id = Game.findIdGame(invitation,username);
 	      		Game.startGame2Player(id);
 	      		User.setCurrentGame(username,id);
+	      		Invitation.deleteInvitation(invitation,username);
 	      		EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
 	      		response.redirect("/");
 	      	}
 
+	      	if(logOut!=null){
+	      		response.redirect("/mainpage");
+	      	}
 	      	map.clear();
 	      	return null;
 	    });
+  	
+	   post("/continue", (request, response)->{
+		   	String username = (String)request.session().attribute(SESSION_NAME);
+		   	String game = request.queryParams("Partida");
+		   	if(game != null){
+		   		int id = Integer.parseInt(game);
+	      		User.setCurrentGame(username,id);
+	      		EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
+	      		response.redirect("/");
+	      	}
+  			return null;
+  	   });   
   	}   
 }

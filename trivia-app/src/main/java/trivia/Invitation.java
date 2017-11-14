@@ -69,4 +69,17 @@ public class Invitation extends Model{
           }
           return listOfUsers;
      }
+
+
+      /** 
+     * function that deletes a user invitation
+     * @param origin user origin of the invitation 
+     * @param destination user invitation destination 
+     * @pre. origin != null, destination != null
+     * @post. deletes a user invitation
+     */
+     public static void deleteInvitation(String origin, String destination){
+          Invitation invitation = findFirst("origin = '"+origin+"' AND destination = '"+destination+"'");
+          invitation.delete();
+     }    
 }
