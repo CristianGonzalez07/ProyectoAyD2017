@@ -175,11 +175,11 @@ public class Game extends Model {
 		int score = 0;
 		int round = (int)game.get("moves");
 		if (round%2==0){
-			score = (int)game.get("scorePlayer1");
-			game.set("scorePlayer1", score+1);
-		} else {
 			score = (int)game.get("scorePlayer2");
 			game.set("scorePlayer2", score+1);
+		} else {
+			score = (int)game.get("scorePlayer1");
+			game.set("scorePlayer1", score+1);
 		}
 		updateMoves(idGame);
 		game.saveIt();
@@ -263,7 +263,7 @@ public class Game extends Model {
      * @return the id that refers to the game in which the 2 given users participate
     */
 	public static int findIdGame(String user1,String user2){
-		Game game = findFirst("player1 = '"+user1+"'' and player2 = '"+user2+"'");
+		Game game = findFirst("player1 = '"+user1+"' and player2 = '"+user2+"'");
 		return (int)game.get("id");
 	}
 
@@ -315,7 +315,7 @@ public class Game extends Model {
 	}
 
 	public static List<String> games(String username){
-		List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"' AND status = 'INPROGRESS'"));
+		List<Game> games = Game.where(("(player1 = '" + username + "' OR player2 = '" + username+"') AND status = 'INPROGRESS'"));
 		List<String> list = new ArrayList<String>();
 		int id = 0;
 		for (int i = 0;i<games.size();i++) {
@@ -323,5 +323,10 @@ public class Game extends Model {
 			list.add(Integer.toString(id));
 		}
 		return list;
+	}
+
+	public static int actualMoves(int id){
+		Game game  =  findFirst("id = ?",id);
+		return (int)game.get("moves");
 	}
 }
