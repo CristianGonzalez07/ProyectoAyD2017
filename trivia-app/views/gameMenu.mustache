@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Game</title>
-    <link rel="stylesheet" type="text/css" href="css/GamerMenu.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/GameMenu.css"></link>
     <h1>Bienvenido <h3 class="nombre">{{currentUser}}</h3></h1>
 </head>
 <body>
@@ -10,24 +10,24 @@
 		<h3 class="texto">Puntaje Actual:<h3 class="puntaje">{{score}}</h3></h3>
 		<article>
 		<div class="container">
+			<h4 class="Error">{{msgError}}</h4>
 			<form action="/gameMenu" method="POST">
 				<input type="submit" name="typeOfGame" class="btn-default" value="1 Jugador"/>
 				<input type="submit" name="typeOfGame" class="btn-default" value="2 Jugadores"/>
 			</form>
+
+			<form action="/gameMenu" method="POST">
+				<input type="submit" name="Reanudar" class="btn-default" value="Reanudar Partida"/>
+			</form>
+
 			<form action="/mainpage" method="GET">
 					<input type="submit" name="Logout" class="btn-default1" value="Salir"/>
 			</form>		
 			<h3>{{textoInvitaciones}}</h3>
 			<form action="/gameMenu" method="POST">	
-				<input type="submit" name="Invitacion" class="btn-default" value={{Invitation1}} />
-				<input type="submit" name="Invitacion" class="btn-default" value={{Invitation2}} />
-				<input type="submit" name="Invitacion" class="btn-default" value={{Invitation3}} />
-			</form>
-			<h3>{{textoPartidas}}</h3>
-			<form action="/gameMenu" method="POST">
-				<input type="submit" name="Partida" class="btn-default" value={{Partida1}} />
-				<input type="submit" name="Partida" class="btn-default" value={{Partida2}} />
-				<input type="submit" name="Partida" class="btn-default" value={{Partida3}} />
+				<input type="submit" name="invitacion" class="Invitacion" value={{Invitacion1}} />
+				<input type="submit" name="invitacion" class="Invitacion" value={{Invitacion2}} />
+				<input type="submit" name="invitacion" class="Invitacion" value={{Invitacion3}} />
 			</form>
 		</div>
 		</article>	
