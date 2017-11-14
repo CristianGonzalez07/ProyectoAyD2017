@@ -40,6 +40,10 @@ function update(msg) {
     }else{
         id("question").innerHTML = "";
         id("results").innerHTML = "";
+        document.getElementById("option1").value="";
+        document.getElementById("option2").value="";
+        document.getElementById("option3").value="";
+        document.getElementById("option4").value="";
         insert("question","<h2>" + data.msgEspera + "</h2>")
     }
     
