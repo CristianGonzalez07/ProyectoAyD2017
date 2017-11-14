@@ -148,4 +148,9 @@ public class User extends Model {
       int currentGame = (int)user.get("currentGame");
       return currentGame;
     }
+
+    public static Boolean games(String username){
+      List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"' AND status = 'INPROGRESS'"));
+      return games.size()>0;
+    }
 }
