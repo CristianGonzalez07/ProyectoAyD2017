@@ -5,8 +5,25 @@ import trivia.Question;
 import java.util.List;
 import org.json.JSONObject;
 import org.eclipse.jetty.websocket.api.Session;
+import java.util.Random;
 
 public class GameHandling{
+
+
+	/** 
+     * function that returns a random number between the range given by the
+     * parameters.
+     * @param init is the smallest number in the range.
+     * @param end is the largest number in the range.
+     * @return a random number between the range given by the parameters.
+     * @pre. 0 <= init <= end.
+     * @post. a random number between the range given by the parameters is
+     * returned.
+     */
+    public static int random(int init,int end) {
+        Random  rnd = new Random();
+        return (int)(rnd.nextDouble() * end + init);
+    }
 
 	public static void buildSiteForPlay(Session user,int id){
 		String question = Question.getQuestion();
@@ -70,6 +87,7 @@ public class GameHandling{
     		buildSiteForPlay(user2,id);
     		buildSiteForWait(user1,p2);
     	}
-
 	}
+
+
 }

@@ -4,7 +4,6 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 import trivia.User;
 import trivia.Question;
 import trivia.Game;
@@ -20,20 +19,6 @@ public class Question extends Model{
         validatePresenceOf("category").message("Please, provide your category");
     }
 
-    /** 
-     * function that returns a random number between the range given by the
-     * parameters.
-     * @param init is the smallest number in the range.
-     * @param end is the largest number in the range.
-     * @return a random number between the range given by the parameters.
-     * @pre. 0 <= init <= end.
-     * @post. a random number between the range given by the parameters is
-     * returned.
-     */
-    public static int random(int init,int end) {
-        Random  rnd = new Random();
-        return (int)(rnd.nextDouble() * end + init);
-    }
 
     /** 
      * function that return true if the question was created correctly
@@ -67,11 +52,11 @@ public class Question extends Model{
     }
 
     /** 
-     * function that returns a List of the options associated with a question in a random order.
+     * function that returns a List of the options associated with a question in a GameHandling.random order.
      * @param description is the description of an existing question in db.
-     * @return a List of the options associated with a question in a random order.
+     * @return a List of the options associated with a question in a GameHandling.random order.
      * @pre. the description is associated with a question in db.
-     * @post. returns a List of the options associated with a question in a random order.
+     * @post. returns a List of the options associated with a question in a GameHandling.random order.
      */
     public static List<String> mergeOptions(String description){
 	    List<String> options = new ArrayList<String>();
@@ -83,7 +68,7 @@ public class Question extends Model{
 	    int n = -1;
 	    String auxOp = "";
 	    for (int i=0;i<4;i++){
-	      	n = random(0,3);
+	      	n = GameHandling.random(0,3);
 	      	auxOp = options.remove(n);
 	      	options.add(auxOp);
 	    }
@@ -109,10 +94,10 @@ public class Question extends Model{
      * @post. create a returns a model associated with a question in the db.
      */
     public static String getQuestion(){
-        int n = random(1,5);
+        int n = GameHandling.random(1,5);
         List<Question> questions = getQuestionsByCategory(getCat(n));
         n = questions.size();
-        Question q = questions.get(random (0,n));
+        Question q = questions.get(GameHandling.random (0,n));
         String res = q.getString("description");
         return res;
     }

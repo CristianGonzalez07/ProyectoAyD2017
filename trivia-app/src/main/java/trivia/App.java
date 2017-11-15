@@ -7,14 +7,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
-//import static j2html.TagCreator.*;
 
 import static spark.Spark.*;
 
@@ -26,21 +24,6 @@ public class App
 	private static final String SESSION_NAME = "username";
 	
 	static int nextUserNumber = 1;
-	/** 
-     * function that returns a random number between the range given by the
-     * parameters.
-     * @param init is the smallest number in the range.
-     * @param end is the largest number in the range.
-     * @return a random number between the range given by the parameters.
-     * @pre. 0 <= init <= end.
-     * @post. a random number between the range given by the parameters is
-     * returned.
-     */
-	public static int random(int init,int end) {
-		Random  rnd = new Random();
-		return (int)(rnd.nextDouble() * end + init);
-	}
-
 
 //Sends a message from one user to all users, along with a list of current usernames
     public static void broadcastMessage(String sender, String message,Session user) {
