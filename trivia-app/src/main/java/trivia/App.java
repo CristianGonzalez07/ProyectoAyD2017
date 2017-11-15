@@ -14,7 +14,7 @@ import javax.swing.Timer;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
-import static j2html.TagCreator.*;
+//import static j2html.TagCreator.*;
 
 import static spark.Spark.*;
 
@@ -42,8 +42,7 @@ public class App
 	}
 
 
-
-  	//Sends a message from one user to all users, along with a list of current usernames
+//Sends a message from one user to all users, along with a list of current usernames
     public static void broadcastMessage(String sender, String message,Session user) {
     	if(!Base.hasConnection()) {
     		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
@@ -56,96 +55,14 @@ public class App
     	String typeOfGame = User.getCurrentGameType(currentUser);
     	
     	if(message.equals("build")){
-    		String question = Question.getQuestion();
-    		Game.setQuestion(question,id);
-    		List<String> options = Question.mergeOptions(question);	
     		
     		if(typeOfGame.equals("1PLAYER")){
-    			try {
-                user.getRemote().sendString(String.valueOf(new JSONObject()
-                	.put("play","yes")
-                    .put("question",question)
-                    .put("option1",options.get(0))
-                    .put("option2",options.get(1))
-                    .put("option3",options.get(2))
-                    .put("option4",options.get(3))
-                    .put("results","")
-                ));
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
+    			GameHandling.buildSiteForPlay(user,id);
     		}
     		else if(typeOfGame.equals("2PLAYER")){
-    			int numberOfPlayer = Game.numberOfPlayer(id,currentUser);
-    			String p1 = Game.player_1(id);
-    			String p2 = Game.player_2(id);
-    			org.eclipse.jetty.websocket.api.Session user1 = null;
-    			org.eclipse.jetty.websocket.api.Session user2 = null;
-
-
-    			if(p1.equals(currentUser)){
-    				user1 = user;
-    				aux = EchoWebSocket.biMapUsername.inverse().get(p2);
-		           	if(aux != null){
-		           		user2 = EchoWebSocket.biMapSession.get(aux);
-		           	}
-    			}else{
-    				user2 = user;
-    				aux = EchoWebSocket.biMapUsername.inverse().get(p1);
-		           	if(aux != null){
-		           		user1 = EchoWebSocket.biMapSession.get(aux);
-		           	}
-    			}
-
-    			if(Game.actualMoves(id)%2 != 0){
-
-    				try {
-    					if(user1 != null){
-		                	user1.getRemote().sendString(String.valueOf(new JSONObject()
-		                		.put("play","yes")
-			                    .put("question",question)
-			                    .put("option1",options.get(0))
-			                    .put("option2",options.get(1))
-			                    .put("option3",options.get(2))
-			                    .put("option4",options.get(3))
-			                    .put("results","")
-			                ));
-		                }
-		                if(user2 != null){
-				    		user2.getRemote().sendString(String.valueOf(new JSONObject()
-				    			.put("play","no")
-				    			.put("msgEspera","Espere...El turno de responder es de: "+p1)
-				    		));	
-		           		}
-		            } catch (Exception e) {
-		                e.printStackTrace();
-		            }
-
-    			}else{
-    				try {
-    					if(user1 != null){
-		                	user1.getRemote().sendString(String.valueOf(new JSONObject()
-			                    .put("play","no")
-				    			.put("msgEspera","Espere...El turno de responder es de: "+p2)
-			                ));
-	                	}
-	                	if(user2 != null){
-			    			user2.getRemote().sendString(String.valueOf(new JSONObject()
-			    				.put("play","yes")
-		                    	.put("question",question)
-		                    	.put("option1",options.get(0))
-		                    	.put("option2",options.get(1))
-		                    	.put("option3",options.get(2))
-		                    	.put("option4",options.get(3))
-		                    	.put("results","")
-			    			));	
-			    		}	
-		            } catch (Exception e) {
-		                e.printStackTrace();
-		            }
-    			}
+    			GameHandling.buildSiteFor2Players(user,id,currentUser);
     		}
-
+    	
     	}else{ //el msj es una respuesta a una pregunta
 	    	String msg = "";
 	    	if(Game.answer(id,message)){
