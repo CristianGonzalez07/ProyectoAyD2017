@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reanudar Partida</title>
+    <link rel="stylesheet" type="text/css" href="css/continue.css"></link>
+    <h3 class="nombre">{{textoPartidas}}</h3>
+</head>
+<body>
+	<center>
+		<div class = 'container'>
+			<form action="gameMenu" method="GET">
+				<input type="submit" name="Logout" class="btn-default1" value="Salir"/>
+			</form>	
+			<form action="/continue" method="POST">
+				<input  id="partida1" name="Partida"  type='submit' class='btn-default' value ={{Partida1}} />
+				<input  id="partida2" name="Partida"  type='submit' class='btn-default' value ={{Partida2}} />
+				<input  id="partida3" name="Partida"  type='submit' class='btn-default' value ={{Partida3}} />
+				<input  id="partida4" name="Partida"  type='submit' class='btn-default' value ={{Partida4}} />
+			</form>
+		</div>
+	</center>
+
+<script type="text/javascript">
+		if(document.getElementById("partida1").value=="/"){
+			document.getElementById("partida1").style.display='none';
+		}
+		if(document.getElementById("partida2").value=="/"){
+			document.getElementById("partida2").style.display='none';
+		}
+		if(document.getElementById("partida3").value=="/"){
+			document.getElementById("partida3").style.display='none';
+		}
+		if(document.getElementById("partida4").value=="/"){
+			document.getElementById("partida4").style.display='none';
+		}
+	</script></body>
