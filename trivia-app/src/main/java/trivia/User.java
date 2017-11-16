@@ -4,7 +4,6 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import java.util.List;
 import org.javalite.activejdbc.validation.UniquenessValidator;
-import java.util.Random;
 import trivia.Game;
 
 public class User extends Model {
@@ -27,21 +26,6 @@ public class User extends Model {
     user.set("currentGame",id);
     user.saveIt();    
   } 
-  
-	/** 
-     * function that returns a random number between the range given by the
-     * parameters.
-     * @param init is the smallest number in the range.
-     * @param end is the largest number in the range.
-     * @return a random number between the range given by the parameters.
-     * @pre. 0 <= init <= end.
-     * @post. a random number between the range given by the parameters is
-     * returned.
-     */
-    public static int random(int init,int end) {
-        Random  rnd = new Random();
-        return (int)(rnd.nextDouble() * end + init);
-    }
 
 	/** 
      * Function that creates a user returns a number 
@@ -101,25 +85,25 @@ public class User extends Model {
   	}
 
   /**
-	 *function that returns the username of a randomly selected user.
+	 *function that returns the username of a GameHandling.random()ly selected user.
 	 *@param username is the name of the user who is looking for a rival
-	 *@return the username of a randomly selected user.
+	 *@return the username of a GameHandling.random()ly selected user.
 	 *@pre. true
-	 *@post. returns the username of a randomly selected user.
+	 *@post. returns the username of a GameHandling.random()ly selected user.
   */
   	public static String randomMatch(String username){
   		List<User> users  =  User.findAll();
-      String result = "";
+     	String result = "";
   		int count = users.size();
-  		User user = users.get(random(0,count));
+  		User user = users.get(GameHandling.random(0,count));
   		String name = user.getString("username");
-      String permissions = user.getString("permissions");
-      System.out.println(name+"==="+permissions);
+      	String permissions = user.getString("permissions");
+      	System.out.println(name+"==="+permissions);
   		if(name.equals(username) || (permissions.equals("YES"))){
-        result = randomMatch(username);
-      }else{
-        result = user.getString("username");
-      }
+        	result = randomMatch(username);
+      	}else{
+        	result = user.getString("username");
+      	}
   		return result;
   	}
 
@@ -147,5 +131,10 @@ public class User extends Model {
       User user =  findFirst("username = ?", username);
       int currentGame = (int)user.get("currentGame");
       return currentGame;
+    }
+
+    public static Boolean games(String username){
+      List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"' AND status = 'INPROGRESS'"));
+      return games.size()>0;
     }
 }

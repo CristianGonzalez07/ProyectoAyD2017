@@ -7,15 +7,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
-import java.util.concurrent.ConcurrentHashMap;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
-import static j2html.TagCreator.*;
 
 import static spark.Spark.*;
 
@@ -27,59 +24,28 @@ public class App
 	private static final String SESSION_NAME = "username";
 	
 	static int nextUserNumber = 1;
-	/** 
-     * function that returns a random number between the range given by the
-     * parameters.
-     * @param init is the smallest number in the range.
-     * @param end is the largest number in the range.
-     * @return a random number between the range given by the parameters.
-     * @pre. 0 <= init <= end.
-     * @post. a random number between the range given by the parameters is
-     * returned.
-     */
-	public static int random(int init,int end) {
-		Random  rnd = new Random();
-		return (int)(rnd.nextDouble() * end + init);
-	}
 
-
-
-  	//Sends a message from one user to all users, along with a list of current usernames
+//Sends a message from one user to all users, along with a list of current usernames
     public static void broadcastMessage(String sender, String message,Session user) {
     	if(!Base.hasConnection()) {
     		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     	}
 
-    	System.out.println("================="+message+"=======");
-    	String username_aux = EchoWebSocket.usernameMap.get(user);
-    	String username = EchoWebSocket.userUsernameMap.get(username_aux);
-    	int id = (int)User.getCurrentGameId(username);
-    	
-    	String typeOfGame = User.getCurrentGameType(username);
+    	String aux = EchoWebSocket.biMapSession.inverse().get(user);
+    	String currentUser = EchoWebSocket.biMapUsername.get(aux);
+
+    	int id = (int)User.getCurrentGameId(currentUser);
+    	String typeOfGame = User.getCurrentGameType(currentUser);
     	
     	if(message.equals("build")){
-    		String question = Question.getQuestion();
-    		Game.setQuestion(question,id);
-    		List<String> options = Question.mergeOptions(question);	
     		
     		if(typeOfGame.equals("1PLAYER")){
-    			try {
-                user.getRemote().sendString(String.valueOf(new JSONObject()
-                    .put("question",question)
-                    .put("option1",options.get(0))
-                    .put("option2",options.get(1))
-                    .put("option3",options.get(2))
-                    .put("option4",options.get(3))
-                    .put("results","")
-                ));
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
+    			GameHandling.buildSiteForPlay(user,id);
     		}
     		else if(typeOfGame.equals("2PLAYER")){
-    			//completar
+    			GameHandling.buildSiteFor2Players(user,id,currentUser);
     		}
-
+    	
     	}else{ //el msj es una respuesta a una pregunta
 	    	String msg = "";
 	    	if(Game.answer(id,message)){
@@ -92,6 +58,7 @@ public class App
 	   		try {
 	    		user.getRemote().sendString(String.valueOf(new JSONObject()
 	                    .put("results",msg)
+	                    .put("play","yes")
 		        ));
 	        } catch (Exception e) {
 		        e.printStackTrace();
@@ -108,7 +75,7 @@ public class App
     {	
     	staticFileLocation("/views");
     	Map map = new HashMap();
-    	staticFiles.expireTime(600);
+    	staticFiles.expireTime(6000);
         webSocket("/chat", EchoWebSocket.class);
         init();
 
@@ -158,8 +125,8 @@ public class App
 	        if(Invitation.newInvitations(username)){
 	        	map.put("textoInvitaciones","Los siguientes usuarios te han invitado a una partida.Para aceptar o rechazar has click sobre el nombre del usuario");
 	        	List<String> invitations = Invitation.getInvitations(username);
-	        	for(int i=0;i<3;i++){
-	        		map.put("Invitation"+i,invitations.get(i));
+	        	for(int i=0;i<3 && i<invitations.size();i++){
+	        		map.put("Invitacion"+(i+1),invitations.get(i));
 	        	}
 	        }
 	         return new ModelAndView(map, "./views/gameMenu.mustache");
@@ -179,6 +146,21 @@ public class App
         get("/results", (request, response) -> {
             return new ModelAndView(map, "./views/results.mustache");
         }, new MustacheTemplateEngine()
+        );
+
+        get("/continue", (request, response) -> {
+        	String username = (String)request.session().attribute(SESSION_NAME);
+	        if(User.games(username)){
+	        	List<String> games = Game.games(username);
+	        		map.put("textoPartidas","Las siguientes Partidas estan Activas·Has click sobre ellas para reanudar");
+	        		for(int i=0;i<3 && i<games.size();i++){
+	        			map.put("Partida"+(i+1),games.get(i));
+	        		}
+	        }else{
+        		map.put("textoPartidas","Usted no posee Partidas Activas en este momento");
+        	}
+	        return new ModelAndView(map, "./views/continue.mustache");
+        },  new MustacheTemplateEngine()
         );
 
 	    post("/register", (request, response) -> {
@@ -252,42 +234,54 @@ public class App
 	    post("/gameMenu", (request, response)->{
 	    	String typeOfGame = request.queryParams("typeOfGame");
 	      	String logOut = request.queryParams("Logout");
-	      	String invitation = request.queryParams("Invitation");
 	      	String game = request.queryParams("game");
+	      	String invitation = request.queryParams("invitacion");
 	      	String username = (String)request.session().attribute(SESSION_NAME);
 	      	
-	      	if(typeOfGame!=null){
+	      	if(typeOfGame != null){
 	      		if(Game.limitGames(username)){
-	      			System.out.println("???????"+username+"??"+nextUserNumber);
-	      			EchoWebSocket.userUsernameMap.put("user"+nextUserNumber,username);
 	      			if(typeOfGame.equals("1 Jugador")){
 		      			Game.createGame1Player(username);
+		      			EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
 		      			response.redirect("/");
 			      	}else if(typeOfGame.equals("2 Jugadores")){
 			      		String player2 = User.randomMatch(username);
 			      		Invitation.createInvitation(username,player2);
 			      		Game.createGame2Player(username,player2);
+			      		response.redirect("/gameMenu");
 			      	}
 	      		}else{
-	      			//msj denegando creacion de game	
+	      			map.put("msgError","Usted no puede iniciar mas partidas.primero debe finalizar las partidas ya iniciadas");
+	      			response.redirect("/gameMenu");	
 	      		} 		
 	      	}
-	      
-	      	if(logOut!=null){
-	      		response.redirect("/mainpage");
-	      	}
 
-	      	if(invitation!= null){
+	      	if(invitation != null){
 	      		int id = Game.findIdGame(invitation,username);
 	      		Game.startGame2Player(id);
 	      		User.setCurrentGame(username,id);
+	      		Invitation.deleteInvitation(invitation,username);
+	      		EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
 	      		response.redirect("/");
 	      	}
 
-	      	if(game != null){
-	      		//
+	      	if(logOut!=null){
+	      		response.redirect("/mainpage");
 	      	}
+	      	map.clear();
 	      	return null;
 	    });
+  	
+	   post("/continue", (request, response)->{
+		   	String username = (String)request.session().attribute(SESSION_NAME);
+		   	String game = request.queryParams("Partida");
+		   	if(game != null){
+		   		int id = Integer.parseInt(game);
+	      		User.setCurrentGame(username,id);
+	      		EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
+	      		response.redirect("/");
+	      	}
+  			return null;
+  	   });   
   	}   
 }

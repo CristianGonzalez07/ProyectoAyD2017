@@ -42,7 +42,7 @@ public class Invitation extends Model{
      */
      public static boolean newInvitations(String username){
           long count = Invitation.count("destination= ? ", username);
-          return count!= 0;
+          return count != 0;
      }
 
 
@@ -61,11 +61,25 @@ public class Invitation extends Model{
           List<String> listOfUsers = new ArrayList<String>();
           Invitation invitation = new Invitation();
           String origin = "";
-          for(int i = 0;i<3;i++){
-               invitation = findFirst("destination = ?",username);
+          List<Invitation>invitations = Invitation.where("destination = ?",username);
+          for(int i = 0;i<invitations.size();i++){
+               invitation = invitations.get(i);
                origin = invitation.getString("origin");
                listOfUsers.add(origin);
           }
           return listOfUsers;
      }
+
+
+      /** 
+     * function that deletes a user invitation
+     * @param origin user origin of the invitation 
+     * @param destination user invitation destination 
+     * @pre. origin != null, destination != null
+     * @post. deletes a user invitation
+     */
+     public static void deleteInvitation(String origin, String destination){
+          Invitation invitation = findFirst("origin = '"+origin+"' AND destination = '"+destination+"'");
+          invitation.delete();
+     }    
 }
