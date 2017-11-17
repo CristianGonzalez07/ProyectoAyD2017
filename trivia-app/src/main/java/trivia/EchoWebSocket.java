@@ -15,7 +15,7 @@ public class EchoWebSocket {
     public void onConnect(Session user) throws Exception {
         String username = "user"+App.nextUserNumber++;
         biMapSession.put(username,user);
-        App.broadcastMessage(sender = "server", msg = "build", user);
+        App.broadcastMessage(msg = "build", user);
     }
 
     @OnWebSocketClose
@@ -27,6 +27,6 @@ public class EchoWebSocket {
 
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
-        App.broadcastMessage(sender = biMapSession.inverse().get(user), msg = message, user);
+        App.broadcastMessage(msg = message, user);
     }
 }

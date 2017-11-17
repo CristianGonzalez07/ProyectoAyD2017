@@ -31,63 +31,117 @@ public class GameHandling{
     	List<String> options = Question.mergeOptions(question);	
 		try {
 			if(user != null){
-	            user.getRemote().sendString(String.valueOf(new JSONObject()
-	                .put("play","yes")
-	                .put("question",question)
-	                .put("option1",options.get(0))
-	                .put("option2",options.get(1))
-	                .put("option3",options.get(2))
-	                .put("option4",options.get(3))
-	                .put("results","")
-	            ));
+				if(!Game.endGame(id)){
+					user.getRemote().sendString(String.valueOf(new JSONObject()
+		                .put("play","yes")
+		                .put("question",question)
+		                .put("option1",options.get(0))
+		                .put("option2",options.get(1))
+		                .put("option3",options.get(2))
+		                .put("option4",options.get(3))
+		                .put("results","")
+	            	));
+				}else{
+					String win = winner(id);
+					user.getRemote().sendString(String.valueOf(new JSONObject()
+						.put("endGame","true")
+						.put("winner",win)
+					));
+				} 
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 	}
 
-	public static void buildSiteForWait(Session user,String player){
-		if(user != null){
-			try {
-				user.getRemote().sendString(String.valueOf(new JSONObject()
-					.put("play","no")
-					.put("msgEspera","Espere...El turno de responder es de: "+player)
-				));	
-			} catch (Exception e) {
-	        	e.printStackTrace();
-	    	}
-		}
+	public static void buildSiteForWait(Session user,String player,int id){
+		try {
+			if(user != null){
+				if(!Game.endGame(id)){
+					user.getRemote().sendString(String.valueOf(new JSONObject()
+						.put("play","no")
+						.put("msgEspera","Espere...El turno de responder es de: "+player)
+					));
+				}else{
+					String win = winner(id);
+					user.getRemote().sendString(String.valueOf(new JSONObject()
+						.put("endGame","true")
+						.put("winner",win)
+					));
+				}	
+			}
+		} catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	public static void buildSiteFor2Players(Session user,int id,String currentUser){
-		int numberOfPlayer = Game.numberOfPlayer(id,currentUser);
     	String p1 = Game.player_1(id);
     	String p2 = Game.player_2(id);
-    	org.eclipse.jetty.websocket.api.Session user1 = null;
-    	org.eclipse.jetty.websocket.api.Session user2 = null;
-    	String aux = ""; 
+    	
     	if(p1.equals(currentUser)){
-    		user1 = user;
-    		aux = EchoWebSocket.biMapUsername.inverse().get(p2);
-		    if(aux != null){
-		        user2 = EchoWebSocket.biMapSession.get(aux);
-		    }
+    		if(Game.actualMoves(id)%2 != 0){
+    			buildSiteForPlay(user,id);
+    		}else{
+    			buildSiteForWait(user,p2,id);
+    		}
     	}else{
-    		user2 = user;
-    		aux = EchoWebSocket.biMapUsername.inverse().get(p1);
-		    if(aux != null){
-		        user1 = EchoWebSocket.biMapSession.get(aux);
-		    }
-    	}
-
-    	if(Game.actualMoves(id)%2 != 0){
-    		buildSiteForPlay(user1,id);
-    		buildSiteForWait(user2,p1);
-    	}else{
-    		buildSiteForPlay(user2,id);
-    		buildSiteForWait(user1,p2);
+    		if(Game.actualMoves(id)%2 != 0){
+	    		buildSiteForWait(user,p1,id);
+    		}else{
+	    		buildSiteForPlay(user,id);
+    		}	
     	}
 	}
 
+	public static String winner(int id){
+		Game game = Game.findFirst("id = ?",id);
+		int score1 =(int)game.get("scorePlayer1");
+		int score2 =(int)game.get("scorePlayer2");
 
+		String win = ""; 
+		if(score1>score2){
+			win = game.getString("player1");
+		}else if(score2>score1){
+				win = game.getString("player2");
+			}else{
+				win = "empate";
+			}
+			System.out.println("El ganador es: "+win+"por los puntajes:"+score1+" a "+ score2);
+		return win;
+	}
+
+	public static void answer(Session user,int id,String message,String currentUser){
+		String msg = "";
+	    if(Game.answer(id,message)){
+	    	Game.currentScore(id);
+	    	msg = "Respuesta Correcta";
+	    }else{
+	    	msg = "Respuesta Incorrecta";
+	    	Game.updateMoves(id);
+	   	} 
+
+	   	String p1 = Game.player_1(id);
+    	String p2 = Game.player_2(id);
+    	String aux = "";
+
+	   	if(p1.equals(currentUser)){
+    		aux = EchoWebSocket.biMapUsername.inverse().get(p2);
+    	}else{
+    		aux = EchoWebSocket.biMapUsername.inverse().get(p1);
+    	}
+
+	   	try {
+	    	user.getRemote().sendString(String.valueOf(new JSONObject()
+	            .put("results",msg)
+	            .put("play","yes")
+		    ));
+	    } catch (Exception e) {
+		    e.printStackTrace();
+		}
+		if(aux!=null){
+    		org.eclipse.jetty.websocket.api.Session user_aux = EchoWebSocket.biMapSession.get(aux);
+    		App.broadcastMessage(message = "build", user_aux);
+    	}
+	}
 }

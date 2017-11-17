@@ -26,19 +26,17 @@ public class App
 	static int nextUserNumber = 1;
 
 //Sends a message from one user to all users, along with a list of current usernames
-    public static void broadcastMessage(String sender, String message,Session user) {
+    public static void broadcastMessage(String message,Session user) {
     	if(!Base.hasConnection()) {
     		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
     	}
 
     	String aux = EchoWebSocket.biMapSession.inverse().get(user);
     	String currentUser = EchoWebSocket.biMapUsername.get(aux);
-
     	int id = (int)User.getCurrentGameId(currentUser);
     	String typeOfGame = User.getCurrentGameType(currentUser);
     	
     	if(message.equals("build")){
-    		
     		if(typeOfGame.equals("1PLAYER")){
     			GameHandling.buildSiteForPlay(user,id);
     		}
@@ -47,24 +45,9 @@ public class App
     		}
     	
     	}else{ //el msj es una respuesta a una pregunta
-	    	String msg = "";
-	    	if(Game.answer(id,message)){
-	    		Game.currentScore(id);
-	    		msg = "Respuesta Correcta";
-	    	}else{
-	    		msg = "Respuesta Incorrecta";
-	    		Game.updateMoves(id);
-	   		}
-	   		try {
-	    		user.getRemote().sendString(String.valueOf(new JSONObject()
-	                    .put("results",msg)
-	                    .put("play","yes")
-		        ));
-	        } catch (Exception e) {
-		        e.printStackTrace();
-		    }
-	   	}
-	
+    		GameHandling.answer(user,id,message,currentUser);
+	    }
+
         if(Base.hasConnection()){
     		Base.close();
     	}
@@ -152,10 +135,10 @@ public class App
         	String username = (String)request.session().attribute(SESSION_NAME);
 	        if(User.games(username)){
 	        	List<String> games = Game.games(username);
-	        		map.put("textoPartidas","Las siguientes Partidas estan Activas·Has click sobre ellas para reanudar");
-	        		for(int i=0;i<3 && i<games.size();i++){
-	        			map.put("Partida"+(i+1),games.get(i));
-	        		}
+	        	map.put("textoPartidas","Las siguientes Partidas estan Activas·Has click sobre ellas para reanudar");
+	        	for(int i=0;i<3 && i<games.size();i++){
+	        		map.put("Partida"+(i+1),games.get(i));
+	        	}
 	        }else{
         		map.put("textoPartidas","Usted no posee Partidas Activas en este momento");
         	}
@@ -211,7 +194,6 @@ public class App
 
 	    post("/createQuestion", (request, response) -> {
 	      	map.clear();
-
             String cat = request.queryParams("Category");
 	      	String desc = request.queryParams("Description");
 	      	String op1 = request.queryParams("txt_op1");
@@ -248,27 +230,25 @@ public class App
 			      		String player2 = User.randomMatch(username);
 			      		Invitation.createInvitation(username,player2);
 			      		Game.createGame2Player(username,player2);
+			      		map.put("msgSucess","Esperando confirmacion de partida.Para saber si la partida fue aceptada ingrese en reanudar Partida");
 			      		response.redirect("/gameMenu");
 			      	}
 	      		}else{
 	      			map.put("msgError","Usted no puede iniciar mas partidas.primero debe finalizar las partidas ya iniciadas");
 	      			response.redirect("/gameMenu");	
 	      		} 		
-	      	}
-
-	      	if(invitation != null){
-	      		int id = Game.findIdGame(invitation,username);
-	      		Game.startGame2Player(id);
-	      		User.setCurrentGame(username,id);
-	      		Invitation.deleteInvitation(invitation,username);
-	      		EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
-	      		response.redirect("/");
-	      	}
-
-	      	if(logOut!=null){
-	      		response.redirect("/mainpage");
-	      	}
-	      	map.clear();
+	      	}else if(invitation != null){
+		      		int id = Game.findIdGame(invitation,username);
+		      		Game.startGame2Player(id);
+		      		User.setCurrentGame(username,id);
+		      		Invitation.deleteInvitation(invitation,username);
+		      		EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
+		      		response.redirect("/");
+	      		}else if(logOut!=null){
+	      				response.redirect("/mainpage");
+	      		}else{
+	      			map.clear();		
+	      		}
 	      	return null;
 	    });
   	

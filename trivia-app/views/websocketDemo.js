@@ -3,24 +3,45 @@ var webSocket = new WebSocket("ws://" + location.hostname + ":" + location.port 
 webSocket.onmessage = function (msg) { update(msg) };
 webSocket.onclose = function () { alert("WebSocket connection closed") };
 var rta = false;
+var totalTiempo=30;
 
 function update(msg) {
     var data = JSON.parse(msg.data);
-    if(data.play=="yes"){
-        if(data.results != ""){
-            text = "<button class='btn-default' onclick="
-            insert("results","<h2>" + data.results + "</h2>")
-            insert("results", text+"sendBuild()>Continuar</button>");
+    if(data.endGame!="true"){
+        if(data.play=="yes"){
+            if(data.results != ""){
+                text = "<button class='btn-default' onclick="
+                insert("results","<h2>" + data.results + "</h2>")
+                insert("results", text+"sendBuild()>Continuar</button>");
+            }else{
+                rta = false;
+                id("question").innerHTML = "";
+                id("results").innerHTML = "";
+                insert("question","<h2>" + data.question + "</h2>");
+
+              
+                document.getElementById("option1").style.display='inline';
+                document.getElementById("option2").style.display='inline';
+                document.getElementById("option3").style.display='inline';
+                document.getElementById("option4").style.display='inline';
+
+                document.getElementById("option1").value=data.option1;
+                document.getElementById("option2").value=data.option2;
+                document.getElementById("option3").value=data.option3;
+                document.getElementById("option4").value=data.option4;
+                totalTiempo=30;
+                updateReloj();
+            }
         }else{
-            rta = false;
+            id("cuenta").innerHTML = "";
             id("question").innerHTML = "";
             id("results").innerHTML = "";
-            insert("question","<h2>" + data.question + "</h2>");
-            document.getElementById("option1").value=data.option1;
-            document.getElementById("option2").value=data.option2;
-            document.getElementById("option3").value=data.option3;
-            document.getElementById("option4").value=data.option4;
-            updateReloj();
+
+            document.getElementById("option1").style.display='none';
+            document.getElementById("option2").style.display='none';
+            document.getElementById("option3").style.display='none';
+            document.getElementById("option4").style.display='none';
+            insert("question","<h2>" + data.msgEspera + "</h2>")
         }
     }else{
         id("cuenta").innerHTML = "";
@@ -30,8 +51,14 @@ function update(msg) {
         document.getElementById("option2").style.display='none';
         document.getElementById("option3").style.display='none';
         document.getElementById("option4").style.display='none';
-        insert("question","<h2>" + data.msgEspera + "</h2>")
+        if(data.winner!="empate"){
+            insert("question","<h2>El Ganador es: " + data.winner + "</h2>");
+        }else{
+            insert("question","<h2>El resultado de la Partida fue Empate</h2>");
+        }
+        
     }
+        
 }
 
 //Helper function for inserting HTML as the first child of an element
@@ -67,8 +94,6 @@ function sendBuild() {
     rta = true;
     webSocket.send("build");
 }
-
-var totalTiempo=30;
 function updateReloj(){
         document.getElementById('cuenta').innerHTML = "Tiempo Restante "+totalTiempo+" segundos";
         if(rta==false){   

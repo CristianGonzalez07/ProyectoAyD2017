@@ -92,15 +92,20 @@ public class Game extends Model {
 		String player = (String)game.get("typeOfGame");
 		int round = (int)game.get("moves");
 		if(player.equals("1PLAYER")){
-			if (round == 10){
+			if (round == 9){
 				resp = true;
+				game.set("status","TERMINATED");
+				game.saveIt();
 			}
 		}
 		if(player.equals("2PLAYER")){
-			if (round == 20){
+			if (round == 19){
 				resp = true;
+				game.set("status","TERMINATED");
+				game.saveIt();
 			}
 		}
+
 		return resp; 
 	}
 
@@ -196,28 +201,26 @@ public class Game extends Model {
 		Game game = Game.findFirst("id = ?", idGame);
 		String status = game.getString("status");
 		String typeOfGame = game.getString("typeOfGame");
-		if(status.equals("TERMINATED")){
-			String user1 = game.getString("player1");
-			User p1 = User.findFirst("username = ?",user1);	
-			if(typeOfGame.equals("2PLAYER")){
-				int scorePlayer1 = (int)game.get("scorePlayer1");
-				int scorePlayer2 = (int)game.get("scorePlayer2");
-				String user2 = game.getString("player2");
-				User p2 = User.findFirst("username = ?",user2);
-				if(scorePlayer1>scorePlayer2)
-					p1.set("score",scorePlayer1+15);
-				else{
-					if(scorePlayer1<scorePlayer2)
-						p2.set("score",scorePlayer2+15);
-					else{					
-						p1.set("score",scorePlayer1);
-						p2.set("score",scorePlayer2);
-					}
+		String user1 = game.getString("player1");
+		User p1 = User.findFirst("username = ?",user1);	
+		if(typeOfGame.equals("2PLAYER")){
+			int scorePlayer1 = (int)game.get("scorePlayer1");
+			int scorePlayer2 = (int)game.get("scorePlayer2");
+			String user2 = game.getString("player2");
+			User p2 = User.findFirst("username = ?",user2);
+			if(scorePlayer1>scorePlayer2)
+				p1.set("score",scorePlayer1+15);
+			else{
+				if(scorePlayer1<scorePlayer2)
+					p2.set("score",scorePlayer2+15);
+				else{					
+					p1.set("score",scorePlayer1);
+					p2.set("score",scorePlayer2);
 				}
-			}else{
-				int scorePlayer1 = (int)game.get("scorePlayer1");
-				p1.set("score",scorePlayer1);
 			}
+		}else{
+			int scorePlayer1 = (int)game.get("scorePlayer1");
+			p1.set("score",scorePlayer1);
 		}
 	}
 
@@ -265,29 +268,6 @@ public class Game extends Model {
 	public static int findIdGame(String user1,String user2){
 		Game game = findFirst("player1 = '"+user1+"' and player2 = '"+user2+"'");
 		return (int)game.get("id");
-	}
-
-	/** 
-     * function that returns the player number corresponding to the given user as a parameter associated
-     * with the given game as a parameter.
-     * @param id is the id of one game.
-     * @param username is a player who participates in the game.
-     * @pre. id>0 username <> []
-     * @post. returns the player number corresponding to the given user as a parameter associated
-     * with the given game as a parameter.
-     * @return the player number corresponding to the given user as a parameter associated
-     * with the given game as a parameter.
-    */
-	public static int numberOfPlayer(int id,String username){
-		Game game  =  findFirst("id = ?",id);
-		String user = game.getString("player1");
-		int res = 0;
-		if(username.equals(user)){
-			res = 1;
-		}else{
-			res =  2;
-		}
-		return res;
 	}
 
 	/**
