@@ -22,7 +22,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 public class App
 {
 	private static final String SESSION_NAME = "username";
-	
+
 	static int nextUserNumber = 1;
 
 //Sends a message from one user to all users, along with a list of current usernames
@@ -35,7 +35,7 @@ public class App
     	String currentUser = EchoWebSocket.biMapUsername.get(aux);
     	int id = (int)User.getCurrentGameId(currentUser);
     	String typeOfGame = User.getCurrentGameType(currentUser);
-    	
+
     	if(message.equals("build")){
     		if(typeOfGame.equals("1PLAYER")){
     			GameHandling.buildSiteForPlay(user,id);
@@ -43,7 +43,7 @@ public class App
     		else if(typeOfGame.equals("2PLAYER")){
     			GameHandling.buildSiteFor2Players(user,id,currentUser);
     		}
-    	
+
     	}else{ //el msj es una respuesta a una pregunta
     		GameHandling.answer(user,id,message,currentUser);
 	    }
@@ -55,7 +55,7 @@ public class App
 
 
     public static void main( String[] args )
-    {	
+    {
     	staticFileLocation("/views");
     	Map map = new HashMap();
     	staticFiles.expireTime(6000);
@@ -74,14 +74,14 @@ public class App
     		}
     	});
 
-    	Timer timer = new Timer (960000, new ActionListener () 
-				{ 
-	    			public void actionPerformed(ActionEvent e) 
-	    			{ 
+    	Timer timer = new Timer (960000, new ActionListener ()
+				{
+	    			public void actionPerformed(ActionEvent e)
+	    			{
 	        			Game.checkWaitTime();
 	        			Game.checkProgresGame();
-	     			} 
-				}); 
+	     			}
+				});
 
 		timer.start();
 
@@ -121,10 +121,10 @@ public class App
 	    	}else{
 	    		response.redirect("error");
 	    	}
-            
+
 	         return new ModelAndView(map, "./views/gameMenu.mustache");
 	    },   new MustacheTemplateEngine()
-	    ); 
+	    );
 
         get("/createQuestion", (request, response) -> {
         	if(request.session().attribute(SESSION_NAME)==null){
@@ -161,39 +161,47 @@ public class App
         },  new MustacheTemplateEngine()
         );
 
-	    post("/register", (request, response) -> {
-	      	String username = request.queryParams("txt_username");
-	      	String password = request.queryParams("txt_password");
-	      	int res = User.register(username,password);
+				get("/pairingForSearch", (request, response) -> {
+					if(request.session().attribute(SESSION_NAME)==null){
+        		response.redirect("/error");
+        	}
+	        return new ModelAndView(map, "./views/pairing.mustache");
+        },  new MustacheTemplateEngine()
+        );
 
-	        if(res == 1){
-	        	map.put("msgFailRegis","Usuario no disponible");
-		        map.put("msgSucessRegis","");
-		        response.redirect("/register");	
-	        }
-	        if(res == 2){
-		        	map.put("msgFailRegis","Usuario no valido o en uso/contraseña no valida");
-		        	map.put("msgSucessRegis","");
-		        	response.redirect("/register");	
-		    }
-		    if(res == 3){
-		      		map.put("msgFailRegis","");
-		        	map.put("msgSucessRegis","Usuario Registrado Exitosamente");
-		        	response.redirect("/register");
-	        }
-	        return null;
-	    });
+			  post("/register", (request, response) -> {
+			    	String username = request.queryParams("txt_username");
+			    	String password = request.queryParams("txt_password");
+			    	int res = User.register(username,password);
+
+			      if(res == 1){
+			      	map.put("msgFailRegis","Usuario no disponible");
+			        map.put("msgSucessRegis","");
+			        response.redirect("/register");
+			      }
+			      if(res == 2){
+			        	map.put("msgFailRegis","Usuario no valido o en uso/contraseña no valida");
+			        	map.put("msgSucessRegis","");
+			        	response.redirect("/register");
+			    }
+			    if(res == 3){
+			      		map.put("msgFailRegis","");
+			        	map.put("msgSucessRegis","Usuario Registrado Exitosamente");
+			        	response.redirect("/register");
+			      }
+			      return null;
+			  });
 
 	    post("/login", (request, response) -> {
 	      	String username = request.queryParams("txt_username");
 	      	String password = request.queryParams("txt_password");
 	      	String permissions = request.queryParams("permissions");
 	      	Boolean res = User.validateLogin(username,password,permissions);
-	      	
+
 		    if(!res){
 		        map.put("msgLogin","Usuario no valido /contraseña no valida");
-		        response.redirect("/login");	
-		    }else{	
+		        response.redirect("/login");
+		    }else{
 		    	User user = User.findFirst("username = ?",username);
 		    	map.put("score",user.get("score"));
 		    	request.session(true);
@@ -204,7 +212,7 @@ public class App
 			    	response.redirect("/gameMenu");
 			   	}
 	        }
-	        return null;      
+	        return null;
 	      });
 
 	    post("/createQuestion", (request, response) -> {
@@ -217,7 +225,7 @@ public class App
 	      	String op4 = request.queryParams("txt_op4");
 
 	      	Boolean res = Question.createQuestion(cat,desc,op1,op2,op3,op4);
-	      	
+
 	      	if(!res){
 	      		map.put("msgFailCreateQuestion","alguno de los datos ingresados no es valido.Cargue de nuevo la pregunta");
 	      		response.redirect("/createQuestion");
@@ -229,12 +237,12 @@ public class App
 	      });
 
 	    post("/gameMenu", (request, response)->{
-	    	String typeOfGame = request.queryParams("typeOfGame");
+	    		String typeOfGame = request.queryParams("typeOfGame");
 	      	String logOut = request.queryParams("Logout");
 	      	String game = request.queryParams("game");
 	      	String invitation = request.queryParams("invitacion");
 	      	String username = (String)request.session().attribute(SESSION_NAME);
-	      	
+
 	      	if(typeOfGame != null){
 	      		if(Game.limitGames(username)){
 	      			if(typeOfGame.equals("1 Jugador")){
@@ -250,8 +258,8 @@ public class App
 			      	}
 	      		}else{
 	      			map.put("msgError","Usted no puede iniciar mas partidas.primero debe finalizar las partidas ya iniciadas");
-	      			response.redirect("/gameMenu");	
-	      		} 		
+	      			response.redirect("/gameMenu");
+	      		}
 	      	}else if(invitation != null){
 		      		int id = Game.findIdGame(invitation,username);
 		      		Game.startGame2Player(id);
@@ -262,21 +270,34 @@ public class App
 	      		}else if(logOut!=null){
 	      				response.redirect("/mainpage");
 	      		}else{
-	      			map.clear();		
+	      			map.clear();
 	      		}
 	      	return null;
 	    });
-  	
-	   post("/continue", (request, response)->{
-		   	String username = (String)request.session().attribute(SESSION_NAME);
-		   	String game = request.queryParams("Partida");
-		   	if(game != null){
-		   		int id = Integer.parseInt(game);
-	      		User.setCurrentGame(username,id);
-	      		EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
-	      		response.redirect("/");
-	      	}
-  			return null;
-  	   });   
-  	}   
+
+			post("/pairingForSearch", (request, response) -> {
+				String username = (String)request.session().attribute(SESSION_NAME);
+				String usernameInvitation = request.queryParams("txt_username");
+				if(User.userExists(username,usernameInvitation)){
+					map.put("msgSucessInvitation","Solicitud enviada correctamente. Esperando ser aceptada");
+					response.redirect("/gameMenu");
+				}else{
+					map.put("msgFailInvitation","El usuario que solicitó no se encuentra registrado. Intente nuevamente");
+					response.redirect("/pairingForSearch");
+				}
+				return null;
+			});
+
+		  post("/continue", (request, response)->{
+			   	String username = (String)request.session().attribute(SESSION_NAME);
+			   	String game = request.queryParams("Partida");
+			   	if(game != null){
+			   		int id = Integer.parseInt(game);
+		      		User.setCurrentGame(username,id);
+		      		EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
+		      		response.redirect("/");
+		      	}
+	  			return null;
+	  	   });
+	  	}
 }
