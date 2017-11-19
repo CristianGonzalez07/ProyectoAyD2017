@@ -10,14 +10,14 @@ import java.util.Date;
 import java.sql.Timestamp;
 
 public class Game extends Model {
-		
+
 	static{
     	validatePresenceOf("typeOfGame").message("Please, provide your typeOfGame");
     	validatePresenceOf("player1").message("Please, provide your player 1");
     	validatePresenceOf("status").message("Please, provide your status");
 	}
-	
-	/** 
+
+	/**
      * function that saves a question associated with the game.
      * @param is the question to keep.
      * @param is the game where we will save the question
@@ -27,11 +27,11 @@ public class Game extends Model {
 	public static void setQuestion(String question,int idGame){
 		Game game = findFirst("id = ?", idGame);
 		game.set("question",question);
-		game.saveIt();		
-	} 
-	
-	/** 
-     * function that creates a game for 1 player 
+		game.saveIt();
+	}
+
+	/**
+     * function that creates a game for 1 player
      * @param player is player 1 of the game
      * @pre. player != null.
      * @post.  creates a game for 1 player
@@ -48,12 +48,12 @@ public class Game extends Model {
 		user.saveIt();
 	}
 
-	/** 
-     * function that creates a game for 2 players 
-     * @param  player is player 1 of the game 
+	/**
+     * function that creates a game for 2 players
+     * @param  player is player 1 of the game
      * @param  player is player 2 of the game
      * @pre. player1 != null, player2 != null.
-     * @post. creates a game for 2 players 
+     * @post. creates a game for 2 players
      */
 	public static void createGame2Player(String player1,String player2){
 		Game game = new Game();
@@ -64,9 +64,9 @@ public class Game extends Model {
 		game.saveIt();
 	}
 
-	/** 
+	/**
      * function that starts a game for 2 players
-     * @param idGame is the id associated with the corresponding game to start. 
+     * @param idGame is the id associated with the corresponding game to start.
      * @pre. idGame >=1;
      * @post. starts a game for 2 players
      */
@@ -79,10 +79,10 @@ public class Game extends Model {
 		game.saveIt();
 	}
 
-	
-	/** 
+
+	/**
      * the game controls the completion of a game
-     * @param idGame is the id associated with the corresponding game to start. 
+     * @param idGame is the id associated with the corresponding game to start.
      * @pre. idGame >=1;
      * @post. returns true if the game has completed all its rounds
     */
@@ -106,12 +106,12 @@ public class Game extends Model {
 			}
 		}
 
-		return resp; 
+		return resp;
 	}
 
-    /** 
+    /**
      * function that limits the start time of a game.
-     * @pre. true; 
+     * @pre. true;
      * @post. if a game exceeded its waiting time, it changes its
      * status to uninitiated.
     **/
@@ -122,20 +122,20 @@ public class Game extends Model {
         Timestamp startDate = new Timestamp(0,0,0,0,0,0,0);
         int currentHour = current.getHours();
         int initialHour = 0;
-        Game currentGame = new Game(); 
+        Game currentGame = new Game();
         for(int i=0;i<games.size();i++){
             currentGame = games.get(i);
             startDate = currentGame.getTimestamp("created_at");
             initialHour = startDate.getHours();
             if(initialHour+5<currentHour){
                 currentGame.set("status","UNINITIATED");
-            } 
+            }
         }
     }
 
-    /** 
+    /**
      * function that limits the duration of the game
-     * @pre. true; 
+     * @pre. true;
      * @post. if the game exceeds the maximum time of a match, it is given as finished
     **/
     public static void checkProgresGame(){
@@ -156,35 +156,43 @@ public class Game extends Model {
     	}
     }
 
-    /** 
+    /**
      *function that modifies the current game round.
      * @param idGame is a ID associated with the game.
      * @pre. id > 0.
      * @post. modifies the current game round.
     */
     public static void updateMoves(int idGame){
-    	Game game = findFirst("id = ?",idGame); 
+    	Game game = findFirst("id = ?",idGame);
 		int round = (int)game.get("moves");
 		game.set("moves",round+1);
 		game.saveIt();
     }
 
-	/** 
+	/**
      * function that modifies a user's current score.
      * @param idGame is a ID associated with the game.
      * @pre. id > 0.
      * @post. modifies user's current score.
      */
 	public static void currentScore(int idGame){
-		Game game = findFirst("id = ?",idGame); 
+		Game game = findFirst("id = ?",idGame);
 		int score = 0;
 		int round = (int)game.get("moves");
-		if (round%2==0){
-			score = (int)game.get("scorePlayer2");
-			game.set("scorePlayer2", score+1);
+		String gameMode = game.getString("typeOfGame");
+		if(gameMode.equals("1PLAYER")){
+			if (round%2!=0){
+				score = (int)game.get("scorePlayer1");
+				game.set("scorePlayer1", score+1);
+			}
 		} else {
-			score = (int)game.get("scorePlayer1");
-			game.set("scorePlayer1", score+1);
+			if (round%2!=0){
+				score = (int)game.get("scorePlayer1");
+				game.set("scorePlayer1", score+1);
+			} else {
+				score = (int)game.get("scorePlayer2");
+				game.set("scorePlayer2", score+1);
+			}
 		}
 		updateMoves(idGame);
 		game.saveIt();
@@ -202,7 +210,7 @@ public class Game extends Model {
 		String status = game.getString("status");
 		String typeOfGame = game.getString("typeOfGame");
 		String user1 = game.getString("player1");
-		User p1 = User.findFirst("username = ?",user1);	
+		User p1 = User.findFirst("username = ?",user1);
 		if(typeOfGame.equals("2PLAYER")){
 			int scorePlayer1 = (int)game.get("scorePlayer1");
 			int scorePlayer2 = (int)game.get("scorePlayer2");
@@ -213,7 +221,7 @@ public class Game extends Model {
 			else{
 				if(scorePlayer1<scorePlayer2)
 					p2.set("score",scorePlayer2+15);
-				else{					
+				else{
 					p1.set("score",scorePlayer1);
 					p2.set("score",scorePlayer2);
 				}
@@ -224,7 +232,7 @@ public class Game extends Model {
 		}
 	}
 
-	/** 
+	/**
      * function that's returns true if the limit of games
      * per player is not exceeded.
      * @param username is a name of player
@@ -232,7 +240,7 @@ public class Game extends Model {
      * @post. return true if the limit of games
      * per player is not exceeded.
      * @return true if if the limit of games per
-     * player is not exceeded. 
+     * player is not exceeded.
     */
 	public static boolean limitGames(String username){
 		List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"'"));
@@ -243,21 +251,21 @@ public class Game extends Model {
 		return res;
 	}
 
-	/** 
+	/**
      * function that verifies the correctness of a response given by a player.
      * @param username is a name of player associated with the game.
      * @return true if the player answer is correct.
      * @pre. id > 0, playerAnswer != "";
      * @post. returns true if the player answer is correct.
     */
-	public static boolean answer(int idGame,String playerAnswer){  
-  		Game game = findFirst("id = ?",idGame); 
+	public static boolean answer(int idGame,String playerAnswer){
+  		Game game = findFirst("id = ?",idGame);
   		String description = game.getString("question");
   		Question q = Question.getQuestionByDesc(description);
     	String correctAnswer = q.getString("option1");
     	return playerAnswer.equals(correctAnswer);
 	}
-	/** 
+	/**
      * function that's returns the id that refers to the game in which the 2 given users participate
      * @param user1 is a name of player 1
      * @param user2 is a name of player 2
