@@ -146,4 +146,11 @@ public class Question extends Model{
         }
         return res;
     }
+
+    public static String getAnswer(int idGame){
+        Game game = Game.findFirst("id = ?", idGame);
+        String desc = game.getString("question");
+        Question q = getQuestionByDesc(desc);
+        return q.getString("option1");
+    }
 }

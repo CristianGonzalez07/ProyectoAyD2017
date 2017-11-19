@@ -9,7 +9,15 @@ function update(msg) {
     var data = JSON.parse(msg.data);
     if(data.endGame!="true"){
         if(data.play=="yes"){
+            document.getElementById("option1").style.backgroundColor='#fff';
+            document.getElementById("option2").style.backgroundColor='#fff';
+            document.getElementById("option3").style.backgroundColor='#fff';
+            document.getElementById("option4").style.backgroundColor='#fff';
             if(data.results != ""){
+                updateButton("option1",data.answer);
+                updateButton("option2",data.answer);
+                updateButton("option3",data.answer);
+                updateButton("option4",data.answer);
                 text = "<button class='btn-default' onclick="
                 insert("results","<h2>" + data.results + "</h2>")
                 insert("results", text+"sendBuild()>Continuar</button>");
@@ -73,32 +81,54 @@ function id(id) {
 
 function sendOption1() {
     rta = true;
+    document.getElementById('option1').disabled=true;
+    document.getElementById('option2').disabled=true;
+    document.getElementById('option3').disabled=true;
+    document.getElementById('option4').disabled=true;
     webSocket.send(id("option1").value);
 }
 
 function sendOption2() {
     rta = true;
+    document.getElementById('option1').disabled=true;
+    document.getElementById('option2').disabled=true;
+    document.getElementById('option3').disabled=true;
+    document.getElementById('option4').disabled=true;
     webSocket.send(id("option2").value);
 }
 
 function sendOption3() {
     rta = true;
+    document.getElementById('option1').disabled=true;
+    document.getElementById('option2').disabled=true;
+    document.getElementById('option3').disabled=true;
+    document.getElementById('option4').disabled=true;
     webSocket.send(id("option3").value);
 }
 
 function sendOption4() {
     rta = true;
+    document.getElementById('option1').disabled=true;
+    document.getElementById('option2').disabled=true;
+    document.getElementById('option3').disabled=true;
+    document.getElementById('option4').disabled=true;
     webSocket.send(id("option4").value);
 }
 function sendBuild() {
     rta = true;
+    document.getElementById('option1').disabled=false;
+    document.getElementById('option2').disabled=false;
+    document.getElementById('option3').disabled=false;
+    document.getElementById('option4').disabled=false;
     webSocket.send("build");
 }
 function updateReloj(){
         document.getElementById('cuenta').innerHTML = "Tiempo Restante "+totalTiempo+" segundos";
-        if(rta==false){   
+        if(rta==false){
+         document.getElementById('Salir').disabled=true;  
             if(totalTiempo==0){
-                webSocket.send("");    
+                webSocket.send(""); 
+                document.getElementById('Salir').disabled=false;   
             }else{
                 /* Restamos un segundo al tiempo restante */
                 totalTiempo-=1;
@@ -107,6 +137,15 @@ function updateReloj(){
             } 
         }else{
             document.getElementById('cuenta').innerHTML = "";
+            document.getElementById('Salir').disabled=false;
         }
+}
+
+function updateButton(id,answer){
+    if(document.getElementById(id).value == answer){
+        document.getElementById(id).style.backgroundColor= '#58FA58';
+    }else{
+        document.getElementById(id).style.backgroundColor= '#FE2E2E';
+    }
 }
             

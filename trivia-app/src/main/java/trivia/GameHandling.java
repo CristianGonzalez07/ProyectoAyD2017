@@ -135,6 +135,7 @@ public class GameHandling{
 	    	user.getRemote().sendString(String.valueOf(new JSONObject()
 	            .put("results",msg)
 	            .put("play","yes")
+	            .put("answer",Question.getAnswer(id))
 		    ));
 	    } catch (Exception e) {
 		    e.printStackTrace();
