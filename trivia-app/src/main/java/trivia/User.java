@@ -7,14 +7,14 @@ import org.javalite.activejdbc.validation.UniquenessValidator;
 import trivia.Game;
 
 public class User extends Model {
-	
+
 	static{
     	validatePresenceOf("username").message("Please, provide your username");
   		validatePresenceOf("password").message("Please, provide your password");
-  		validateWith(new UniquenessValidator("username")).message("This username is already taken."); 		
+  		validateWith(new UniquenessValidator("username")).message("This username is already taken.");
 	}
-  
-  /** 
+
+  /**
      * function that associates a current game id to the given user.
      * @param username is the name of the user associated with the id of the current game.
      * @param idGame it's the id to set
@@ -24,15 +24,15 @@ public class User extends Model {
   public static void setCurrentGame(String username,int id){
     User user = findFirst("username = ?", username);
     user.set("currentGame",id);
-    user.saveIt();    
-  } 
+    user.saveIt();
+  }
 
-	/** 
-     * Function that creates a user returns a number 
+	/**
+     * Function that creates a user returns a number
      * depending on whether or not the user is reserved.
      * @param username is the name of the user to consult.
      * @param password is the password of the user to control
-     * @return A number from 1 to 3, 1 if reserved, 2 if already 
+     * @return A number from 1 to 3, 1 if reserved, 2 if already
      * available and 3 if not.
      * @pre. username <> [] and password <> []
      * @post. a number from 1 to 3 that must return
@@ -56,7 +56,7 @@ public class User extends Model {
 			return cont;
 	}
 
-    /** 
+    /**
      * Function function that returns true if the user's password and
      * permissions are correct for system access.
      * @param username is the name of the user to consult.
@@ -64,12 +64,12 @@ public class User extends Model {
      * @param asAdmin indicates the corresponding access permissions.
      * @return  true if the user's password and permissions are correct
      * for system access otherwise false.
-     * @pre. username <> [] and password <> [] and 
+     * @pre. username <> [] and password <> [] and
      * (asAdmin="YES" or asAdmin = "NO")
      * @post. returns true if the user's password and
      * permissions are correct for system access.
      */
-	public static Boolean validateLogin(String username,String password,String asAdmin){	
+	public static Boolean validateLogin(String username,String password,String asAdmin){
 		List<User> users  = User.where("username ='"+username+"' AND password ='"+password+"'");
 		if(users.size() != 0){
 			User p =  users.get(0);
@@ -78,7 +78,7 @@ public class User extends Model {
 				return (p1.equals("YES"));
 			}else{
 				return (p1.equals("NO"));
-			}				
+			}
 		}else{
 			return false;
 		}
@@ -137,4 +137,20 @@ public class User extends Model {
       List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"' AND status = 'INPROGRESS'"));
       return games.size()>0;
     }
+
+		/**
+	   *function that returns if a username exists.
+	   *@param username username to whom you want to send an invitation.
+	   *@return true if the user is in the system
+	   *@pre. username != null.
+	   *@post. returns the boolean if user exists,otherwise returns false.
+	  */
+		public static boolean userExists(String userOrig, String userDesti){
+			List<User> users  = User.where("username ='"+userDesti+"'");
+			if (users.size()!=0){
+				Invitation.createInvitation(userOrig,userDesti);
+				return true;
+			}
+			return false;
+		}
 }
