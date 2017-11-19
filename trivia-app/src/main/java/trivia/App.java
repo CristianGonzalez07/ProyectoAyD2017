@@ -85,6 +85,11 @@ public class App
 
 		timer.start();
 
+		 get("/error", (request, response) -> {
+	       return new ModelAndView(map, "./views/error.html");
+	    }, new MustacheTemplateEngine()
+	    );
+
 	    get("/mainpage", (request, response) -> {
 	       request.session().removeAttribute(SESSION_NAME);
 	       map.clear();
@@ -103,44 +108,54 @@ public class App
 	    );
 
 	    get("/gameMenu", (request, response) -> {
-            String username = (String)request.session().attribute(SESSION_NAME);
-            map.put("currentUser",username);
-	        if(Invitation.newInvitations(username)){
-	        	map.put("textoInvitaciones","Los siguientes usuarios te han invitado a una partida.Para aceptar o rechazar has click sobre el nombre del usuario");
-	        	List<String> invitations = Invitation.getInvitations(username);
-	        	for(int i=0;i<3 && i<invitations.size();i++){
-	        		map.put("Invitacion"+(i+1),invitations.get(i));
-	        	}
-	        }
+	    	if(request.session().attribute(SESSION_NAME)!=null){
+	    		String username = (String)request.session().attribute(SESSION_NAME);
+	            map.put("currentUser",username);
+		        if(Invitation.newInvitations(username)){
+		        	map.put("textoInvitaciones","Los siguientes usuarios te han invitado a una partida.Para aceptar o rechazar has click sobre el nombre del usuario");
+		        	List<String> invitations = Invitation.getInvitations(username);
+		        	for(int i=0;i<3 && i<invitations.size();i++){
+		        		map.put("Invitacion"+(i+1),invitations.get(i));
+		        	}
+		        }
+	    	}else{
+	    		response.redirect("error");
+	    	}
+            
 	         return new ModelAndView(map, "./views/gameMenu.mustache");
 	    },   new MustacheTemplateEngine()
 	    ); 
 
         get("/createQuestion", (request, response) -> {
+        	if(request.session().attribute(SESSION_NAME)==null){
+        		response.redirect("/error");
+        	}
 	        return new ModelAndView(map, "./views/createQuestion.mustache");
         },  new MustacheTemplateEngine()
         );
 
         get("/admin", (request, response) -> {
+        	if(request.session().attribute(SESSION_NAME)==null){
+        		response.redirect("/error");
+        	}
 	        return new ModelAndView(map, "./views/admin.mustache");
         },  new MustacheTemplateEngine()
         );
 
-        get("/results", (request, response) -> {
-            return new ModelAndView(map, "./views/results.mustache");
-        }, new MustacheTemplateEngine()
-        );
-
         get("/continue", (request, response) -> {
-        	String username = (String)request.session().attribute(SESSION_NAME);
-	        if(User.games(username)){
-	        	List<String> games = Game.games(username);
-	        	map.put("textoPartidas","Las siguientes Partidas estan Activas·Has click sobre ellas para reanudar");
-	        	for(int i=0;i<3 && i<games.size();i++){
-	        		map.put("Partida"+(i+1),games.get(i));
+        	if(request.session().attribute(SESSION_NAME)!=null){
+        		String username = (String)request.session().attribute(SESSION_NAME);
+		        if(User.games(username)){
+		        	List<String> games = Game.games(username);
+		        	map.put("textoPartidas","Las siguientes Partidas estan Activas·Has click sobre ellas para reanudar");
+		        	for(int i=0;i<3 && i<games.size();i++){
+		        		map.put("Partida"+(i+1),games.get(i));
+		        	}
+		        }else{
+	        		map.put("textoPartidas","Usted no posee Partidas Activas en este momento");
 	        	}
-	        }else{
-        		map.put("textoPartidas","Usted no posee Partidas Activas en este momento");
+        	}else{
+        		response.redirect("/error");
         	}
 	        return new ModelAndView(map, "./views/continue.mustache");
         },  new MustacheTemplateEngine()
