@@ -174,7 +174,7 @@ public class Game extends Model {
      * @param idGame is a ID associated with the game.
      * @pre. id > 0.
      * @post. modifies user's current score.
-     */
+  */
 	public static void currentScore(int idGame){
 		Game game = findFirst("id = ?",idGame);
 		int score = 0;
