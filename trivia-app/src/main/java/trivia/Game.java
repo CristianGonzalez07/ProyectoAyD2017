@@ -317,4 +317,14 @@ public class Game extends Model {
 		Game game  =  findFirst("id = ?",id);
 		return (int)game.get("moves");
 	}
+
+	public static int getScoreP1(int id){
+		Game game  =  findFirst("id = ?",id);
+		return (int)game.get("scorePlayer1");
+	}
+
+	public static int getScoreP2(int id){
+		Game game  =  findFirst("id = ?",id);
+		return (int)game.get("scorePlayer1");
+	}
 }
