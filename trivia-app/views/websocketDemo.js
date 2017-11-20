@@ -59,11 +59,16 @@ function update(msg) {
         document.getElementById("option2").style.display='none';
         document.getElementById("option3").style.display='none';
         document.getElementById("option4").style.display='none';
-        if(data.winner!="empate"){
-            insert("question","<h2>El Ganador es: " + data.winner + "</h2>");
+        if(data.typeOfGame =="1Player"){
+            insert("question","<h2>Partida terminada. El Puntaje es: " + data.scorep1 + "</h2>");
         }else{
-            insert("question","<h2>El resultado de la Partida fue Empate</h2>");
+            if(data.winner!="empate"){
+                insert("question","<h2>El Ganador es: " + data.winner + "Por "+data.scorep1+" a "+data.scorep2+" </h2>");
+            }else{
+                insert("question","<h2>El resultado de la Partida fue Empate "+data.scorep1+" a "+data.scorep2+"</h2>");
+            }   
         }
+       
         
     }
         
