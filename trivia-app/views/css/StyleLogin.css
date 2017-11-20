@@ -1,5 +1,5 @@
 body{
-	background:url("../imagenes/Flames.jpg");
+	background:url("../imagenes/FondoMain.jpg");
 	background-repeat: no-repeat;
 	background-size: 100%;
 	margin:auto;
@@ -8,11 +8,15 @@ body{
 h1{
 	background-image: url("../imagenes/TituloIniciarSesion.png");
 	background-repeat: no-repeat;
-	height: 50px;
+	height: 100px;
 	position: relative;
+	background-size: 40%;
 	background-position: 50% 0px;
-	top: 10px;
-
+	margin-top: 15px;
+}
+*{
+	padding: 0px;
+	margin: 0px;
 }
 .Error{
 	color: red;
