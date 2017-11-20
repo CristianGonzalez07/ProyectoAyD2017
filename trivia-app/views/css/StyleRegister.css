@@ -20,7 +20,7 @@ h1{
 	background-position: 50%;
 	border-bottom: 15px solid;
 	background-color:#67C3DA;
-	height: 70px;
+	height: 72px;
 }
 *{
 	margin: 0px;
@@ -40,16 +40,6 @@ h1{
 	margin-top: 20px;
 	border-radius: 10px;
 }
-/*form{
-	margin: auto;
-	width: 450px;
-	background: rgba(0,0,0,0.7);
-	padding: 10px 20px;
-	box-sizing: border-box;
-	margin-top: 20px;
-	border-radius: 10px;
-}
-*/
 .form-control{
 	height: 45px;
 	width: 250px;
