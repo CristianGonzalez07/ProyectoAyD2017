@@ -1,0 +1,23 @@
+.btn-default{
+	height: 45px;
+	width: 250px;
+	font-size: 18px;
+	margin-top: 50px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+
+.btn-default:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+h1{
+	font-size: 50px;
+	color:black;
+	text-align: center;
+	margin-top: 0px;
+	height: 70px;
+}

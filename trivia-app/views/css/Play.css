@@ -1,21 +1,31 @@
 h1{
-	background-color:#A9A9A9;
+	background-color:#67C3DA;
+	background-image: url("../imagenes/TituloPregunta.png");
+	background-repeat: no-repeat;
+	background-position: 50% 15px;
 	border-bottom: 15px solid;
-	font-size: 50px;
-	text-align: center;
 	margin-top: -1%;
-	height: 70px;
-	margin-left: -1%;
+	height: 90px;
 	margin-bottom: 100px;
+}
+*{
+	padding: 0px;
+	margin: 0px;
 }
 div{
 	margin: auto;
 	width: 450px;
-	background: rgba(0,0,0,0.4);
+	background: rgba(0,0,0,0.4); 
 	padding: 10px 20px;
 	box-sizing: border-box;
 	margin-top: 10px;
-	border-radius: 10px;
+	border-radius: 5px;
+}
+body{
+	background-image: url("../imagenes/completo.jpg");
+	background-repeat: no-repeat;
+	background-size: 80% ;
+	background-position: 100px 50px;
 }
 
 .btn-default{
@@ -35,7 +45,7 @@ div{
 	height: 40px;
 	width: 150px;
 	font-size: 18px;
-	margin-bottom: 15px;
+	margin-bottom: 12px;
 	background-color: #fff;
 	padding-left: 10px;
 	border-radius: 10px;

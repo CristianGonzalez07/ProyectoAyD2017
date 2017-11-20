@@ -1,5 +1,7 @@
 body{
-	background-color: #F0FFF0;
+	background-image: url("../imagenes/FondoMain.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%;
 	margin: auto;
 }
 .note{
@@ -13,11 +15,16 @@ body{
 	font-size: 30px;
 }
 h1{
-	font-size: 60px;
-	margin-top: 0px;
-	background-color: #C0C0C0;
-	border: 15px solid;
-	border-color: silver black  rgba(0,0,0,0.7);
+	background-image: url("../imagenes/TituloRegistrar.png");
+	background-repeat: no-repeat;
+	background-position: 50%;
+	border-bottom: 15px solid;
+	background-color:#67C3DA;
+	height: 70px;
+}
+*{
+	margin: 0px;
+	padding: 0px;
 }
 
 .Error{

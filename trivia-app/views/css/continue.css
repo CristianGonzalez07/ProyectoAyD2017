@@ -2,7 +2,8 @@
 	height: 40px;
 	width: 200px;
 	font-size: 18px;
-	margin-top: 50px;
+	margin-top: 70px;
+	margin-left: 40px; 
 	background-color: #fff;
 	padding-left: 10px;
 	border-radius: 10px;
@@ -15,6 +16,14 @@
 
 body{
 	background-color: #F0FFF0;
+	background-image: url("../imagenes/FondoMain.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+.nombre{
+	font-size: 20px;
+	margin-top: 10%;
+	margin-left: 18%;
 }
 
 .btn-default1{
@@ -33,4 +42,18 @@ body{
 	cursor: pointer;
   	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
   	transition: all 0.2s ease;
+}
+*{
+	padding: 0px;
+	margin: 0px;
+}
+h2{
+	background-color:#67C3DA;
+	background-image: url("../imagenes/TituloReanudar.png");
+	background-repeat: no-repeat;
+	background-position: 50% 0px;
+	background-size: 33%;
+	border-bottom: 15px solid;
+	height: 70px;
+	margin-bottom: 100px;
 }
