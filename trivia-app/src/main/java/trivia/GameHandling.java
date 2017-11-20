@@ -46,6 +46,9 @@ public class GameHandling{
 					user.getRemote().sendString(String.valueOf(new JSONObject()
 						.put("endGame","true")
 						.put("winner",win)
+						.put("typeOfGame","1Player")
+						.put("scorep1",Game.getScoreP1(id))
+						.put("scorep2",Game.getScoreP2(id))
 					));
 				} 
 	        }
@@ -67,6 +70,9 @@ public class GameHandling{
 					user.getRemote().sendString(String.valueOf(new JSONObject()
 						.put("endGame","true")
 						.put("winner",win)
+						.put("typeOfGame","1Player")
+						.put("scorep1",Game.getScoreP1(id))
+						.put("scorep2",Game.getScoreP2(id))
 					));
 				}	
 			}
@@ -107,7 +113,6 @@ public class GameHandling{
 			}else{
 				win = "empate";
 			}
-			System.out.println("El ganador es: "+win+"por los puntajes:"+score1+" a "+ score2);
 		return win;
 	}
 
