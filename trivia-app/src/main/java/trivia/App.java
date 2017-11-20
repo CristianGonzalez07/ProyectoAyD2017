@@ -74,6 +74,11 @@ public class App
     		}
     	});
 
+
+    	if(!Base.hasConnection()) {
+    		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+    	}
+
     	Timer timer = new Timer (960000, new ActionListener ()
 				{
 	    			public void actionPerformed(ActionEvent e)
@@ -84,6 +89,10 @@ public class App
 				});
 
 		timer.start();
+
+		if(Base.hasConnection()){
+    		Base.close();
+    	}
 
 		 get("/error", (request, response) -> {
 	       return new ModelAndView(map, "./views/error.html");

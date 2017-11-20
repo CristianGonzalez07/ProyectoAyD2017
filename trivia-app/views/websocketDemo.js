@@ -37,7 +37,7 @@ function update(msg) {
                 document.getElementById("option2").value=data.option2;
                 document.getElementById("option3").value=data.option3;
                 document.getElementById("option4").value=data.option4;
-                totalTiempo=30;
+                totalTiempo=15;
                 updateReloj();
             }
         }else{
@@ -132,6 +132,10 @@ function updateReloj(){
         if(rta==false){
          document.getElementById('Salir').disabled=true;  
             if(totalTiempo==0){
+            	document.getElementById('option1').disabled=true;
+    			document.getElementById('option2').disabled=true;
+    			document.getElementById('option3').disabled=true;
+    			document.getElementById('option4').disabled=true;
                 webSocket.send(""); 
                 document.getElementById('Salir').disabled=false;   
             }else{
