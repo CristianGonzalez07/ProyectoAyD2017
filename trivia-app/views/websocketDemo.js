@@ -31,7 +31,7 @@ function update(msg) {
                 id("results").innerHTML = "";
                 document.getElementById("cuenta").classList.add("container");
                 document.getElementById("results").classList.remove("container");
-                document.getElementById("options").classList.remove("container");
+                document.getElementById("options").classList.add("container");
                 document.getElementById("question").classList.add("container");
                 insert("question","<h2>" + data.question + "</h2>");
 

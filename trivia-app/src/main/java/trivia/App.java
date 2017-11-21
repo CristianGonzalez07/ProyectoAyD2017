@@ -182,7 +182,7 @@ public class App
 					if(request.session().attribute(SESSION_NAME)==null){
         		response.redirect("/error");
         	}
-	        return new ModelAndView(map, "./views/pairing.mustache");
+	        return new ModelAndView(map, "./views/pairingForSearch.mustache");
         },  new MustacheTemplateEngine()
         );
 
@@ -254,24 +254,28 @@ public class App
 	      });
 
 	    post("/gameMenu", (request, response)->{
-	    		String typeOfGame = request.queryParams("typeOfGame");
+	    	String typeOfGame = request.queryParams("typeOfGame");
+	    	String randomPairing = request.queryParams("randomPairing");
+	    	String searchPairing = request.queryParams("SearchPairing");
 	      	String logOut = request.queryParams("Logout");
 	      	String game = request.queryParams("game");
 	      	String invitation = request.queryParams("invitacion");
 	      	String username = (String)request.session().attribute(SESSION_NAME);
 
-	      	if(typeOfGame != null){
+	      	if((typeOfGame != null) || (randomPairing != null) || (searchPairing != null)){
 	      		if(Game.limitGames(username)){
-	      			if(typeOfGame.equals("1 Jugador")){
+	      			if("1 Jugador".equals(typeOfGame)){
 		      			Game.createGame1Player(username);
 		      			EchoWebSocket.biMapUsername.put("user"+nextUserNumber,username);
 		      			response.redirect("/");
-			      	}else if(typeOfGame.equals("2 Jugadores")){
+			      	}else if(randomPairing != null){
 			      		String player2 = User.randomMatch(username);
 			      		Invitation.createInvitation(username,player2);
 			      		Game.createGame2Player(username,player2);
 			      		map.put("msgSucess","Esperando confirmacion de partida.Para saber si la partida fue aceptada ingrese en reanudar Partida");
 			      		response.redirect("/gameMenu");
+			      	}else if(searchPairing != null){
+						map.clear();
 			      	}
 	      		}else{
 	      			map.put("msgError","Usted no puede iniciar mas partidas.primero debe finalizar las partidas ya iniciadas");
@@ -297,7 +301,9 @@ public class App
 				String usernameInvitation = request.queryParams("txt_username");
 				if(User.userExists(username,usernameInvitation)){
 					map.put("msgSucessInvitation","Solicitud enviada correctamente. Esperando ser aceptada");
-					response.redirect("/gameMenu");
+
+			        Game.createGame2Player(username,usernameInvitation);
+					response.redirect("/pairingForSearch");
 				}else{
 					map.put("msgFailInvitation","El usuario que solicitó no se encuentra registrado. Intente nuevamente");
 					response.redirect("/pairingForSearch");
