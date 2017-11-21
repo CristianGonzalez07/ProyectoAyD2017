@@ -18,6 +18,10 @@ function update(msg) {
                 updateButton("option2",data.answer);
                 updateButton("option3",data.answer);
                 updateButton("option4",data.answer);
+                document.getElementById("cuenta").classList.remove("container");
+                document.getElementById("results").classList.add("container");
+                document.getElementById("options").classList.add("container");
+                document.getElementById("question").classList.add("container");
                 text = "<button class='btn-default' onclick="
                 insert("results","<h2>" + data.results + "</h2>")
                 insert("results", text+"sendBuild()>Continuar</button>");
@@ -25,6 +29,10 @@ function update(msg) {
                 rta = false;
                 id("question").innerHTML = "";
                 id("results").innerHTML = "";
+                document.getElementById("cuenta").classList.add("container");
+                document.getElementById("results").classList.remove("container");
+                document.getElementById("options").classList.remove("container");
+                document.getElementById("question").classList.add("container");
                 insert("question","<h2>" + data.question + "</h2>");
 
               
@@ -44,6 +52,11 @@ function update(msg) {
             id("cuenta").innerHTML = "";
             id("question").innerHTML = "";
             id("results").innerHTML = "";
+                
+            document.getElementById("cuenta").classList.remove("container");
+            document.getElementById("results").classList.remove("container");
+            document.getElementById("options").classList.remove("container");
+            document.getElementById("question").classList.add("container");
 
             document.getElementById("option1").style.display='none';
             document.getElementById("option2").style.display='none';
@@ -55,6 +68,10 @@ function update(msg) {
         id("cuenta").innerHTML = "";
         id("question").innerHTML = "";
         id("results").innerHTML = "";
+        document.getElementById("cuenta").classList.remove("container");
+        document.getElementById("results").classList.remove("container");
+        document.getElementById("options").classList.remove("container");
+        document.getElementById("question").classList.add("container");
         document.getElementById("option1").style.display='none';
         document.getElementById("option2").style.display='none';
         document.getElementById("option3").style.display='none';
