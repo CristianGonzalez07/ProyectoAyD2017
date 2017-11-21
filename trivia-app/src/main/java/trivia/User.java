@@ -3,6 +3,7 @@ package trivia;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.Model;
 import java.util.List;
+import java.util.ArrayList;
 import org.javalite.activejdbc.validation.UniquenessValidator;
 import trivia.Game;
 
@@ -153,4 +154,30 @@ public class User extends Model {
 			}
 			return false;
 		}
+    
+    public static int getScore(String username){
+      User user =  findFirst("username = ?", username);
+      return (int)user.get("score");
+    }
+    public static List<String> ranking(){
+      List<User> users  = User.where("permissions = 'NO' order by score desc ");
+      List<String> list = new ArrayList<String>();
+      if(users.size()>0){
+        String name="";
+        int score = 0; 
+        User user = null;
+        for (int i=0;i<5;i++) {
+          
+          if(users.size()>i){
+            user = users.get(i);
+            name = user.getString("username");
+            score = (int)user.get("score");
+            list.add(name+": "+score);
+          }else{
+            list.add("----");
+          }
+        }
+      }
+      return list;
+    }
 }

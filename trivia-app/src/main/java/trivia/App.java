@@ -116,10 +116,16 @@ public class App
 	    }, new MustacheTemplateEngine()
 	    );
 
-	    get("/gameMenu", (request, response) -> {
+	     get("/gameMenu", (request, response) -> {
 	    	if(request.session().attribute(SESSION_NAME)!=null){
+	    		List<String> ranking = User.ranking();
+	    		for(int i=0;i<5;i++){
+		        		map.put("posicion"+(i+1),ranking.get(i));
+		        	}
+
 	    		String username = (String)request.session().attribute(SESSION_NAME);
 	            map.put("currentUser",username);
+	            map.put("score",User.getScore(username));
 		        if(Invitation.newInvitations(username)){
 		        	map.put("textoInvitaciones","Los siguientes usuarios te han invitado a una partida.Para aceptar o rechazar has click sobre el nombre del usuario");
 		        	List<String> invitations = Invitation.getInvitations(username);
@@ -134,6 +140,8 @@ public class App
 	         return new ModelAndView(map, "./views/gameMenu.mustache");
 	    },   new MustacheTemplateEngine()
 	    );
+
+
 
         get("/createQuestion", (request, response) -> {
         	if(request.session().attribute(SESSION_NAME)==null){

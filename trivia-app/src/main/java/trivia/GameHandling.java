@@ -104,7 +104,7 @@ public class GameHandling{
 		Game game = Game.findFirst("id = ?",id);
 		int score1 =(int)game.get("scorePlayer1");
 		int score2 =(int)game.get("scorePlayer2");
-
+		totalScoreForPlayer(id);
 		String win = ""; 
 		if(score1>score2){
 			win = game.getString("player1");
@@ -149,5 +149,46 @@ public class GameHandling{
     		org.eclipse.jetty.websocket.api.Session user_aux = EchoWebSocket.biMapSession.get(aux);
     		App.broadcastMessage(message = "build", user_aux);
     	}
+	}
+
+	/**
+	 * function that modifies the total score of users
+	 * @param username of users associated with the game
+	 * @pre idGame <> []
+	 * @pos modifies user's total score
+	*/
+	public static void totalScoreForPlayer(int idGame){
+		Game game = Game.findFirst("id = ?", idGame);
+		String status = game.getString("status");
+		String typeOfGame = game.getString("typeOfGame");
+		String user1 = game.getString("player1");
+		User p1 = User.findFirst("username = ?",user1);
+
+		if(typeOfGame.equals("2PLAYER")){
+			int scorePlayer1 = (int)game.get("scorePlayer1");
+			int scorePlayer2 = (int)game.get("scorePlayer2");
+			String user2 = game.getString("player2");
+			User p2 = User.findFirst("username = ?",user2);
+			int scoreTotalPlayer1 = (int)p1.get("score");
+			int scoreTotalPlayer2 = (int)p2.get("score");
+
+			if(scorePlayer1>scorePlayer2)
+				p1.set("score",scoreTotalPlayer1+15);
+			else{
+				if(scorePlayer1<scorePlayer2)
+					p2.set("score",scoreTotalPlayer2+15);
+				else{
+					p1.set("score",scoreTotalPlayer1+scorePlayer1);
+					p2.set("score",scoreTotalPlayer2+scorePlayer2);
+				}
+				p1.saveIt();
+				p2.saveIt();
+			}
+		}else{
+			int scorePlayer1 = (int)game.get("scorePlayer1");
+			int scoreTotalPlayer1 = (int)p1.get("score");
+			p1.set("score",scoreTotalPlayer1+scorePlayer1);
+			p1.saveIt();
+		}
 	}
 }

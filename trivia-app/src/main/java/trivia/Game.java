@@ -92,14 +92,14 @@ public class Game extends Model {
 		String player = (String)game.get("typeOfGame");
 		int round = (int)game.get("moves");
 		if(player.equals("1PLAYER")){
-			if (round == 9){
+			if (round == 10){
 				resp = true;
 				game.set("status","TERMINATED");
 				game.saveIt();
 			}
 		}
 		if(player.equals("2PLAYER")){
-			if (round == 19){
+			if (round == 20){
 				resp = true;
 				game.set("status","TERMINATED");
 				game.saveIt();
@@ -181,10 +181,8 @@ public class Game extends Model {
 		int round = (int)game.get("moves");
 		String gameMode = game.getString("typeOfGame");
 		if(gameMode.equals("1PLAYER")){
-			if (round%2!=0){
-				score = (int)game.get("scorePlayer1");
-				game.set("scorePlayer1", score+1);
-			}
+			score = (int)game.get("scorePlayer1");
+			game.set("scorePlayer1", score+1);
 		} else {
 			if (round%2!=0){
 				score = (int)game.get("scorePlayer1");
@@ -199,38 +197,6 @@ public class Game extends Model {
 	}
 
 
-	/**
-	 * function that modifies the total score of users
-	 * @param username of users associated with the game
-	 * @pre idGame <> []
-	 * @pos modifies user's total score
-	*/
-	public static void totalScoreForPlayer(int idGame){
-		Game game = Game.findFirst("id = ?", idGame);
-		String status = game.getString("status");
-		String typeOfGame = game.getString("typeOfGame");
-		String user1 = game.getString("player1");
-		User p1 = User.findFirst("username = ?",user1);
-		if(typeOfGame.equals("2PLAYER")){
-			int scorePlayer1 = (int)game.get("scorePlayer1");
-			int scorePlayer2 = (int)game.get("scorePlayer2");
-			String user2 = game.getString("player2");
-			User p2 = User.findFirst("username = ?",user2);
-			if(scorePlayer1>scorePlayer2)
-				p1.set("score",scorePlayer1+15);
-			else{
-				if(scorePlayer1<scorePlayer2)
-					p2.set("score",scorePlayer2+15);
-				else{
-					p1.set("score",scorePlayer1);
-					p2.set("score",scorePlayer2);
-				}
-			}
-		}else{
-			int scorePlayer1 = (int)game.get("scorePlayer1");
-			p1.set("score",scorePlayer1);
-		}
-	}
 
 	/**
      * function that's returns true if the limit of games
@@ -243,7 +209,7 @@ public class Game extends Model {
      * player is not exceeded.
     */
 	public static boolean limitGames(String username){
-		List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"'"));
+		List<Game> games = Game.where(("(player1 = '" + username + "' OR player2 = '" + username+"') and status='INPROGRESS'"));
 		boolean res = false;
 		if (games.size()<= 4){
 			res=true;
