@@ -128,7 +128,10 @@ public class Game extends Model {
             startDate = currentGame.getTimestamp("created_at");
             initialHour = startDate.getHours();
             if(initialHour+5<currentHour){
-                currentGame.set("status","UNINITIATED");
+            	String p1 = currentGame.getString("player1");
+            	String p2 = currentGame.getString("player2");
+                currentGame.delete();
+               	Invitation.deleteInvitation(p1,p2);
             }
         }
     }
@@ -151,7 +154,8 @@ public class Game extends Model {
     		current.setDate(days1-2);
     		int valor = current.compareTo(startDate);
     		if (valor > 0){
-    			currentGame.set("status","TERMINATED");
+    			GameHandling.totalScoreForPlayer((int)currentGame.get("id"));
+    			currentGame.delete();
     		}
     	}
     }
