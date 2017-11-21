@@ -13,10 +13,12 @@
 		<article>
 		<div class="container">
 			<h4 class="text2">{{msgError}}</h4>
-			<form action="/gameMenu" method="POST" >
+			<form id = "IniciarPartida" action="/gameMenu" method="POST" >
 				<input type="submit" name="typeOfGame" class="btn-default" value="1 Jugador"/>
-				<input type="submit" name="typeOfGame" class="btn-default" value="2 Jugadores"/>
+				<input id="2jugadores" type="button" onclick="showPairing()" name="typeOfGame" class="btn-default" value="2 Jugadores"/>
 			</form>
+
+			<form id="busqueda" action="/pairingForSearch" method="GET"></form>
 
 			<form action="/continue" method="GET" >
 				<input type="submit" name="Reanudar" class="btn-default" value="Reanudar Partida"/>
@@ -24,18 +26,35 @@
 
 			<form action="/mainpage" method="GET">
 					<input type="submit" name="Logout" class="btn-default1" value="Salir"/>
-			</form>		
+			</form>
 			<h3 class="text2">{{textoInvitaciones}}</h3>
-			<form action="/gameMenu" method="POST">	
+			<form action="/gameMenu" method="POST">
 				<input id="invitacion1" type="submit" name="invitacion" class="Invitacion" value={{Invitacion1}} />
 				<input id="invitacion2" type="submit" name="invitacion" class="Invitacion" value={{Invitacion2}} />
 				<input id="invitacion3" type="submit" name="invitacion" class="Invitacion" value={{Invitacion3}} />
 			</form>
 		</div>
-		</article>	
+		</article>
 	</center>
 
 	<script type="text/javascript">
+
+	function id(id) {
+    	return document.getElementById(id);
+	}
+
+	//Helper function for inserting HTML as the first child of an element
+	function insert(targetId, message) {
+    	id(targetId).insertAdjacentHTML("afterbegin", message);
+	}
+
+	function showPairing(){
+		document.getElementById("2jugadores").style.display='none';
+		id("IniciarPartida").insertAdjacentHTML("afterbegin","<input type='submit' name='randomPairing' class='btn-default' value='Emparejamiento Aleatorio'/>")
+		id("busqueda").insertAdjacentHTML("afterbegin","<input type='submit' name='randomPairing' class='btn-default' value='Emparejamiento Aleatorio'/>");
+	}
+
+
 		if(document.getElementById("invitacion1").value=="/"){
 			document.getElementById("invitacion1").style.display='none';
 		}
