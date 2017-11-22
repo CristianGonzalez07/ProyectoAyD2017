@@ -25,7 +25,7 @@ public class GameHandling{
         return (int)(rnd.nextDouble() * end + init);
     }
 
-	public static void buildSiteForPlay(Session user,int id){
+		public static void buildSiteForPlay(Session user,int id){
 		String question = Question.getQuestion();
     	Game.setQuestion(question,id);
     	List<String> options = Question.mergeOptions(question);	
@@ -42,14 +42,23 @@ public class GameHandling{
 		                .put("results","")
 	            	));
 				}else{
-					System.out.println("================================================"+Game.getCurrentGameType(id));
 					String win = winner(id);
+					int score1 = 0;
+					int score2 = 0;
+					if(win.equals(Game.player_1(id))){
+						score1 = Game.getScoreP1(id);
+						score2 = Game.getScoreP2(id);
+					}else{
+						score1 = Game.getScoreP2(id);
+						score2 = Game.getScoreP1(id);
+					}
 					user.getRemote().sendString(String.valueOf(new JSONObject()
 						.put("endGame","true")
 						.put("winner",win)
 						.put("typeOfGame",Game.getCurrentGameType(id))
-						.put("scorep1",Game.getScoreP1(id))
-						.put("scorep2",Game.getScoreP2(id))
+						.put("scorep1",score1)
+						.put("scorep2",score2)
+						
 					));
 				} 
 	        }
@@ -68,12 +77,23 @@ public class GameHandling{
 					));
 				}else{
 					String win = winner(id);
+					int score1 = 0;
+					int score2 = 0;
+					if(win.equals(Game.player_1(id))){
+						score1 = Game.getScoreP1(id);
+						score2 = Game.getScoreP2(id);
+					}else{
+						score1 = Game.getScoreP2(id);
+						score2 = Game.getScoreP1(id);
+					}
+					
 					user.getRemote().sendString(String.valueOf(new JSONObject()
 						.put("endGame","true")
 						.put("winner",win)
 						.put("typeOfGame",Game.getCurrentGameType(id))
-						.put("scorep1",Game.getScoreP1(id))
-						.put("scorep2",Game.getScoreP2(id))
+						.put("scorep1",score1)
+						.put("scorep2",score2)
+						
 					));
 				}	
 			}

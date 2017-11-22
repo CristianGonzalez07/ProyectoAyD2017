@@ -244,8 +244,25 @@ public class Game extends Model {
      * @return the id that refers to the game in which the 2 given users participate
     */
 	public static int findIdGame(String user1,String user2){
-		Game game = findFirst("player1 = '"+user1+"' and player2 = '"+user2+"'");
-		return (int)game.get("id");
+		List<Game> games_aux = Game.where(("player1 = '" + user1 + "' AND player2 = '" + user2+"'"));
+		List<Game> games_aux2 = Game.where(("player1 = '" + user2 + "' AND player2 = '" + user1+"'"));
+	    List<Game> games = new ArrayList<Game>();
+	    	String status = "";
+	    	for (int i = 0;i<games_aux.size();i++) {
+	    		status = games_aux.get(i).getString("status");
+	        	if(status.equals("WAITING")){
+	          		games.add(games_aux.get(i));
+	        	}
+	       	}
+
+	       	for (int i = 0;i<games_aux2.size();i++) {
+	    		status = games_aux2.get(i).getString("status");
+	        	if(status.equals("WAITING")){
+	          		games.add(games_aux2.get(i));
+	        	}
+	       	}
+	       
+	       	return (int)games.get(0).get("id");
 	}
 
 	/**
@@ -273,7 +290,15 @@ public class Game extends Model {
 	}
 
 	public static List<String> games(String username){
-		List<Game> games = Game.where(("(player1 = '" + username + "' OR player2 = '" + username+"') AND status = 'INPROGRESS'"));
+		List<Game> games_aux = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"'"));
+		List<Game> games = new ArrayList<Game>();
+		String status = "";
+		for (int i = 0;i<games_aux.size();i++) {
+			status = games_aux.get(i).getString("status");
+			if(status.equals("INPROGRESS")){
+				games.add(games_aux.get(i));
+			}
+		}
 		List<String> list = new ArrayList<String>();
 		int id = 0;
 		for (int i = 0;i<games.size();i++) {

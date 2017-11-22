@@ -98,13 +98,15 @@ public class User extends Model {
   		int count = users.size();
   		User user = users.get(GameHandling.random(0,count));
   		String name = user.getString("username");
-      	String permissions = user.getString("permissions");
-      	System.out.println(name+"==="+permissions);
+      String permissions = user.getString("permissions");
+      System.out.println(name+"==="+permissions);
   		if(name.equals(username) || (permissions.equals("YES"))){
         	result = randomMatch(username);
+      }else if(Invitation.existsInvitation(username,name)){
+        	result = randomMatch(username);
       	}else{
-        	result = user.getString("username");
-      	}
+          result = user.getString("username");
+        }
   		return result;
   	}
 
@@ -123,8 +125,16 @@ public class User extends Model {
     }
 
     public static Boolean games(String username){
-      List<Game> games = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"' AND status = 'INPROGRESS'"));
-      return games.size()>0;
+      List<Game> games_aux = Game.where(("player1 = '" + username + "' OR player2 = '" + username+"'"));
+      List<Game> games = new ArrayList<Game>();
+      String status = "";
+      for (int i = 0;i<games_aux.size();i++) {
+        status = games_aux.get(i).getString("status");
+        if(status.equals("INPROGRESS")){
+          games.add(games_aux.get(i));
+        }
+      }
+      return games.size()!=0;
     }
 
 		/**
@@ -137,8 +147,10 @@ public class User extends Model {
 		public static boolean userExists(String userOrig, String userDesti){
 			List<User> users  = User.where("username ='"+userDesti+"'");
 			if (users.size()!=0){
-				Invitation.createInvitation(userOrig,userDesti);
-				return true;
+        if(!Invitation.existsInvitation(userOrig,userDesti)){
+          Invitation.createInvitation(userOrig,userDesti);
+          return true;
+        }
 			}
 			return false;
 		}

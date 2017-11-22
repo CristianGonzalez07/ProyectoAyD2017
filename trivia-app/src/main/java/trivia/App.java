@@ -305,11 +305,10 @@ public class App
 				String usernameInvitation = request.queryParams("txt_username");
 				if(User.userExists(username,usernameInvitation)){
 					map.put("msgSucessInvitation","Solicitud enviada correctamente. Esperando ser aceptada");
-
 			        Game.createGame2Player(username,usernameInvitation);
 					response.redirect("/pairingForSearch");
 				}else{
-					map.put("msgFailInvitation","El usuario que solicitó no se encuentra registrado. Intente nuevamente");
+					map.put("msgFailInvitation","El usuario que solicitó no se encuentra registrado o ya posee una invitacion pendiente con usted.");
 					response.redirect("/pairingForSearch");
 				}
 				return null;
