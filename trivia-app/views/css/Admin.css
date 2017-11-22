@@ -15,23 +15,36 @@
 .nombre{
 	color: green;
 	position: absolute;
-	top: -1%;
-	left: 61%;
-	font-size: 25px;
+	top: 4%;
+	left: 58%;
+	font-size: 35px;
+}
+form{
+	margin-top: 15%;
+	margin-left: 0%;
 }
 h1{
-	background-color:#A9A9A9;
+	background-image: url("../imagenes/TituloBienvenido.png");
+	background-repeat: no-repeat;
+	background-position: 40% 0px;
+	background-color: #67C3DA;
 	border-bottom: 15px solid;
 	font-size: 50px;
 	text-align: center;
-	margin-top: -1%;
+	margin-top: 0%;
 	height: 70px;
 	margin-left: -1%;
 	margin-bottom: 0px;
 }
 
 body{
-	background-color: #F0FFF0;
+	background-image: url("../imagenes/FondoMain.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+*{
+	margin: 0px;
+	padding: 0px;
 }
 
 

@@ -1,0 +1,71 @@
+h1{
+	background-image: url("../imagenes/TituloEmparejar.png");
+	background-repeat: no-repeat;
+	background-position: 50%;
+	background-size: 50%;
+	background-color: #67C3DA;
+	border-bottom: 15px solid;
+	margin-top: 0%;
+	height: 70px;
+	margin-left: -1%;
+	margin-bottom: 0px;
+}
+*{
+	padding: 0px;
+	margin: 0px;
+}
+
+.btn-default1{
+	height: 40px;
+	width: 150px;
+	font-size: 18px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+	position: absolute;
+	top: 1%;
+	left: 1%; 
+}
+.btn-default1:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+
+div{
+	margin-top: 30px;
+}
+form{
+	margin-top: 30px;
+}
+body{
+	background-color: #F0FFF0;
+	background-image: url("../imagenes/FondoMain.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+.btn-default{
+	height: 40px;
+	width: 200px;
+	font-size: 18px;
+	margin-top: 30px; 
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+.btn-default:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+.form-control{
+	height: 30px;
+	width: 300px;
+	padding-left: 15px;
+}
+p{
+	font-size: 20px;
+	margin-bottom: 30px;
+}

@@ -82,4 +82,10 @@ public class Invitation extends Model{
           Invitation invitation = findFirst("origin = '"+origin+"' AND destination = '"+destination+"'");
           invitation.delete();
      }    
+
+     public static boolean existsInvitation(String username1,String username2){
+          List<Invitation> invitation1 = Invitation.where(("origin = '" + username1 + "' AND destination = '" + username2+"'"));
+          List<Invitation> invitation2 = Invitation.where(("origin = '" + username2 + "' AND destination = '" + username1+"'"));
+          return ((invitation1.size()!=0)||(invitation2.size()!=0));
+     }    
 }
