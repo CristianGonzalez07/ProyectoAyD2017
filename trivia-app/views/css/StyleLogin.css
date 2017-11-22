@@ -1,13 +1,22 @@
 body{
+	background:url("../imagenes/FondoMain.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%;
 	margin:auto;
-	background-color: #F0FFF0;
 }
 
 h1{
-	color: blue;
-	font-size: 50px;
-	height: 20px;
-
+	background-image: url("../imagenes/TituloIniciarSesion.png");
+	background-repeat: no-repeat;
+	height: 100px;
+	position: relative;
+	background-size: 40%;
+	background-position: 50% 0px;
+	margin-top: 15px;
+}
+*{
+	padding: 0px;
+	margin: 0px;
 }
 .Error{
 	color: red;
@@ -23,7 +32,7 @@ h1{
 	text-align: center;
 	margin: 0 auto;
 	background-color: #34495E;
-	margin-top: 75px;
+	margin-top: 50px;
 	border-radius: 4px;
 	border-style: solid;
 }

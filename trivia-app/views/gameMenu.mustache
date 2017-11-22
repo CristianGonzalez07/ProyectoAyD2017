@@ -2,22 +2,70 @@
 <html>
 <head>
     <title>Game</title>
-    <link rel="stylesheet" type="text/css" href="css/GamerMenu.css"></link>
-    <h1>Bienvenido <h3 class="nombre">{{currentUser}}</h3></h1>
+    <link rel="stylesheet" type="text/css" href="css/GameMenu.css"></link>
+    <h1><h3 class="nombre">{{currentUser}}</h3><h3 class="texto">Puntaje Actual:</h3><h3 class="puntaje">{{score}}</h3></h1>
 </head>
 <body>
 	<center>
-		<h3 class="texto">Puntaje Actual:<h3 class="puntaje">{{score}}</h3></h3>
+	<h4 class="text3">--Ranking Top 5--</h4>
+	<center><marquee direction="left" id="ejemplo"><p>1). {{posicion1}}</p><p>2). {{posicion2}}</p><p>3). {{posicion3}}</p><p>4). {{posicion4}}</p><p>5). {{posicion5}}</p></marquee> <a href="javascript:void(0);"></a> <a href="javascript:void(0);">
+	<div class="nav"></div>
 		<article>
 		<div class="container">
-			<form action="/play" method="GET">
-				<input  class="btn-default" name="play" type="submit" value="Iniciar Partida"/>
+			<h4 class="text2">{{msgError}}</h4>
+			<form id = "IniciarPartida" action="/gameMenu" method="POST" >
+				<input type="submit" name="typeOfGame" class="btn-default" value="1 Jugador"/>
+				<input id="2jugadores" type="button" onclick="showPairing()" name="typeOfGame" class="btn-default" value="2 Jugadores"/>
 			</form>
-			<form action="/" method="GET">
-	    		<input class="btn-default1" name="logout" type="submit" value="Salir">
-	    	</form>
-		</div>
-		</article>	
-	</center>
-</body>
 
+			<form id="busqueda" action="/pairingForSearch" method="GET"></form>
+
+			<form action="/continue" method="GET" >
+				<input type="submit" name="Reanudar" class="btn-default" value="Reanudar Partida"/>
+			</form>
+
+			<form action="/mainpage" method="GET">
+					<input type="submit" name="Logout" class="btn-default1" value="Salir"/>
+			</form>
+			<h3 class="text2">{{textoInvitaciones}}</h3>
+			<form action="/gameMenu" method="POST">
+				<input id="invitacion1" type="submit" name="invitacion" class="Invitacion" value={{Invitacion1}} />
+				<input id="invitacion2" type="submit" name="invitacion" class="Invitacion" value={{Invitacion2}} />
+				<input id="invitacion3" type="submit" name="invitacion" class="Invitacion" value={{Invitacion3}} />
+			</form>
+		</div>
+		</article>
+	</center>
+
+	<script type="text/javascript">
+
+	function id(id) {
+    	return document.getElementById(id);
+	}
+
+	//Helper function for inserting HTML as the first child of an element
+	function insert(targetId, message) {
+    	id(targetId).insertAdjacentHTML("afterbegin", message);
+	}
+
+	function showPairing(){
+		document.getElementById("2jugadores").style.display='none';
+		id("IniciarPartida").innerHTML = "";
+		id("IniciarPartida").insertAdjacentHTML("afterbegin","<input type='submit' name='typeOfGame' class='jugador1' value='1 Jugador'/>")
+		id("IniciarPartida").insertAdjacentHTML("afterbegin","<input type='submit' name='randomPairing' class='btn-default5' value='Emparejamiento Aleatorio'/>")
+		id("busqueda").insertAdjacentHTML("afterbegin","<input type='submit' name='SearchPairing' class='btn-default4' value='Emparejamiento por Busqueda'/>")
+		;
+	}
+
+
+		if(document.getElementById("invitacion1").value=="/"){
+			document.getElementById("invitacion1").style.display='none';
+		}
+		if(document.getElementById("invitacion2").value=="/"){
+			document.getElementById("invitacion2").style.display='none';
+		}
+		if(document.getElementById("invitacion3").value=="/"){
+			document.getElementById("invitacion3").style.display='none';
+		}
+	</script>
+</body>

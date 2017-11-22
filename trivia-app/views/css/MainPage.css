@@ -3,14 +3,16 @@
 }
 
 header{
-	background-color:#A9A9A9;
 	border-bottom: 10px solid;
 
 }
 body{
-	background:	#F0FFF0;
+	background-image: url("../imagenes/FondoMain.jpg"); 
+	background-repeat: no-repeat;
+	background-size: 100%;
 	margin: auto;
 }
+
 
 
 div{
@@ -36,7 +38,10 @@ form{
 }
 
 h1{
-	background-color:#A9A9A9;
+	background-image: url("../imagenes/TituloMain.png"); 
+	background-repeat: no-repeat;
+	background-position: 50%;
+	background-color:#67C3DA;
 	border-bottom: 15px solid;
 	font-size: 50px;
 	color:black;

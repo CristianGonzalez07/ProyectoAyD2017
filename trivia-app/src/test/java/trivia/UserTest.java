@@ -92,6 +92,5 @@ public class UserTest{
         assertEquals(User.validateLogin(username,pass,perms),false);
        
         user.delete();
-        assertEquals(User.validateLogin("CGonzalez","pregunta2","YES"),true);
     }
 }

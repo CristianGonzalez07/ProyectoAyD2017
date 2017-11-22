@@ -41,10 +41,12 @@ select{
 }
 #titulo{
 
-	background-color:#A9A9A9;
+	background-image: url("../imagenes/TituloCreacionP.png");
+	background-repeat: no-repeat;
+	background-position: 50%;
+	background-size: 50%;
+	background-color: #67C3DA;
 	border-bottom: 15px solid;
-	font-size: 50px;
-	text-align: center;
 	margin-top: 0%;
 	height: 70px;
 	margin-left: -1%;
@@ -74,5 +76,7 @@ form{
 
 body{
 	margin: auto;
-	background-color: #F0FFF0
+	background-image: url("../imagenes/FondoCrearP.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%;
 }

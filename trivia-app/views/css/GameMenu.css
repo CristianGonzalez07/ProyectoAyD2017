@@ -1,0 +1,183 @@
+/* Emparejamiento por busqueda */
+.btn-default4{
+	position: absolute;
+	top: 45%;
+	left: 60%;
+	height: 40px;
+	width: 270px;
+	font-size: 18px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+
+.btn-default4:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+/* Emparejamiento aleatorio */
+.btn-default5{
+	position: absolute;
+	top: 45%;
+	left: 40%;
+	height: 40px;
+	width: 250px;
+	font-size: 18px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+
+.btn-default5:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+/* 1 Jugador */
+.jugador1{
+	height: 40px;
+	width: 200px;
+	font-size: 18px;
+	margin-top: 50px;
+	margin-right: 205px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+
+.jugador1:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+/*    */
+
+.nombre{
+	color: green;
+	position: absolute;
+	top: 1.7%;
+	left: 45%;
+	font-size: 40px;
+}
+
+*{
+	padding: 0px;
+	margin: 0px;
+}
+.text3{
+	font-size: 25px;
+	border-bottom:5px solid black;
+	background-color: black;
+	color: white;
+}
+
+.puntaje{
+	color: green;
+	position: absolute;
+	top: 5%;
+	right:4%;
+	font-size: 20px;
+}
+.text2{
+	font-size: 20px;
+	color: black;
+	text-decoration: underline;
+}
+
+p{
+	float: left;
+	margin-left: 5%;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 20px; 
+}
+.nav{
+	border-top: 5px solid black;
+	background-color: black;
+}
+
+.texto{
+	margin: 0;
+	font-size: 28px;
+	top: 4%;
+	right: 10%;
+	position: absolute;
+}
+
+.btn-default{
+	height: 40px;
+	width: 200px;
+	font-size: 18px;
+	margin-top: 50px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+
+.btn-default:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+
+
+
+form{
+	margin-top:15px;
+	padding:5px; 
+	margin:25px;
+}
+body{
+	background-image: url("../imagenes/FondoMain.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%
+}
+
+h1{
+	background-color:#67C3DA;
+	background-image: url("../imagenes/TituloBienvenido.png");
+	background-repeat: no-repeat;
+	background-position: 20% 0px;
+	border-bottom: 15px solid;
+	font-size: 50px;
+	text-align: center;
+	margin-top: -0.5%;
+	height: 70px;
+	margin-left: -1%;
+	margin-bottom: 0px;
+}
+
+.btn-default1{
+	height: 40px;
+	width: 150px;
+	font-size: 18px;
+	margin-bottom: 15px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+	position: absolute;
+	top: 1%;
+	left: 1%; 
+}
+.btn-default1:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(49, 138, 172, 1);
+  	transition: all 0.2s ease;
+}
+
+.Invitacion{
+	height: 40px;
+	width: 200px;
+	font-size: 18px;
+	margin-top: 0px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+.Invitacion:hover{
+	cursor: pointer;
+  	box-shadow: 0 4px 16px rgba(120, 138, 172, 4);
+  	transition: all 0.2s ease;
+}
+

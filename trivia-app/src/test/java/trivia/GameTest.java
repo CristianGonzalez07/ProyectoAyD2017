@@ -24,17 +24,31 @@ public class GameTest{
     }
 
     @Test
-    public void validatePresenceOfUsers(){
+    public void validatePresenceOfPlayers(){
         Game game = new Game();
-        game.set("user", "");
-        assertEquals(game.isValid(), false);
-    }
-
-    @Test
-    public void validateDescription(){
-        Game game = new Game();
-        game.set("description", "");
+        game.set("PLAYER1", "");
+        game.set("PLAYER2", "");
         assertEquals(game.isValid(), false);
     }
     
+    @Test
+    public void validateGame(){
+        Game game = new Game();
+        game.set("typeOfGame", "1PLAYER");
+        game.set("Player1", "Player");
+        game.set("Player2", "");
+        game.set("status","INITIATED");
+        assertEquals(game.isValid(), true);
+        game.set("typeOfGame", "2PLAYER");
+        game.set("player1", "");
+        game.set("player2", "");
+        game.set("status","INITIATED");
+        assertEquals(game.isValid(), false);
+        game.set("typeOfGame", "1PLAYER");
+        game.set("Player1", "Player");
+        game.set("Player2", "player2");
+        game.set("status","WAITING");
+        assertEquals(game.isValid(), true);
+        game.delete();
+    }
 }

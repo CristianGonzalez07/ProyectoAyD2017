@@ -1,9 +1,13 @@
 body{
-	background-color: #F0FFF0;
+	background-image: url("../imagenes/FondoMain.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%;
 	margin: auto;
 }
 .note{
-	color: blue;
+	color: black;
+	margin-bottom: 5px;
+	margin-top: 20px;
 }
 .titulo{
 	font-size: 50px;
@@ -11,16 +15,24 @@ body{
 .Sucess{
 	color: green;
 	font-size: 30px;
+	margin-top: 10px;
 }
 h1{
-	font-size: 60px;
-	margin-top: 0px;
-	background-color: #C0C0C0;
-	border: 15px solid;
-	border-color: silver black  rgba(0,0,0,0.7);
+	background-image: url("../imagenes/TituloRegistrar.png");
+	background-repeat: no-repeat;
+	background-position: 50%;
+	border-bottom: 15px solid;
+	background-color:#67C3DA;
+	height: 72px;
+}
+*{
+	margin: 0px;
+	padding: 0px;
 }
 
 .Error{
+	margin-top: 10px;
+	margin-bottom:10px;
 	color: red;
 	font-size: 30px;
 }
@@ -30,26 +42,17 @@ h1{
 	background: rgba(0,0,0,0.7);
 	padding: 10px 20px;
 	box-sizing: border-box;
-	margin-top: 20px;
+	margin-top: 80px;
 	border-radius: 10px;
 }
-/*form{
-	margin: auto;
-	width: 450px;
-	background: rgba(0,0,0,0.7);
-	padding: 10px 20px;
-	box-sizing: border-box;
-	margin-top: 20px;
-	border-radius: 10px;
-}
-*/
 .form-control{
 	height: 45px;
 	width: 250px;
+	margin-top: 5px;
 	font-size: 18px;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 	background-color: #fff;
-	padding-left: 10px;
+	padding-left: 15px;
 }
 .btn-default:hover{
 	cursor: pointer;
@@ -58,8 +61,9 @@ h1{
 .btn-default{
 	height: 45px;
 	width: 250px;
+	margin-top: 20px;
 	font-size: 18px;
-	margin-bottom: 15px;
+	margin-bottom: 0px;
 	background-color: #fff;
 	padding-left: 10px;
 	border-radius: 10px;

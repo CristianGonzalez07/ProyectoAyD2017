@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pregunta2</title>
+    <link rel="stylesheet" type="text/css" href="css/Play.css"></link>
+    <h1></h1>
+</head>
+<body>
+	<center>
+		<div><h2 id="cuenta"><!-- Built by JS --></h2></div>
+		<div id="question"><!-- Built by JS --></div>
+		<div id="options">
+				<input id="option1"  type='button' class='btn-default' onclick="sendOption1()"/>
+				<input id="option2"  type='button' class='btn-default' onclick="sendOption2()"/>
+				<input id="option3"  type='button' class='btn-default' onclick="sendOption3()"/>
+				<input id="option4"  type='button' class='btn-default' onclick="sendOption4()"/>
+		</div>
+        <div id="results"><!-- Built by JS --></div>
+        <form action="/gameMenu" method="GET">
+			<input id="Salir" type="submit" class="btn-default1" value="Salir"/>
+		</form>	
+    	<script src="websocketDemo.js"></script>
+	</center>
+</body>
