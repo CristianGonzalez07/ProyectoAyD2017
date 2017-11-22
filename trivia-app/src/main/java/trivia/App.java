@@ -33,8 +33,9 @@ public class App
 
     	String aux = EchoWebSocket.biMapSession.inverse().get(user);
     	String currentUser = EchoWebSocket.biMapUsername.get(aux);
+    	System.out.println("===??????????"+currentUser);
     	int id = (int)User.getCurrentGameId(currentUser);
-    	String typeOfGame = User.getCurrentGameType(currentUser);
+    	String typeOfGame = Game.getCurrentGameType(id);
 
     	if(message.equals("build")){
     		if(typeOfGame.equals("1PLAYER")){
@@ -75,24 +76,26 @@ public class App
     	});
 
 
-    	if(!Base.hasConnection()) {
-    		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
-    	}
+    	
 
     	Timer timer = new Timer (960000, new ActionListener ()
 				{
 	    			public void actionPerformed(ActionEvent e)
 	    			{
+	    				if(!Base.hasConnection()) {
+    						Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "root", "root");
+    					}
 	        			Game.checkWaitTime();
 	        			Game.checkProgresGame();
+	        			if(Base.hasConnection()){
+    						Base.close();
+    					}
 	     			}
 				});
 
 		timer.start();
 
-		if(Base.hasConnection()){
-    		Base.close();
-    	}
+		
 
 		 get("/error", (request, response) -> {
 	       return new ModelAndView(map, "./views/error.html");
@@ -118,6 +121,7 @@ public class App
 
 	     get("/gameMenu", (request, response) -> {
 	    	if(request.session().attribute(SESSION_NAME)!=null){
+	    		map.clear();
 	    		List<String> ranking = User.ranking();
 	    		for(int i=0;i<5;i++){
 		        		map.put("posicion"+(i+1),ranking.get(i));

@@ -42,11 +42,12 @@ public class GameHandling{
 		                .put("results","")
 	            	));
 				}else{
+					System.out.println("================================================"+Game.getCurrentGameType(id));
 					String win = winner(id);
 					user.getRemote().sendString(String.valueOf(new JSONObject()
 						.put("endGame","true")
 						.put("winner",win)
-						.put("typeOfGame","1Player")
+						.put("typeOfGame",Game.getCurrentGameType(id))
 						.put("scorep1",Game.getScoreP1(id))
 						.put("scorep2",Game.getScoreP2(id))
 					));
@@ -70,7 +71,7 @@ public class GameHandling{
 					user.getRemote().sendString(String.valueOf(new JSONObject()
 						.put("endGame","true")
 						.put("winner",win)
-						.put("typeOfGame","1Player")
+						.put("typeOfGame",Game.getCurrentGameType(id))
 						.put("scorep1",Game.getScoreP1(id))
 						.put("scorep2",Game.getScoreP2(id))
 					));

@@ -108,18 +108,6 @@ public class User extends Model {
   		return result;
   	}
 
-  /**
-   *function that returns the current game type for the given user.
-   *@param user name is the user name of who wants to know the current game type.
-   *@return the current game type.
-   *@pre. username != null.
-   *@post. returns the current game type if exists,otherwise returns null.
-  */
-    public static String getCurrentGameType(String username){
-      int currentGame = getCurrentGameId(username);
-      Game game = Game.findFirst("id = ?", currentGame);
-      return game.getString("typeOfGame");
-    }
 
   /**
    *function that returns the current game id for the given user.

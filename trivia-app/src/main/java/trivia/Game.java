@@ -295,6 +295,19 @@ public class Game extends Model {
 
 	public static int getScoreP2(int id){
 		Game game  =  findFirst("id = ?",id);
-		return (int)game.get("scorePlayer1");
+		return (int)game.get("scorePlayer2");
 	}
+
+	 /**
+   *function that returns the current game type for the given game id.
+   *@param idGame is the id of is the id of the game that you want to
+   * know your type of game.
+   *@return the current game type.
+   *@pre. id>0.
+   *@post. returns the current game type if exists,otherwise returns null.
+  */
+    public static String getCurrentGameType(int idGame){
+      Game game = Game.findFirst("id = ?", idGame);
+      return game.getString("typeOfGame");
+    }
 }

@@ -26,6 +26,10 @@ function update(msg) {
                 insert("results","<h2>" + data.results + "</h2>")
                 insert("results", text+"sendBuild()>Continuar</button>");
             }else{
+            	document.getElementById('option1').disabled=false;
+    			document.getElementById('option2').disabled=false;
+    			document.getElementById('option3').disabled=false;
+    			document.getElementById('option4').disabled=false;
                 rta = false;
                 id("question").innerHTML = "";
                 id("results").innerHTML = "";
@@ -76,7 +80,7 @@ function update(msg) {
         document.getElementById("option2").style.display='none';
         document.getElementById("option3").style.display='none';
         document.getElementById("option4").style.display='none';
-        if(data.typeOfGame =="1Player"){
+        if(data.typeOfGame == "1PLAYER"){
             insert("question","<h2>Partida terminada. El Puntaje es: " + data.scorep1 + "</h2>");
         }else{
             if(data.winner!="empate"){
@@ -85,10 +89,7 @@ function update(msg) {
                 insert("question","<h2>El resultado de la Partida fue Empate "+data.scorep1+" a "+data.scorep2+"</h2>");
             }   
         }
-       
-        
     }
-        
 }
 
 //Helper function for inserting HTML as the first child of an element
